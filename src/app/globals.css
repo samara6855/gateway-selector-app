@@ -16,12 +16,21 @@
   }
 }
 
+/* body {
+  background-image: url('../../public/background2.webp');
+  background-size: cover;
+  width: 100%;
+  height: 100%;
+} */
+
 body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(to bottom right, #efe3e3, #e1d0e4, #ddcfeb, #d5d6e6, #d5e4e6, #e6d6d7);
+  background-repeat: no-repeat !important;
+  background-size: cover;
+  background-position: center;
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
 }
