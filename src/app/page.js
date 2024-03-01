@@ -8,7 +8,10 @@ import { CountryData } from "country-codes-list";
 import { getAllCurrencies } from "../../components/currencyAPI";
 import ReactFlagsSelect from "react-flags-select";
 import ReactCountryFlag from "react-country-flag";
+import getSymbolFromCurrency from "currency-symbol-map";
+import { Country } from "country-state-city";
 
+import "./globals.css";
 import { useState, useRef, useEffect } from "react";
 
 export default function Home() {
@@ -122,33 +125,24 @@ export default function Home() {
     sessionStorage.setItem("product", option);
   };
 
-  // const handlePaymentGatewayDropdownChange = (event) => {
-  //   const { value } = event.target;
-  //   setSelectedValuesPaymentGateway((prevValues) => ({
-  //     ...prevValues,
-  //     country: value
-  //   }));
-  //   sessionStorage.setItem('country', value);
-  // };
-
-  // const handlePaymentGatewayDropdown2Change = (event) => {
-  //   const { value } = event.target;
-  //   setSelectedValuesPaymentGateway((prevValues) => ({
-  //     ...prevValues,
-  //     currency: value
-  //   }));
-  //   sessionStorage.setItem('currency', value);
-  // };
-
   const handleCountryChange = (event) => {
-    // const selectedValue = event.target.value;
     const { value } = event.target;
+    console.log("Selected country:", value);
     setSelectedValuesFilters((prevValues) => ({
       ...prevValues,
       country: value,
     }));
     sessionStorage.setItem("country", value);
   };
+
+  // const handleCountryChange = (countryCode) => {
+  //   console.log("Selected country code:", countryCode);
+  //   setSelectedValuesFilters((prevValues) => ({
+  //     ...prevValues,
+  //     country: countryCode,
+  //   }));
+  //   sessionStorage.setItem("country", countryCode);
+  // };
 
   const handleCurrencyChange = (event) => {
     // const selectedValue = event.target.value;
@@ -218,18 +212,28 @@ export default function Home() {
       selectedValuesFilters.currency === "option1") ||
     isLoading ||
     responseText.trim() !== "";
+
   const countries = getCountries().map((country) => ({
     name: country.name,
-    code: country.code.toLowerCase(), // countryCode should be in lowercase for ReactCountryFlag
+    code: country.code.toLowerCase(),
   }));
+
+  let currencySymbol = "";
+  const countryDetails = Country.getCountryByCode(
+    selectedValuesFilters.country
+  );
+
+  if (countryDetails && countryDetails.currency) {
+    currencySymbol = getSymbolFromCurrency(countryDetails.currency);
+  }
 
   return (
     <body>
-      <main className="flex min-h-screen items-center justify-center p-8 sm:p-16 md:p-24 lg:p-32 xl:p-40">
-        <div className="flex flex-col items-start justify-center w-full max-w-96">
+      <main className="flex flex-col min-h-screen items-center justify-center p-8 sm:p-16 md:p-24 lg:p-32 xl:p-40">
+        <div className="flex flex-col items-start justify-center w-full max-w-96 border-2 border-gray-200 rounded-xl p-4">
           <label
             htmlFor="menu-button"
-            className="text-black font-semibold mb-1 text-sm"
+            className="text-black font-semibold mb-1 text-sm mt-4"
           >
             Select your product
           </label>
@@ -238,10 +242,10 @@ export default function Home() {
               <div className="w-1/2 mr-2 flex items-center">
                 <button
                   type="button"
-                  className={`inline-flex justify-center items-center h-10 w-full mt-1 rounded-md py-2 text-sm shadow-sm bg-white hover:bg-lighter-gray ${
+                  className={`inline-flex justify-center items-center h-10 w-full mt-1 rounded-md text-sm shadow-sm bg-white ${
                     selectedOption === "Payment Gateway"
-                      ? "ring-1 ring-indigo text-indigo "
-                      : " text-gray"
+                      ? "ring-1 ring-indigo-500 text-indigo-500"
+                      : " text-gray-400"
                   }`}
                   onClick={() => handleOptionClick("Payment Gateway")}
                 >
@@ -254,7 +258,7 @@ export default function Home() {
                         selectedOption === "Payment Gateway" ? "blue" : "gray"
                       }
                       fillOpacity={
-                        selectedOption === "Payment Gateway" ? "0.7" : ""
+                        selectedOption === "Payment Gateway" ? "0.6" : "0.6"
                       }
                       xmlns="http://www.w3.org/2000/svg"
                     >
@@ -263,8 +267,8 @@ export default function Home() {
                     <p
                       className={
                         selectedOption === "Payment Gateway"
-                          ? "text-indigo"
-                          : "text-gray"
+                          ? "text-indigo-500"
+                          : "text-gray-400"
                       }
                     >
                       Payment gateway
@@ -276,10 +280,10 @@ export default function Home() {
               <div className="w-1/2 ml-2 flex items-center">
                 <button
                   type="button"
-                  className={`inline-flex justify-center items-center h-10 w-full mt-1 rounded-md py-2 text-sm shadow-sm bg-white hover:bg-lighter-gray ${
+                  className={`inline-flex justify-center items-center h-10 w-full mt-1 rounded-md py-2 text-sm shadow-sm bg-white  ${
                     selectedOption === "POS"
-                      ? "ring-1 ring-indigo text-indigo"
-                      : " text-gray"
+                      ? "ring-1 ring-indigo-500 text-indigo-500"
+                      : " text-gray-400"
                   }`}
                   onClick={() => handleOptionClick("POS")}
                 >
@@ -290,13 +294,15 @@ export default function Home() {
                       viewBox="0 0 17 15"
                       xmlns="http://www.w3.org/2000/svg"
                       fill={selectedOption === "POS" ? "blue" : "gray"}
-                      fillOpacity={selectedOption === "POS" ? "0.7" : ""}
+                      fillOpacity={selectedOption === "POS" ? "0.6" : "0.6"}
                     >
                       <path d="M14.5 6H13.5V0H3.5V6H2.5C1.96957 6 1.46086 6.21071 1.08579 6.58579C0.710714 6.96086 0.5 7.46957 0.5 8V15H16.5V8C16.5 7.46957 16.2893 6.96086 15.9142 6.58579C15.5391 6.21071 15.0304 6 14.5 6ZM5.5 2H11.5V6H5.5V2ZM14.5 13H2.5V8H14.5V13ZM13.5 11H9.5V9H13.5V11Z" />
                     </svg>
                     <p
                       className={
-                        selectedOption === "POS" ? "text-indigo" : "text-gray"
+                        selectedOption === "POS"
+                          ? " text-indigo-500"
+                          : "text-gray-400"
                       }
                     >
                       POS
@@ -311,36 +317,46 @@ export default function Home() {
             htmlFor="countryDropdown"
             className="text-black font-semibold mb-1 text-sm"
           >
-            Country
+            Country{" "}
+            {/* <ReactCountryFlag
+              countryCode={selectedValuesFilters.country}
+              svg
+            /> */}
+            <span
+              className={`ml-1 mr-1 flag-icon flag-icon-${selectedValuesFilters.country.toLowerCase()}`}
+            ></span>
+            <p className="text-gray-500 inline-block">{currencySymbol}</p>
           </label>
 
-          <div className="flex justify-center items-center w-full mb-4 mt-1 text-sm">
+          {/* <div className="flex justify-center items-center w-full mb-4 mt-1 relative">
+          <div className="text-lighter-gray w-full">
             <ReactFlagsSelect
               selected={selectedValuesFilters.country}
-              onSelect={(code) => setSelectedValuesFilters({ country: code })}
-              onChange={handleCountryChange}
+              onSelect={(countryCode) => handleCountryChange(countryCode)}
               className="rounded-md w-full h-10 text-sm text-gray bg-white items-start"
-              value={handleCountryChange}
-              placeholder="Choose country"
               optionsSize={14}
               selectedSize={14}
             />
-          </div>
-          {/* <div className="flex justify-center items-center w-full mb-4 mt-1 relative">
-          
+            </div>
+          </div> */}
+
+          <div className="flex justify-center items-center w-full mb-4 mt-1 relative gap-1">
+            {/* <div className="bg-white h-10 w-8 flex justify-center items-center rounded-md"> */}
+
+            {/* </div> */}
             <select
-              className="rounded-md pt-1 pb-1 w-full h-10 text-sm pl-2 text-gray cursor-pointer"
+              className="rounded-md pt-1 pb-1 w-full h-10 text-sm pl-2 text-gray-400 cursor-pointer border-none focus:outline-none"
               value={selectedValuesFilters.country}
               onChange={handleCountryChange}
             >
-              
+              <option value="option1">Choose country</option>
               {countries.map((country, index) => (
                 <option key={index} value={country.code}>
                   {country.name}
                 </option>
               ))}
             </select>
-          </div> */}
+          </div>
 
           <label
             htmlFor="currencyDropdown"
@@ -351,7 +367,7 @@ export default function Home() {
           <div className="flex justify-center items-center w-full mb-4 mt-1 relative">
             <select
               id="currencyDropdown"
-              className="rounded-md pt-1 pb-1 w-full h-10 text-sm pl-2 pr-8 text-gray border-none appearance-none"
+              className="rounded-md pt-1 pb-1 w-full h-10 text-sm pl-2 text-gray-400 border-none cursor-pointer focus:outline-none"
               onChange={handleCurrencyChange}
               value={selectedValuesFilters.currency}
             >
@@ -364,7 +380,8 @@ export default function Home() {
                   </option>
                 ))}
             </select>
-            <div className="absolute inset-y-0 right-0 flex items-center pr-1 pointer-events-none">
+            
+            {/* <div className="absolute inset-y-0 right-0 flex items-center pr-1 pointer-events-none">
               <svg
                 height="20"
                 viewBox="0 0 48 48"
@@ -374,22 +391,41 @@ export default function Home() {
                 <path d="M14 20l10 10 10-10z" />
                 <path d="M0 0h48v48h-48z" fill="none" />
               </svg>
-            </div>
+            </div> */}
           </div>
 
-          <label
+          {/* <label
             htmlFor="textInput"
             className="text-black font-semibold mb-1 text-sm"
           >
             Requirements
-          </label>
-          <div className="w-full mb-4  text-black rounded-md">
-            <textarea
+          </label> */}
+
+          <div className="w-full mb-4 text-black rounded-md relative mt-4">
+            {/* <textarea
               id="textInput"
-              className="p-3 resize-none rounded-md w-full text-sm h-20 border-none bg-white"
-              placeholder="Enter your requirements.."
+              className="p-3 resize-none rounded-md w-full text-sm h-20 border-none bg-white focus:outline-none"
+              placeholder=""
               onChange={handleInputChange}
             />
+            <span className="absolute top-0 left-0 ml-3 mt-2 text-gray transition-all duration-300 pointer-events-none rounded-xl bg-white focus:ring-lilac">
+              Requirements
+            </span> */}
+            <div className="relative">
+              <input
+                type="text"
+                id="floating_outlined"
+                className="block px-2.5 pb-2.5 pt-4 w-full h-20 text-sm  text-black bg-white rounded-lg border border-gray-300 dark:text-black dark:border-gray-200 dark:focus:border-gray-400 focus:outline-none focus:ring- focus:border-gray-400 peer"
+                placeholder=" "
+                onChange={handleInputChange}
+              />
+              <label
+                htmlFor="floating_outlined"
+                className="absolute text-md rounded-md text-gray-500 bg-white dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0]  px-2 peer-focus:px-2 peer-focus:text-gray-500 peer-focus:dark:text-gray-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
+              >
+                Requirements
+              </label>
+            </div>
           </div>
 
           <div className="flex items-center w-full mb-1 gap-2">
@@ -398,7 +434,7 @@ export default function Home() {
               id="consultationCheckbox"
               onChange={handleConsultationChange}
               checked={consultationNeeded}
-              className="form-checkbox h-4 w-4 transition duration-150 ease-in-out checked:bg-indigo"
+              className="bg h-4 w-4 border border-gray-400 rounded checked:bg-black checked:border-transparent focus:outline-none focus:bg-black"
             />
             <label
               htmlFor="consultationCheckbox"
@@ -410,11 +446,11 @@ export default function Home() {
 
           <button
             type="button"
-            className={`mt-2 px-4 py-2 text-white rounded-md transition-colors w-full
+            className={`mt-2 px-4 py-2 mb-2 text-white rounded-md transition-colors w-full
                 ${
                   isButtonDisabled
-                    ? " bg-indigo bg-opacity-55 cursor-not-allowed"
-                    : "hover:border-gray-300 bg-indigo hover:bg-blue hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30 cursor-pointer"
+                    ? " bg-indigo-500 bg-opacity-55 cursor-not-allowed"
+                    : "hover:border-gray-300 bg-indigo-500 hover:bg-blue-500 cursor-pointer"
                 }`}
             onClick={handleButtonClick}
             disabled={isButtonDisabled}
@@ -437,7 +473,23 @@ export default function Home() {
             )}
             {!isLoading && "Submit 🡢"}
           </button>
+        </div>
 
+        <div className="justify-center w-full max-w-96">
+          <div className="flex justify-end mt-4">
+            <a href="#" className="mr-8 text-xs">
+              Help
+            </a>
+            <a href="#" className="mr-8 text-xs">
+              Privacy
+            </a>
+            <a href="#" className="text-xs">
+              Terms
+            </a>
+          </div>
+        </div>
+
+        <div className="justify-center w-full max-w-96">
           <div className="mt-16 text-center font-medium font-mono">
             {isLoading && <LoaderWithFacts setIsLoading={setIsLoading} />}
           </div>
@@ -445,14 +497,14 @@ export default function Home() {
 
         {isPopupVisible && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="bg-white rounded-lg shadow-md max-w-4xl w-auto max-h-3/4 min-h-20 h-auto overflow-x-auto overflow-y-auto relative">
+            <div className="bg-white rounded-lg shadow-md max-w-4xl w-auto max-h-3/4 min-h-20 h-auto overflow-x-auto overflow-y-auto relative text-black">
               <button
-                className="fixed top-2 right-2 text-gray-600 hover:text-gray-800"
+                className="absolute pb-2 top-2 right-2 text-gray-600 hover:text-gray-800"
                 onClick={handleClosePopup}
               >
                 <svg
-                  className="h-6 w-6"
-                  fill="none"
+                  className="h-6 w-6 pt-2 pr-2"
+                  fill="gray"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
                   xmlns="http://www.w3.org/2000/svg"
@@ -472,14 +524,14 @@ export default function Home() {
 
         {isContactPopupVisible && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="bg-white rounded-lg shadow-md max-w-4xl w-full max-h-3/4 min-h-20 h-auto overflow-x-auto overflow-y-auto relative">
+            <div className="bg-white rounded-2xl shadow-md max-w-3xl w-full max-h-3/4 min-h-20 h-auto overflow-x-auto overflow-y-auto relative text-black">
               <button
-                className="static top-2 right-2 text-gray-600 hover:text-gray-800"
+                className="absolute top-2 right-2 text-gray-600 hover:text-gray-800"
                 onClick={handleCloseContactPopup}
               >
                 <svg
                   className="h-6 w-6"
-                  fill="none"
+                  fill="gray"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
                   xmlns="http://www.w3.org/2000/svg"
@@ -492,7 +544,12 @@ export default function Home() {
                   ></path>
                 </svg>
               </button>
-              <div className="p-4">
+              <div className="p-4 ">
+                <div className="text-center pt-2 pb-4">
+                  <text className="text-2xl font-semibold">
+                    Contact Information
+                  </text>
+                </div>
                 <ContactForm />
               </div>
             </div>

@@ -6,27 +6,20 @@ module.exports = {
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
-    screens: {
-      xs: '220px',
-      sm: '480px',
-      md: '768px',
-      lg: '976px',
-      xl: '1440px',
-    },
-    colors: {
-      'blue': '#1d4ed8',
-      'indigo': '#6366f1',
-      'lilac': '#BDBEEC',
-      'purple': '#7e5bef',
-      'pink': '#ff49db',
-      'green': '#13ce66',
-      'gray-dark': '#273444',
-      'gray': '#8492a6',
-      'gray-light': '#d3dce6',
-      'lighter-gray': '#F4F6F6',
-      'white': '#ffffff',
-      'black': '#000000'
-    },
+    // colors: {
+    //   'blue': '#1d4ed8',
+    //   'indigo': '#6366f1',
+    //   'lilac': '#BDBEEC',
+    //   'purple': '#7e5bef',
+    //   'pink': '#ff49db',
+    //   'green': '#13ce66',
+    //   'gray-dark': '#273444',
+    //   'gray': '#8492a6',
+    //   'gray-light': '#d3dce6',
+    //   'lighter-gray': '#F4F6F6',
+    //   'white': '#ffffff',
+    //   'black': '#000000'
+    // },
     extend: {
       // colors: {
       //   gray: {

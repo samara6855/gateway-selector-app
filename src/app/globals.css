@@ -16,6 +16,37 @@
   }
 }
 
+::-webkit-scrollbar {
+  width: 8px; 
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+html {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.3) rgba(0, 0, 0, 0.1); 
+}
+
+input[type="checkbox"].custom-checkbox:checked {
+  background-color: black;
+}
+
+textarea:focus + span,
+textarea:not(:placeholder-shown) + span {
+  transform: translate(0, -100%);
+  font-size: 0.8rem;
+  color: black;
+}
+
+
+
 /* body {
   background-image: url('../../public/background2.webp');
   background-size: cover;

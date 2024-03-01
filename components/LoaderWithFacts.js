@@ -31,7 +31,7 @@ const LoaderWithFacts = ({ setIsLoading }) => {
   }, [setIsLoading]);
 
   return (
-    <div className="loader-with-facts font-mono italic text-lg">
+    <div className="loader-with-facts font-mono italic text-lg text-black">
       <p>{facts[currentFactIndex]}</p>
     </div>
   );
