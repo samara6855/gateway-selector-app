@@ -227,6 +227,323 @@ export default function Home() {
     currencySymbol = getSymbolFromCurrency(countryDetails.currency);
   }
 
+  // function formatResponse(responseText) {
+  //   let response;
+
+  //   try {
+  //     response = JSON.parse(responseText);
+  //   } catch (error) {
+  //     // If JSON parsing fails, display the error message
+  //     return <p>{error.message}</p>;
+  //   }
+
+  //   if (response && response["Payment Gateways"]) {
+  //     return (
+  //       <div>
+  //         <div class="w-full md:w-1/2 m-4">
+  //           <form class="flex items-center">
+  //             <label for="simple-search" class="sr-only">
+  //               Search
+  //             </label>
+  //             <div class="relative w-full">
+  //               <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+  //                 <svg
+  //                   aria-hidden="true"
+  //                   class="w-5 h-5 text-gray-300 dark:text-gray-400"
+  //                   fill="currentColor"
+  //                   viewBox="0 0 20 20"
+  //                   xmlns="http://www.w3.org/2000/svg"
+  //                 >
+  //                   <path
+  //                     fill-rule="evenodd"
+  //                     d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+  //                     clip-rule="evenodd"
+  //                   />
+  //                 </svg>
+  //               </div>
+  //               <input
+  //                 type="text"
+  //                 id="simple-search"
+  //                 class="bg-gray-100 border border-gray-200 text-gray-900 text-sm rounded-lg focus:outline-none block w-full pl-10 p-2 dark:placeholder-gray-400 dark:text-black"
+  //                 placeholder="Search"
+  //                 required
+  //               />
+  //             </div>
+  //           </form>
+  //         </div>
+
+  //         <table className="border border-gray-200">
+  //           <thead>
+  //             <tr>
+  //             <th className="border border-gray-200 px-4 py-2">Select</th>
+  //               <th className="border border-gray-200 px-4 py-2">
+  //                 Payment Gateway Name
+  //               </th>
+  //               <th className="border border-gray-200 px-4 py-2">
+  //                 Payment Methods
+  //               </th>
+  //               <th className="border border-gray-200 px-4 py-2">
+  //                 API Languages
+  //               </th>
+  //               <th className="border border-gray-200 px-4 py-2 ">
+  //                 Security/Compliance
+  //               </th>
+  //               <th className="border border-gray-200 px-4 py-2 ">Countries</th>
+  //               <th className="border border-gray-200 px-4 py-2 ">Currencies</th>
+  //               <th className="border border-gray-200 px-4 py-2 ">Fee</th>
+  //               <th className="border border-gray-200 px-4 py-2">Website</th>
+  //             </tr>
+  //           </thead>
+  //           <tbody>
+  //             {response["Payment Gateways"].map((gateway, index) => (
+  //               <tr key={index} className="border-b border-gray-200">
+  //               <td className="border border-gray-200 px-4 py-2">
+  //               <input type="checkbox" className="form-checkbox h-4 w-4 text-primary-500 border-gray-300 rounded focus:ring-primary-500" />
+  //             </td>
+  //                 <td className="border border-gray-200 px-4 py-2">
+  //                   {gateway["Payment Gateway Name"]}
+  //                 </td>
+  //                 <td className="border border-gray-200 px-4 py-2">
+  //                   {Array.isArray(gateway["Payment Methods"])
+  //                     ? gateway["Payment Methods"].join(", ")
+  //                     : gateway["Payment Methods"]}
+  //                 </td>
+  //                 <td className="border border-gray-200 px-4 py-2">
+  //                   {Array.isArray(gateway["API Languages"])
+  //                     ? gateway["API Languages"].join(", ")
+  //                     : gateway["API Languages"]}
+  //                 </td>
+  //                 <td className="border border-gray-200 px-4 py-2">
+  //                   {Array.isArray(gateway["Security/Compliance"])
+  //                     ? gateway["Security/Compliance"].join(", ")
+  //                     : gateway["Security/Compliance"]}
+  //                 </td>
+  //                 <td className="border border-gray-200 px-4 py-2">
+  //                   {Array.isArray(gateway.Countries)
+  //                     ? gateway.Countries.join(", ")
+  //                     : gateway.Countries}
+  //                 </td>
+  //                 <td className="border border-gray-200 px-4 py-2">
+  //                   {Array.isArray(gateway.Currencies)
+  //                     ? gateway.Currencies.join(", ")
+  //                     : gateway.Currencies}
+  //                 </td>
+  //                 <td className="border border-gray-200 px-4 py-2">
+  //                   {Array.isArray(gateway.Fee)
+  //                     ? gateway.Fee.join(", ")
+  //                     : gateway.Fee}
+  //                 </td>
+  //                 <td className="border border-gray-200 px-4 py-2">
+  //                   <a href={gateway.Website}>
+  //                     {gateway["Payment Gateway Name"]}
+  //                   </a>
+  //                 </td>
+  //               </tr>
+  //             ))}
+  //           </tbody>
+  //         </table>
+  //       </div>
+  //     );
+  //   } else {
+  //     return <p>{responseText}</p>;
+  //   }
+  // }
+
+  function PaymentGateways({ responseText }) {
+    const [searchTerm, setSearchTerm] = useState("");
+    const [checkedCount, setCheckedCount] = useState(0);
+    const [checkedBoxes, setCheckedBoxes] = useState({});
+    let filteredGateways = [];
+
+    let response;
+
+    useEffect(() => {
+      if (response && response["Payment Gateways"]) {
+        const initialCheckedBoxes = {};
+        response["Payment Gateways"].forEach((gateway, index) => {
+          initialCheckedBoxes[gateway.id] = false;
+        });
+        setCheckedBoxes(initialCheckedBoxes);
+      }
+    }, [response]);
+
+    const handleCheckboxChange = (id) => {
+      const newCheckedBoxes = { ...checkedBoxes };
+      newCheckedBoxes[id] = !newCheckedBoxes[id];
+      setCheckedBoxes(newCheckedBoxes);
+
+      const isChecked = newCheckedBoxes[id];
+      setCheckedCount((prevCount) =>
+        isChecked ? prevCount + 1 : prevCount - 1
+      );
+    };
+
+    const handleCompareClick = () => {
+      console.log("Compare button clicked");
+    };
+
+    try {
+      response = JSON.parse(responseText);
+
+      response["Payment Gateways"].forEach((gateway, index) => {
+        gateway.id = index;
+      });
+
+      filteredGateways = response["Payment Gateways"].filter((gateway) => {
+        const gatewayValues = Object.values(gateway);
+        for (const value of gatewayValues) {
+          if (
+            typeof value === "string" &&
+            value.toLowerCase().includes(searchTerm.toLowerCase())
+          ) {
+            return true;
+          }
+          if (Array.isArray(value)) {
+            for (const item of value) {
+              if (
+                typeof item === "string" &&
+                item.toLowerCase().includes(searchTerm.toLowerCase())
+              ) {
+                return true;
+              }
+            }
+          }
+        }
+        return false;
+      });
+    } catch (error) {
+      return <p>Requirement is unrelated to Payment Gateways.</p>;
+    }
+
+    return (
+      <div>
+        <div className="w-full md:w-1/2 m-4">
+          <form className="flex items-center">
+            <label htmlFor="simple-search" className="sr-only">
+              Search
+            </label>
+            <div className="relative w-full">
+              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <svg
+                  aria-hidden="true"
+                  className="w-5 h-5 text-gray-300 dark:text-gray-400"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+              <input
+                type="text"
+                id="simple-search"
+                className="bg-gray-100 border border-gray-200 text-gray-900 text-sm rounded-lg focus:outline-none block w-full pl-10 p-2 dark:placeholder-gray-400 dark:text-black"
+                placeholder="Search"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                required
+              />
+            </div>
+            <div className="ml-4">
+              <button
+                className={`bg-blue-500 text-white px-4 py-2 rounded-lg focus:outline-none ${
+                  checkedCount >= 2 ? "" : "opacity-50 cursor-not-allowed"
+                }`}
+                onClick={handleCompareClick}
+                disabled={checkedCount < 2}
+              >
+                Compare({checkedCount})
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <table className="border border-gray-200">
+          <thead>
+            <tr>
+              <th className="border border-gray-200 px-4 py-2">Select</th>
+              <th className="border border-gray-200 px-4 py-2">
+                Payment Gateway Name
+              </th>
+              <th className="border border-gray-200 px-4 py-2 min-w-72">
+                Payment Methods
+              </th>
+              <th className="border border-gray-200 px-4 py-2 min-w-60">
+                API Languages
+              </th>
+              <th className="border border-gray-200 px-4 py-2">
+                Security/Compliance
+              </th>
+              <th className="border border-gray-200 px-4 py-2">Countries</th>
+              <th className="border border-gray-200 px-4 py-2">Currencies</th>
+              <th className="border border-gray-200 px-4 py-2 min-w-60">Fee</th>
+              <th className="border border-gray-200 px-4 py-2">Website</th>
+            </tr>
+          </thead>
+          <tbody>
+            {(searchTerm === ""
+              ? response["Payment Gateways"]
+              : filteredGateways
+            ).map((gateway) => (
+              <tr key={gateway.id} className="border-b border-gray-200">
+                <td className="border border-gray-200 px-4 py-2">
+                  <input
+                    type="checkbox"
+                    className="form-checkbox h-4 w-4 text-primary-500 border-gray-300 rounded focus:ring-primary-500"
+                    checked={checkedBoxes[gateway.id] || false}
+                    onChange={() => handleCheckboxChange(gateway.id)}
+                  />
+                </td>
+                <td className="border border-gray-200 px-4 py-2">
+                  {gateway["Payment Gateway Name"]}
+                </td>
+                <td className="border border-gray-200 px-4 py-2">
+                  {Array.isArray(gateway["Payment Methods"])
+                    ? gateway["Payment Methods"].join(", ")
+                    : gateway["Payment Methods"]}
+                </td>
+                <td className="border border-gray-200 px-4 py-2">
+                  {Array.isArray(gateway["API Languages"])
+                    ? gateway["API Languages"].join(", ")
+                    : gateway["API Languages"]}
+                </td>
+                <td className="border border-gray-200 px-4 py-2">
+                  {Array.isArray(gateway["Security/Compliance"])
+                    ? gateway["Security/Compliance"].join(", ")
+                    : gateway["Security/Compliance"]}
+                </td>
+                <td className="border border-gray-200 px-4 py-2">
+                  {Array.isArray(gateway.Countries)
+                    ? gateway.Countries.join(", ")
+                    : gateway.Countries}
+                </td>
+                <td className="border border-gray-200 px-4 py-2">
+                  {Array.isArray(gateway.Currencies)
+                    ? gateway.Currencies.join(", ")
+                    : gateway.Currencies}
+                </td>
+                <td className="border border-gray-200 px-4 py-2">
+                  {Array.isArray(gateway.Fee)
+                    ? gateway.Fee.join(", ")
+                    : gateway.Fee}
+                </td>
+                <td className="border border-gray-200 px-4 py-2">
+                  <a href={gateway.Website}>
+                    {gateway["Payment Gateway Name"]}
+                  </a>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  }
+
   return (
     <body>
       <main className="flex flex-col min-h-screen items-center justify-center p-8 sm:p-16 md:p-24 lg:p-32 xl:p-40">
@@ -380,7 +697,7 @@ export default function Home() {
                   </option>
                 ))}
             </select>
-            
+
             {/* <div className="absolute inset-y-0 right-0 flex items-center pr-1 pointer-events-none">
               <svg
                 height="20"
@@ -496,15 +813,15 @@ export default function Home() {
         </div>
 
         {isPopupVisible && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
             <div className="bg-white rounded-lg shadow-md max-w-4xl w-auto max-h-3/4 min-h-20 h-auto overflow-x-auto overflow-y-auto relative text-black">
               <button
-                className="absolute pb-2 top-2 right-2 text-gray-600 hover:text-gray-800"
+                className="absolute top-2 right-2 text-gray-600 hover:text-gray-800"
                 onClick={handleClosePopup}
               >
                 <svg
-                  className="h-6 w-6 pt-2 pr-2"
-                  fill="gray"
+                  className="h-8 w-8 p-1"
+                  fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
                   xmlns="http://www.w3.org/2000/svg"
@@ -512,12 +829,16 @@ export default function Home() {
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    strokeWidth="2"
+                    strokeWidth={2}
                     d="M6 18L18 6M6 6l12 12"
-                  ></path>
+                  />
                 </svg>
               </button>
-              <div dangerouslySetInnerHTML={{ __html: responseText }} />
+              {/* <div dangerouslySetInnerHTML={{ __html: responseText }} /> */}
+              {/* <div>{formatResponse(responseText)}</div> */}
+              <div className="p-1">
+              <PaymentGateways responseText={responseText} />
+              </div>
             </div>
           </div>
         )}

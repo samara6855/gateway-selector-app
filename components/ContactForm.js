@@ -77,7 +77,7 @@ const ContactForm = () => {
       className="bg-white rounded px-8 pt-8 pb-6 mb-8 gap-6"
     >
       <div className="flex flex-wrap mb-4">
-        <div className="mt-2 w-full pr-2">
+        <div className="mt-2 w-1/2 pr-2">
           <label
             htmlFor="firstName"
             className="block mb-1 text-sm font-semibold text-black"
