@@ -6,7 +6,6 @@ import ContactForm from "../../components/ContactForm";
 import { getCountries } from "country-state-picker";
 import { CountryData } from "country-codes-list";
 import { getAllCurrencies } from "../../components/currencyAPI";
-import ReactFlagsSelect from "react-flags-select";
 import ReactCountryFlag from "react-country-flag";
 import getSymbolFromCurrency from "currency-symbol-map";
 import { Country } from "country-state-city";
@@ -16,7 +15,7 @@ import { useState, useRef, useEffect } from "react";
 
 export default function Home() {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(null);
+  const [selectedOption, setSelectedOption] = useState("Payment Gateway");
   const [inputText, setInputText] = useState(null);
   const [responseText, setResponseText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -45,7 +44,6 @@ export default function Home() {
     const { checked } = event.target;
     setConsultationNeeded(checked);
 
-    // Store the value in session storage
     sessionStorage.setItem("consultationNeeded", checked ? "yes" : "no");
   };
 
@@ -227,128 +225,6 @@ export default function Home() {
     currencySymbol = getSymbolFromCurrency(countryDetails.currency);
   }
 
-  // function formatResponse(responseText) {
-  //   let response;
-
-  //   try {
-  //     response = JSON.parse(responseText);
-  //   } catch (error) {
-  //     // If JSON parsing fails, display the error message
-  //     return <p>{error.message}</p>;
-  //   }
-
-  //   if (response && response["Payment Gateways"]) {
-  //     return (
-  //       <div>
-  //         <div class="w-full md:w-1/2 m-4">
-  //           <form class="flex items-center">
-  //             <label for="simple-search" class="sr-only">
-  //               Search
-  //             </label>
-  //             <div class="relative w-full">
-  //               <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-  //                 <svg
-  //                   aria-hidden="true"
-  //                   class="w-5 h-5 text-gray-300 dark:text-gray-400"
-  //                   fill="currentColor"
-  //                   viewBox="0 0 20 20"
-  //                   xmlns="http://www.w3.org/2000/svg"
-  //                 >
-  //                   <path
-  //                     fill-rule="evenodd"
-  //                     d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-  //                     clip-rule="evenodd"
-  //                   />
-  //                 </svg>
-  //               </div>
-  //               <input
-  //                 type="text"
-  //                 id="simple-search"
-  //                 class="bg-gray-100 border border-gray-200 text-gray-900 text-sm rounded-lg focus:outline-none block w-full pl-10 p-2 dark:placeholder-gray-400 dark:text-black"
-  //                 placeholder="Search"
-  //                 required
-  //               />
-  //             </div>
-  //           </form>
-  //         </div>
-
-  //         <table className="border border-gray-200">
-  //           <thead>
-  //             <tr>
-  //             <th className="border border-gray-200 px-4 py-2">Select</th>
-  //               <th className="border border-gray-200 px-4 py-2">
-  //                 Payment Gateway Name
-  //               </th>
-  //               <th className="border border-gray-200 px-4 py-2">
-  //                 Payment Methods
-  //               </th>
-  //               <th className="border border-gray-200 px-4 py-2">
-  //                 API Languages
-  //               </th>
-  //               <th className="border border-gray-200 px-4 py-2 ">
-  //                 Security/Compliance
-  //               </th>
-  //               <th className="border border-gray-200 px-4 py-2 ">Countries</th>
-  //               <th className="border border-gray-200 px-4 py-2 ">Currencies</th>
-  //               <th className="border border-gray-200 px-4 py-2 ">Fee</th>
-  //               <th className="border border-gray-200 px-4 py-2">Website</th>
-  //             </tr>
-  //           </thead>
-  //           <tbody>
-  //             {response["Payment Gateways"].map((gateway, index) => (
-  //               <tr key={index} className="border-b border-gray-200">
-  //               <td className="border border-gray-200 px-4 py-2">
-  //               <input type="checkbox" className="form-checkbox h-4 w-4 text-primary-500 border-gray-300 rounded focus:ring-primary-500" />
-  //             </td>
-  //                 <td className="border border-gray-200 px-4 py-2">
-  //                   {gateway["Payment Gateway Name"]}
-  //                 </td>
-  //                 <td className="border border-gray-200 px-4 py-2">
-  //                   {Array.isArray(gateway["Payment Methods"])
-  //                     ? gateway["Payment Methods"].join(", ")
-  //                     : gateway["Payment Methods"]}
-  //                 </td>
-  //                 <td className="border border-gray-200 px-4 py-2">
-  //                   {Array.isArray(gateway["API Languages"])
-  //                     ? gateway["API Languages"].join(", ")
-  //                     : gateway["API Languages"]}
-  //                 </td>
-  //                 <td className="border border-gray-200 px-4 py-2">
-  //                   {Array.isArray(gateway["Security/Compliance"])
-  //                     ? gateway["Security/Compliance"].join(", ")
-  //                     : gateway["Security/Compliance"]}
-  //                 </td>
-  //                 <td className="border border-gray-200 px-4 py-2">
-  //                   {Array.isArray(gateway.Countries)
-  //                     ? gateway.Countries.join(", ")
-  //                     : gateway.Countries}
-  //                 </td>
-  //                 <td className="border border-gray-200 px-4 py-2">
-  //                   {Array.isArray(gateway.Currencies)
-  //                     ? gateway.Currencies.join(", ")
-  //                     : gateway.Currencies}
-  //                 </td>
-  //                 <td className="border border-gray-200 px-4 py-2">
-  //                   {Array.isArray(gateway.Fee)
-  //                     ? gateway.Fee.join(", ")
-  //                     : gateway.Fee}
-  //                 </td>
-  //                 <td className="border border-gray-200 px-4 py-2">
-  //                   <a href={gateway.Website}>
-  //                     {gateway["Payment Gateway Name"]}
-  //                   </a>
-  //                 </td>
-  //               </tr>
-  //             ))}
-  //           </tbody>
-  //         </table>
-  //       </div>
-  //     );
-  //   } else {
-  //     return <p>{responseText}</p>;
-  //   }
-  // }
-
   function PaymentGateways({ responseText }) {
     const [searchTerm, setSearchTerm] = useState("");
     const [checkedCount, setCheckedCount] = useState(0);
@@ -367,21 +243,34 @@ export default function Home() {
       }
     }, [response]);
 
-    const handleCheckboxChange = (id) => {
+    const handleCheckboxChange = (id, gatewayName) => {
       const newCheckedBoxes = { ...checkedBoxes };
       newCheckedBoxes[id] = !newCheckedBoxes[id];
       setCheckedBoxes(newCheckedBoxes);
-
+    
       const isChecked = newCheckedBoxes[id];
-      setCheckedCount((prevCount) =>
-        isChecked ? prevCount + 1 : prevCount - 1
-      );
+      setCheckedCount((prevCount) => (isChecked ? prevCount + 1 : prevCount - 1));
+    
+      const sessionStorageKey = `checkbox_${id}`;
+      if (isChecked) {
+        sessionStorage.setItem(sessionStorageKey, JSON.stringify({ gatewayName }));
+      } else {
+        sessionStorage.removeItem(sessionStorageKey);
+      }
     };
-
+    
     const handleCompareClick = () => {
-      console.log("Compare button clicked");
+      const selectedGateways = [];
+      for (const id in checkedBoxes) {
+        if (checkedBoxes[id]) {
+          const gateway = response["Payment Gateways"][id];
+          selectedGateways.push(gateway);
+        }
+      }
+    
+      window.open('', 'ComparePopup', 'width=600,height=400,scrollbars=yes,resizable=yes');
     };
-
+    
     try {
       response = JSON.parse(responseText);
 
@@ -495,7 +384,7 @@ export default function Home() {
                     type="checkbox"
                     className="form-checkbox h-4 w-4 text-primary-500 border-gray-300 rounded focus:ring-primary-500"
                     checked={checkedBoxes[gateway.id] || false}
-                    onChange={() => handleCheckboxChange(gateway.id)}
+                    onChange={() => handleCheckboxChange(gateway.id, gateway["Payment Gateway Name"])}
                   />
                 </td>
                 <td className="border border-gray-200 px-4 py-2">
