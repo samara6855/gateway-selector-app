@@ -18,10 +18,6 @@ const ContactForm = () => {
     setCountryCode(country.countryCode);
   };
 
-  const handleScheduleSubmit = async (event) => {
-    window.open("https://crabroom.com/hr-interview", "_blank");
-  };
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     setIsButtonDisabled(true);

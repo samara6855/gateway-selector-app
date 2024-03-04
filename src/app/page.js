@@ -23,6 +23,7 @@ export default function Home() {
   const [isContactPopupVisible, setContactPopupVisibility] = useState(false);
   const [consultationNeeded, setConsultationNeeded] = useState(true);
   const [currencies, setCurrencies] = useState([]);
+  const [product, setProduct] = useState(null);
   const [selected, setSelected] = useState("");
   const [selectedValuesFilters, setSelectedValuesFilters] = useState({
     country: "option1",
@@ -167,6 +168,8 @@ export default function Home() {
       const country = sessionStorage.getItem("country");
       const currency = sessionStorage.getItem("currency");
 
+      setProduct(product);
+
       const response = await fetch(
         `https://uxgey6rgmldnpumnikzsihhagq0uqxpa.lambda-url.us-east-1.on.aws/?product=${product}`,
         {
@@ -247,18 +250,23 @@ export default function Home() {
       const newCheckedBoxes = { ...checkedBoxes };
       newCheckedBoxes[id] = !newCheckedBoxes[id];
       setCheckedBoxes(newCheckedBoxes);
-    
+
       const isChecked = newCheckedBoxes[id];
-      setCheckedCount((prevCount) => (isChecked ? prevCount + 1 : prevCount - 1));
-    
+      setCheckedCount((prevCount) =>
+        isChecked ? prevCount + 1 : prevCount - 1
+      );
+
       const sessionStorageKey = `checkbox_${id}`;
       if (isChecked) {
-        sessionStorage.setItem(sessionStorageKey, JSON.stringify({ gatewayName }));
+        sessionStorage.setItem(
+          sessionStorageKey,
+          JSON.stringify({ gatewayName })
+        );
       } else {
         sessionStorage.removeItem(sessionStorageKey);
       }
     };
-    
+
     const handleCompareClick = () => {
       const selectedGateways = [];
       for (const id in checkedBoxes) {
@@ -267,10 +275,14 @@ export default function Home() {
           selectedGateways.push(gateway);
         }
       }
-    
-      window.open('', 'ComparePopup', 'width=600,height=400,scrollbars=yes,resizable=yes');
+
+      window.open(
+        "",
+        "ComparePopup",
+        "width=600,height=400,scrollbars=yes,resizable=yes"
+      );
     };
-    
+
     try {
       response = JSON.parse(responseText);
 
@@ -384,7 +396,12 @@ export default function Home() {
                     type="checkbox"
                     className="form-checkbox h-4 w-4 text-primary-500 border-gray-300 rounded focus:ring-primary-500"
                     checked={checkedBoxes[gateway.id] || false}
-                    onChange={() => handleCheckboxChange(gateway.id, gateway["Payment Gateway Name"])}
+                    onChange={() =>
+                      handleCheckboxChange(
+                        gateway.id,
+                        gateway["Payment Gateway Name"]
+                      )
+                    }
                   />
                 </td>
                 <td className="border border-gray-200 px-4 py-2">
@@ -427,6 +444,209 @@ export default function Home() {
                 </td>
               </tr>
             ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  }
+
+  function POSoutput({ responseText }) {
+    const [searchTerm, setSearchTerm] = useState("");
+    const [checkedCount, setCheckedCount] = useState(0);
+    const [checkedBoxes, setCheckedBoxes] = useState({});
+    let filteredPOS = [];
+
+    let response;
+
+    useEffect(() => {
+      if (response && response.POS) {
+        const initialCheckedBoxes = {};
+        response.POS.forEach((pos, index) => {
+          initialCheckedBoxes[index] = false;
+        });
+        setCheckedBoxes(initialCheckedBoxes);
+      }
+    }, [response]);
+
+    const handleCheckboxChange = (id, posName) => {
+      const newCheckedBoxes = { ...checkedBoxes };
+      newCheckedBoxes[id] = !newCheckedBoxes[id];
+      setCheckedBoxes(newCheckedBoxes);
+
+      const isChecked = newCheckedBoxes[id];
+      setCheckedCount((prevCount) =>
+        isChecked ? prevCount + 1 : prevCount - 1
+      );
+
+      const sessionStorageKey = `checkbox_${id}`;
+      if (isChecked) {
+        sessionStorage.setItem(sessionStorageKey, JSON.stringify({ posName }));
+      } else {
+        sessionStorage.removeItem(sessionStorageKey);
+      }
+    };
+
+    const handleCompareClick = () => {
+      const selectedPOS = [];
+      for (const id in checkedBoxes) {
+        if (checkedBoxes[id]) {
+          const pos = response.POS[id];
+          selectedPOS.push(pos);
+        }
+      }
+
+      window.open(
+        "",
+        "ComparePopup",
+        "width=600,height=400,scrollbars=yes,resizable=yes"
+      );
+    };
+
+    try {
+      response = JSON.parse(responseText);
+
+      response.POS.forEach((pos, index) => {
+        pos.id = index;
+      });
+
+      filteredPOS = response.POS.filter((pos) => {
+        const posValues = Object.values(pos);
+        for (const value of posValues) {
+          if (
+            typeof value === "string" &&
+            value.toLowerCase().includes(searchTerm.toLowerCase())
+          ) {
+            return true;
+          }
+          if (Array.isArray(value)) {
+            for (const item of value) {
+              if (
+                typeof item === "string" &&
+                item.toLowerCase().includes(searchTerm.toLowerCase())
+              ) {
+                return true;
+              }
+            }
+          }
+        }
+        return false;
+      });
+    } catch (error) {
+      return <p>Error: {error.message}</p>;
+    }
+
+    return (
+      <div>
+        <div className="w-full md:w-1/2 m-4">
+          <form className="flex items-center">
+            <label htmlFor="simple-search" className="sr-only">
+              Search
+            </label>
+            <div className="relative w-full">
+              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <svg
+                  aria-hidden="true"
+                  className="w-5 h-5 text-gray-300 dark:text-gray-400"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+              <input
+                type="text"
+                id="simple-search"
+                className="bg-gray-100 border border-gray-200 text-gray-900 text-sm rounded-lg focus:outline-none block w-full pl-10 p-2 dark:placeholder-gray-400 dark:text-black"
+                placeholder="Search"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                required
+              />
+            </div>
+            <div className="ml-4">
+              <button
+                className={`bg-blue-500 text-white px-4 py-2 rounded-lg focus:outline-none ${
+                  checkedCount >= 2 ? "" : "opacity-50 cursor-not-allowed"
+                }`}
+                onClick={handleCompareClick}
+                disabled={checkedCount < 2}
+              >
+                Compare({checkedCount})
+              </button>
+            </div>
+          </form>
+        </div>
+        <table className="border border-gray-200">
+          <thead>
+            <tr>
+              <th className="border border-gray-200 px-4 py-2">Select</th>
+              <th className="border border-gray-200 px-4 py-2">POS Name</th>
+              <th className="border border-gray-200 px-4 py-2">Best For</th>
+              <th className="border border-gray-200 px-4 py-2">
+                Industries Catered To
+              </th>
+              <th className="border border-gray-200 px-4 py-2">
+                Starting Price
+              </th>
+              <th className="border border-gray-200 px-4 py-2">
+                Transaction Fee
+              </th>
+              <th className="border border-gray-200 px-4 py-2">Free Version</th>
+              <th className="border border-gray-200 px-4 py-2 min-w-60">
+                Top Three Features
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {(searchTerm === "" ? response.POS : filteredPOS).map(
+              (pos, index) => (
+                <tr key={pos.id} className="border-b border-gray-200">
+                  <td className="border border-gray-200 px-4 py-2">
+                    <input
+                      type="checkbox"
+                      className="form-checkbox h-4 w-4 text-primary-500 border-gray-300 rounded focus:ring-primary-500"
+                      checked={checkedBoxes[pos.id] || false}
+                      onChange={() =>
+                        handleCheckboxChange(pos.id, pos["POS Name"])
+                      }
+                    />
+                  </td>
+                  <td className="border border-gray-200 px-4 py-2">
+                    {pos["POS Name"] || "-"}
+                  </td>
+                  <td className="border border-gray-200 px-4 py-2">
+                    {pos["Best For"] || "-"}
+                  </td>
+                  <td className="border border-gray-200 px-4 py-2">
+                    {pos["Industries Catered To"] || "-"}
+                  </td>
+                  <td className="border border-gray-200 px-4 py-2">
+                    {pos["Starting Price"] || "-"}
+                  </td>
+                  <td className="border border-gray-200 px-4 py-2">
+                    {pos["Transaction Fee"] || "-"}
+                  </td>
+                  ``
+                  <td className="border border-gray-200 px-4 py-2">
+                    {pos["Free Version"] || "-"}
+                  </td>
+                  <td className="border border-gray-200 px-4 py-2">
+                    {/* <ul>
+                      {Array.isArray(pos["Top Three Features"]) &&
+                        pos["Top Three Features"].map((feature, index) => (
+                          <li key={index}>{feature}</li>
+                        ))}
+                    </ul> */}
+                    {pos["Top Three Features"] || "-"}
+                  </td>
+                </tr>
+              )
+            )}
           </tbody>
         </table>
       </div>
@@ -726,7 +946,11 @@ export default function Home() {
               {/* <div dangerouslySetInnerHTML={{ __html: responseText }} /> */}
               {/* <div>{formatResponse(responseText)}</div> */}
               <div className="p-1">
-              <PaymentGateways responseText={responseText} />
+                {product === "pos" ? (
+                  <POSoutput responseText={responseText} />
+                ) : product === "payment gateway" ? (
+                  <PaymentGateways responseText={responseText} />
+                ) : null}
               </div>
             </div>
           </div>
