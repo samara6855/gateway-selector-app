@@ -1,12 +1,9 @@
 "use client";
-import Image from "next/image";
 import "flag-icon-css/css/flag-icons.min.css";
 import LoaderWithFacts from "../../components/LoaderWithFacts";
 import ContactForm from "../../components/ContactForm";
 import { getCountries } from "country-state-picker";
-import { CountryData } from "country-codes-list";
 import { getAllCurrencies } from "../../components/currencyAPI";
-import ReactCountryFlag from "react-country-flag";
 import getSymbolFromCurrency from "currency-symbol-map";
 import { Country } from "country-state-city";
 
@@ -31,11 +28,21 @@ export default function Home() {
   });
 
   const [isOpen, setIsOpen] = useState(false);
+  const [isFullScreen, setIsFullScreen] = useState(false);
+
+  const handleResizePopup = () => {
+    setIsFullScreen(!isFullScreen);
+  };
+
+  const handleScheduleSubmit = async (event) => {
+    window.open("https://crabroom.com/hr-interview", "_blank");
+  };
 
   const handleSelectOption = (countryCode) => {
     handleCountryChange(countryCode);
     setIsOpen(false);
   };
+
   // const [selectedValuesPOS, setSelectedValuesPOS] = useState({
   //   country: 'option1',
   //   currency: 'option1'
@@ -68,16 +75,13 @@ export default function Home() {
 
     sessionStorage.setItem("consultationNeeded", "yes");
     const handleClickOutside = (event) => {
-      // Close the dropdown if the click is outside of it
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setDropdownOpen(false);
       }
     };
 
-    // Add click event listener to the document body
     document.body.addEventListener("click", handleClickOutside);
 
-    // Clean up the event listener on component unmount
     return () => {
       sessionStorage.clear();
       document.body.removeEventListener("click", handleClickOutside);
@@ -317,8 +321,8 @@ export default function Home() {
     }
 
     return (
-      <div>
-        <div className="w-full md:w-1/2 m-4">
+      <div className="flex flex-col">
+        <div className="min-w-1/2 md:w-1/2 m-4">
           <form className="flex items-center">
             <label htmlFor="simple-search" className="sr-only">
               Search
@@ -342,55 +346,69 @@ export default function Home() {
               <input
                 type="text"
                 id="simple-search"
-                className="bg-gray-100 border border-gray-200 text-gray-900 text-sm rounded-lg focus:outline-none block w-full pl-10 p-2 dark:placeholder-gray-400 dark:text-black"
+                className="bg-gray-100 border min-w-72 border-gray-200 text-gray-900 text-sm rounded-lg focus:outline-none block w-full pl-10 p-2 dark:placeholder-gray-400 dark:text-black"
                 placeholder="Search"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 required
               />
             </div>
-            <div className="ml-4">
+
+            <div className="ml-60">
               <button
-                className={`bg-blue-500 text-white px-4 py-2 rounded-lg focus:outline-none ${
-                  checkedCount >= 2 ? "" : "opacity-50 cursor-not-allowed"
-                }`}
-                onClick={handleCompareClick}
-                disabled={checkedCount < 2}
+                type="button"
+                className="mt-2 px-4 py-2 mb-2 text-white rounded-md transition-colors w-full bg-blue-500 min-w-60"
+                onClick={handleScheduleSubmit}
               >
-                Compare({checkedCount})
+                I need consultation 🡢
               </button>
             </div>
           </form>
         </div>
 
         <table className="border border-gray-200">
-          <thead>
+          <thead className="bg-gray-300">
             <tr>
-              <th className="border border-gray-200 px-4 py-2">Select</th>
-              <th className="border border-gray-200 px-4 py-2">
+              <th className="border border-gray-200 px-4 py-2 text-black font-semibold">
+                Select
+              </th>
+              <th className="border border-gray-200 px-4 py-2 text-black font-semibold">
                 Payment Gateway Name
               </th>
-              <th className="border border-gray-200 px-4 py-2 min-w-72">
+              <th className="border border-gray-200 px-4 py-2 min-w-72 text-black font-semibold">
                 Payment Methods
               </th>
-              <th className="border border-gray-200 px-4 py-2 min-w-60">
+              <th className="border border-gray-200 px-4 py-2 min-w-60 text-black font-semibold">
                 API Languages
               </th>
-              <th className="border border-gray-200 px-4 py-2">
+              <th className="border border-gray-200 px-4 py-2 text-black font-semibold">
                 Security/Compliance
               </th>
-              <th className="border border-gray-200 px-4 py-2">Countries</th>
-              <th className="border border-gray-200 px-4 py-2">Currencies</th>
-              <th className="border border-gray-200 px-4 py-2 min-w-60">Fee</th>
-              <th className="border border-gray-200 px-4 py-2">Website</th>
+              <th className="border border-gray-200 px-4 py-2 min-w-40 text-black font-semibold">
+                Countries
+              </th>
+              <th className="border border-gray-200 px-4 py-2 min-w-72 text-black font-semibold">
+                Currencies
+              </th>
+              <th className="border border-gray-200 px-4 py-2 min-w-60 text-black font-semibold">
+                Fee
+              </th>
+              <th className="border border-gray-200 px-4 py-2 text-black font-semibold">
+                Website
+              </th>
             </tr>
           </thead>
           <tbody>
             {(searchTerm === ""
               ? response["Payment Gateways"]
               : filteredGateways
-            ).map((gateway) => (
-              <tr key={gateway.id} className="border-b border-gray-200">
+            ).map((gateway, index) => (
+              <tr
+                key={gateway.id}
+                className={`border-b border-gray-200 ${
+                  index % 2 === 0 ? "" : "bg-gray-100"
+                }`}
+              >
                 <td className="border border-gray-200 px-4 py-2">
                   <input
                     type="checkbox"
@@ -408,14 +426,40 @@ export default function Home() {
                   {gateway["Payment Gateway Name"]}
                 </td>
                 <td className="border border-gray-200 px-4 py-2">
-                  {Array.isArray(gateway["Payment Methods"])
+                  {/* {Array.isArray(gateway["Payment Methods"])
                     ? gateway["Payment Methods"].join(", ")
-                    : gateway["Payment Methods"]}
+                    : gateway["Payment Methods"]} */}
+                  {Array.isArray(gateway["Payment Methods"]) ? (
+                    gateway["Payment Methods"].map((method, index) => (
+                      <span
+                        key={index}
+                        className="border border-gray-200 bg-purple-300 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
+                      >
+                        {method}
+                      </span>
+                    ))
+                  ) : (
+                    <span className="payment-method">
+                      {gateway["Payment Methods"]}
+                    </span>
+                  )}
                 </td>
+
                 <td className="border border-gray-200 px-4 py-2">
-                  {Array.isArray(gateway["API Languages"])
-                    ? gateway["API Languages"].join(", ")
-                    : gateway["API Languages"]}
+                  {Array.isArray(gateway["API Languages"]) ? (
+                    gateway["API Languages"].map((language, index) => (
+                      <span
+                        key={index}
+                        className="border border-gray-200 bg-blue-300 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
+                      >
+                        {language}
+                      </span>
+                    ))
+                  ) : (
+                    <span className="api-language">
+                      {gateway["API Languages"]}
+                    </span>
+                  )}
                 </td>
                 <td className="border border-gray-200 px-4 py-2">
                   {Array.isArray(gateway["Security/Compliance"])
@@ -428,9 +472,20 @@ export default function Home() {
                     : gateway.Countries}
                 </td>
                 <td className="border border-gray-200 px-4 py-2">
-                  {Array.isArray(gateway.Currencies)
-                    ? gateway.Currencies.join(", ")
-                    : gateway.Currencies}
+                  {Array.isArray(gateway.Currencies) &&
+                  gateway.Currencies.length > 3 ? (
+                    <select className="w-20">
+                      {gateway.Currencies.map((currency) => (
+                        <option key={currency} value={currency}>
+                          {currency}
+                        </option>
+                      ))}
+                    </select>
+                  ) : Array.isArray(gateway.Currencies) ? (
+                    gateway.Currencies.join(", ")
+                  ) : (
+                    gateway.Currencies
+                  )}
                 </td>
                 <td className="border border-gray-200 px-4 py-2">
                   {Array.isArray(gateway.Fee)
@@ -446,6 +501,16 @@ export default function Home() {
             ))}
           </tbody>
         </table>
+        {checkedCount >= 2 && (
+          <div className="flex justify-center m-4">
+            <button
+              className="bg-blue-500 text-white px-4 py-2 rounded-lg focus:outline-none"
+              onClick={handleCompareClick}
+            >
+              Compare({checkedCount})
+            </button>
+          </div>
+        )}
       </div>
     );
   }
@@ -536,8 +601,8 @@ export default function Home() {
     }
 
     return (
-      <div>
-        <div className="w-full md:w-1/2 m-4">
+      <div className="flex flex-col">
+        <div className="min-w-1/2 md:w-1/2 m-4">
           <form className="flex items-center">
             <label htmlFor="simple-search" className="sr-only">
               Search
@@ -561,22 +626,21 @@ export default function Home() {
               <input
                 type="text"
                 id="simple-search"
-                className="bg-gray-100 border border-gray-200 text-gray-900 text-sm rounded-lg focus:outline-none block w-full pl-10 p-2 dark:placeholder-gray-400 dark:text-black"
+                className="bg-gray-100 border min-w-72 border-gray-200 text-gray-900 text-sm rounded-lg focus:outline-none block w-full pl-10 p-2 dark:placeholder-gray-400 dark:text-black"
                 placeholder="Search"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 required
               />
             </div>
-            <div className="ml-4">
+
+            <div className="ml-60">
               <button
-                className={`bg-blue-500 text-white px-4 py-2 rounded-lg focus:outline-none ${
-                  checkedCount >= 2 ? "" : "opacity-50 cursor-not-allowed"
-                }`}
-                onClick={handleCompareClick}
-                disabled={checkedCount < 2}
+                type="button"
+                className="mt-2 px-4 py-2 mb-2 text-white rounded-md transition-colors w-full bg-indigo-500 min-w-60"
+                onClick={handleScheduleSubmit}
               >
-                Compare({checkedCount})
+                I need consultation 🡢
               </button>
             </div>
           </form>
@@ -584,28 +648,52 @@ export default function Home() {
         <table className="border border-gray-200">
           <thead>
             <tr>
-              <th className="border border-gray-200 px-4 py-2">Select</th>
-              <th className="border border-gray-200 px-4 py-2">POS Name</th>
-              <th className="border border-gray-200 px-4 py-2">Best For</th>
-              <th className="border border-gray-200 px-4 py-2">
-                Industries Catered To
+              <th className="border border-gray-200 px-4 py-2 text-black bg-gray-300 font-semibold">
+                Select
               </th>
-              <th className="border border-gray-200 px-4 py-2">
-                Starting Price
+              <th className="border border-gray-200 px-4 py-2 text-black bg-gray-300 font-semibold">
+                POS Name
               </th>
-              <th className="border border-gray-200 px-4 py-2">
-                Transaction Fee
+              <th className="border border-gray-200 px-4 py-2 text-black bg-gray-300 font-semibold min-w-60 pt-3">
+                <div className="flex flex-col">
+                  <span className="text-sm font-medium">Reviews</span>
+                  <div className="flex flex-row border-t border-gray-200 mt-1 pt-1">
+                    <span className="flex-1 text-xs font-normal text-center">
+                      Google Reviews
+                    </span>
+                    <span className="flex-1 text-xs font-normal text-center border-l border-gray-200">
+                      Trust Pilot Reviews
+                    </span>
+                  </div>
+                </div>
               </th>
-              <th className="border border-gray-200 px-4 py-2">Free Version</th>
-              <th className="border border-gray-200 px-4 py-2 min-w-60">
-                Top Three Features
+
+              <th className="border border-gray-200 px-4 py-2 text-black bg-gray-300 font-semibold min-w-52">
+                Device Cost
               </th>
+              <th className="border border-gray-200 px-4 py-2 text-black bg-gray-300 font-semibold min-w-48">
+                Works with (Payment Gateway)
+              </th>
+              <th className="border border-gray-200 px-4 py-2 text-black bg-gray-300 font-semibold min-w-40">
+                Payment processing cost
+              </th>
+              <th className="border border-gray-200 px-4 py-2 text-black bg-gray-300 font-semibold">
+                Industries
+              </th>
+              {/* <th className="border border-gray-200 px-4 py-2 text-black bg-gray-300 font-semibold">
+                Inventory Management
+              </th> */}
             </tr>
           </thead>
           <tbody>
             {(searchTerm === "" ? response.POS : filteredPOS).map(
               (pos, index) => (
-                <tr key={pos.id} className="border-b border-gray-200">
+                <tr
+                  key={pos.id}
+                  className={`border-b border-gray-200 ${
+                    index % 2 === 0 ? "" : "bg-gray-100"
+                  }`}
+                >
                   <td className="border border-gray-200 px-4 py-2">
                     <input
                       type="checkbox"
@@ -620,35 +708,46 @@ export default function Home() {
                     {pos["POS Name"] || "-"}
                   </td>
                   <td className="border border-gray-200 px-4 py-2">
-                    {pos["Best For"] || "-"}
+                    <div className="flex flex-row">
+                      <span className="flex-1 text-sm font-normal text-center">
+                        {pos["Google Reviews"] || "-"}
+                      </span>
+                      <span className="flex-1 text-sm font-normal text-center border-l border-gray-200">
+                        {pos["Trust Pilot Reviews"] || "-"}
+                      </span>
+                    </div>
+                  </td>
+
+                  <td className="border border-gray-200 px-4 py-2">
+                    {pos["Device Cost"] || "-"}
                   </td>
                   <td className="border border-gray-200 px-4 py-2">
-                    {pos["Industries Catered To"] || "-"}
+                    {pos["Works with (Payment Gateway)"] || "-"}
                   </td>
                   <td className="border border-gray-200 px-4 py-2">
-                    {pos["Starting Price"] || "-"}
+                    {pos["Payment processing cost"] || "-"}
                   </td>
                   <td className="border border-gray-200 px-4 py-2">
-                    {pos["Transaction Fee"] || "-"}
+                    {pos["Industries"] || "-"}
                   </td>
-                  ``
-                  <td className="border border-gray-200 px-4 py-2">
-                    {pos["Free Version"] || "-"}
-                  </td>
-                  <td className="border border-gray-200 px-4 py-2">
-                    {/* <ul>
-                      {Array.isArray(pos["Top Three Features"]) &&
-                        pos["Top Three Features"].map((feature, index) => (
-                          <li key={index}>{feature}</li>
-                        ))}
-                    </ul> */}
-                    {pos["Top Three Features"] || "-"}
-                  </td>
+                  {/* <td className="border border-gray-200 px-4 py-2">
+                    {pos["Inventory Management"] || "-"}
+                  </td> */}
                 </tr>
               )
             )}
           </tbody>
         </table>
+        {checkedCount >= 2 && (
+          <div className="flex justify-center m-4">
+            <button
+              className="bg-blue-500 text-white px-4 py-2 rounded-lg focus:outline-none"
+              onClick={handleCompareClick}
+            >
+              Compare({checkedCount})
+            </button>
+          </div>
+        )}
       </div>
     );
   }
@@ -841,7 +940,7 @@ export default function Home() {
               <input
                 type="text"
                 id="floating_outlined"
-                className="block px-2.5 pb-2.5 pt-4 w-full h-20 text-sm  text-black bg-white rounded-lg border border-gray-300 dark:text-black dark:border-gray-200 dark:focus:border-gray-400 focus:outline-none focus:ring- focus:border-gray-400 peer"
+                className="block px-2.5 pb-2.5 pt-4 w-full h-20 text-sm text-black bg-white rounded-lg border border-gray-300 dark:text-black dark:border-gray-200 dark:focus:border-gray-400 focus:outline-none focus:ring- focus:border-gray-400 peer"
                 placeholder=" "
                 onChange={handleInputChange}
               />
@@ -922,8 +1021,55 @@ export default function Home() {
         </div>
 
         {isPopupVisible && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
-            <div className="bg-white rounded-lg shadow-md max-w-4xl w-auto max-h-3/4 min-h-20 h-auto overflow-x-auto overflow-y-auto relative text-black">
+          <div
+            className={`fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4`}
+          >
+            <div
+              className={`bg-white rounded-lg shadow-md ${
+                isFullScreen
+                  ? "w-screen h-screen"
+                  : "max-w-4xl w-auto max-h-3/4 min-h-20"
+              } overflow-x-auto overflow-y-auto relative text-black custom-scrollbar`}
+            >
+              <button
+                className="absolute top-2 right-10 text-gray-600 hover:text-gray-800"
+                onClick={handleResizePopup}
+              >
+                {isFullScreen ? (
+                  <svg
+                    className="h-8 w-8 p-1"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M20 12H4"
+                    />
+                  </svg>
+                ) : (
+                  <svg
+                    fill="none"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    width="24"
+                    className="pt-2"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M13.8995 4.10052V2.10052H21.8995V10.1005H19.8995V5.51477L14.1213 11.293L12.7071 9.87878L18.4854 4.10052H13.8995Z"
+                      fill="currentColor"
+                    />
+                    <path
+                      d="M4.10046 13.8995H2.10046V21.8995H10.1005V19.8995H5.51468L11.2929 14.1212L9.87872 12.707L4.10046 18.4853V13.8995Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                )}
+              </button>
               <button
                 className="absolute top-2 right-2 text-gray-600 hover:text-gray-800"
                 onClick={handleClosePopup}
@@ -943,8 +1089,6 @@ export default function Home() {
                   />
                 </svg>
               </button>
-              {/* <div dangerouslySetInnerHTML={{ __html: responseText }} /> */}
-              {/* <div>{formatResponse(responseText)}</div> */}
               <div className="p-1">
                 {product === "pos" ? (
                   <POSoutput responseText={responseText} />
@@ -978,7 +1122,7 @@ export default function Home() {
                   ></path>
                 </svg>
               </button>
-              <div className="p-4 ">
+              <div className="p-4">
                 <div className="text-center pt-2 pb-4">
                   <text className="text-2xl font-semibold">
                     Contact Information
