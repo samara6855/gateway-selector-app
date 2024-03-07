@@ -232,11 +232,68 @@ export default function Home() {
     currencySymbol = getSymbolFromCurrency(countryDetails.currency);
   }
 
+  function Popup({ finalCompareResponse, onClose }) {
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 p-4">
+        <div className="bg-white rounded-lg shadow-md max-w-4xl w-auto max-h-3/4 min-h-20 overflow-x-auto overflow-y-auto relative text-black custom-scrollbar">
+          <div className="p-4">
+            <button
+              className="absolute top-2 right-2 text-gray-600 hover:text-gray-800"
+              onClick={onClose}
+            >
+              <svg
+                className="h-8 w-8 p-1"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+            <h1 className="text-2xl p-1 font-semibold">Comparison Result</h1>
+            <div className="max-h-full overflow-y-auto pt-4">
+              {finalCompareResponse}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   function PaymentGateways({ responseText }) {
     const [searchTerm, setSearchTerm] = useState("");
     const [checkedCount, setCheckedCount] = useState(0);
     const [checkedBoxes, setCheckedBoxes] = useState({});
     let filteredGateways = [];
+    const [showDropdown, setShowDropdown] = useState(false);
+    const [isPopupVisible, setIsPopupVisible] = useState(false);
+    const [finalCompareResponse, setFinalCompareResponse] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
+    const [showAll, setShowAll] = useState(false);
+    const [showLanguages, setShowLanguages] = useState(false);
+    const [showCurrencies, setShowCurrencies] = useState(false);
+
+    const toggleShowAll = () => {
+      setShowAll(!showAll);
+    };
+
+    const handleMoreClick = () => {
+      setShowDropdown(!showDropdown);
+    };
+
+    const toggleShowLanguages = () => {
+      setShowLanguages(!showLanguages);
+    };
+
+    const toggleShowCurrencies = () => {
+      setShowCurrencies(!showCurrencies);
+    };
 
     let response;
 
@@ -250,7 +307,7 @@ export default function Home() {
       }
     }, [response]);
 
-    const handleCheckboxChange = (id, gatewayName) => {
+    const handleCheckboxChange = (id, gatewayData) => {
       const newCheckedBoxes = { ...checkedBoxes };
       newCheckedBoxes[id] = !newCheckedBoxes[id];
       setCheckedBoxes(newCheckedBoxes);
@@ -262,29 +319,92 @@ export default function Home() {
 
       const sessionStorageKey = `checkbox_${id}`;
       if (isChecked) {
-        sessionStorage.setItem(
-          sessionStorageKey,
-          JSON.stringify({ gatewayName })
-        );
+        sessionStorage.setItem(sessionStorageKey, JSON.stringify(gatewayData));
       } else {
         sessionStorage.removeItem(sessionStorageKey);
       }
     };
 
-    const handleCompareClick = () => {
-      const selectedGateways = [];
-      for (const id in checkedBoxes) {
-        if (checkedBoxes[id]) {
-          const gateway = response["Payment Gateways"][id];
-          selectedGateways.push(gateway);
-        }
-      }
+    const handleClosePopup = () => {
+      setIsPopupVisible(false);
+    };
 
-      window.open(
-        "",
-        "ComparePopup",
-        "width=600,height=400,scrollbars=yes,resizable=yes"
-      );
+    const handleCompareClick = async () => {
+      try {
+        // Set isLoading to true to indicate loading state
+        setIsLoading(true);
+
+        function retrieveCheckboxSessionStorageItems() {
+          const items = {};
+
+          // Loop through sessionStorage keys
+          for (let i = 0; i < sessionStorage.length; i++) {
+            const key = sessionStorage.key(i);
+
+            // Check if key starts with "checkbox_"
+            if (key.startsWith("checkbox_")) {
+              // Retrieve the item from sessionStorage
+              const item = sessionStorage.getItem(key);
+
+              // Parse the item value from JSON
+              const parsedItem = JSON.parse(item);
+
+              // Add the item to the result object
+              items[key] = parsedItem;
+            }
+          }
+
+          return items;
+        }
+
+        const checkboxItems = retrieveCheckboxSessionStorageItems();
+        const checkboxItemsJson = JSON.stringify(checkboxItems);
+
+        const compareResponse = await fetch(
+          `https://ut4vfwn4rrk53nl36ymmnv3xem0iezgi.lambda-url.us-east-1.on.aws/`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              checkboxItems: checkboxItemsJson,
+            }),
+          }
+        );
+
+        if (!compareResponse.ok) {
+          console.log("error receiving response");
+          throw new Error("Failed to fetch data");
+        }
+
+        const compareResponseData = await compareResponse.json();
+        const finalCompareResponse = compareResponseData.bot.trim();
+        console.log(finalCompareResponse);
+
+        const paragraphs = finalCompareResponse
+          .split("\n")
+          .map((paragraph, index) => (
+            <p key={index}>
+              <br></br>
+              {paragraph}
+            </p>
+          ));
+
+        // Set finalCompareResponse state
+        setFinalCompareResponse(paragraphs);
+        // Set finalCompareResponse state
+        // setFinalCompareResponse(finalCompareResponse);
+
+        // Set isLoading to false to indicate end of loading state
+        setIsLoading(false);
+
+        // Show the popup
+        setIsPopupVisible(true);
+      } catch (error) {
+        console.error("Error occurred:", error);
+        setIsLoading(false); // Ensure isLoading is set to false in case of errors
+      }
     };
 
     try {
@@ -324,7 +444,7 @@ export default function Home() {
       <div className="flex flex-col">
         <div className="min-w-1/2 md:w-1/2 m-4">
           <form className="flex items-center">
-            <label htmlFor="simple-search" className="sr-only">
+            <label htmlFor="simple-search" className="sr-only border border-cyan-100">
               Search
             </label>
             <div className="relative w-full">
@@ -357,7 +477,7 @@ export default function Home() {
             <div className="ml-60">
               <button
                 type="button"
-                className="mt-2 px-4 py-2 mb-2 text-white rounded-md transition-colors w-full bg-blue-500 min-w-60"
+                className="mt-2 px-4 py-2 mb-2 text-white rounded-md transition-colors w-full bg-cyan-500 min-w-60"
                 onClick={handleScheduleSubmit}
               >
                 I need consultation 🡢
@@ -366,78 +486,91 @@ export default function Home() {
           </form>
         </div>
 
-        <table className="border border-gray-200">
-          <thead className="bg-gray-300">
+        <table className="rounded-lg">
+          <thead className=" bg-cyan-500 text-white rounded-md">
             <tr>
-              <th className="border border-gray-200 px-4 py-2 text-black font-semibold">
+              <th className=" px-4 py-2 font-semibold rounded-lg">
                 Select
               </th>
-              <th className="border border-gray-200 px-4 py-2 text-black font-semibold">
+              <th className="border border-cyan-200 px-4 py-2 font-semibold rounded-lg">
                 Payment Gateway Name
               </th>
-              <th className="border border-gray-200 px-4 py-2 min-w-72 text-black font-semibold">
+              <th className="border border-cyan-200 px-4 py-2 min-w-72 font-semibold rounded-lg">
                 Payment Methods
               </th>
-              <th className="border border-gray-200 px-4 py-2 min-w-60 text-black font-semibold">
+              <th className="border border-cyan-200 px-4 py-2 min-w-60 font-semibold rounded-lg">
                 API Languages
               </th>
-              <th className="border border-gray-200 px-4 py-2 text-black font-semibold">
+              <th className="border border-cyan-200 px-4 py-2 font-semibold rounded-lg">
                 Security/Compliance
               </th>
-              <th className="border border-gray-200 px-4 py-2 min-w-40 text-black font-semibold">
+              <th className="border border-cyan-200 px-4 py-2 min-w-40 font-semibold rounded-lg">
                 Countries
               </th>
-              <th className="border border-gray-200 px-4 py-2 min-w-72 text-black font-semibold">
+              <th className="border border-cyan-200 px-4 py-2 min-w-72 max-w-72 font-semibold rounded-lg">
                 Currencies
               </th>
-              <th className="border border-gray-200 px-4 py-2 min-w-60 text-black font-semibold">
+              <th className="border border-cyan-200 px-4 py-2 min-w-60 font-semibold rounded-lg">
                 Fee
               </th>
-              <th className="border border-gray-200 px-4 py-2 text-black font-semibold">
+              <th className="border border-cyan-200 px-4 py-2 font-semibold rounded-lg">
                 Website
               </th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="rounded-lg">
             {(searchTerm === ""
               ? response["Payment Gateways"]
               : filteredGateways
             ).map((gateway, index) => (
               <tr
                 key={gateway.id}
-                className={`border-b border-gray-200 ${
-                  index % 2 === 0 ? "" : "bg-gray-100"
+                className={`border-b border-cyan-200 rounded-lg ${
+                  index % 2 === 0 ? "" : "bg-cyan-50"
                 }`}
               >
-                <td className="border border-gray-200 px-4 py-2">
+                <td className="border border-cyan-200 px-4 py-2 rounded-lg">
                   <input
                     type="checkbox"
                     className="form-checkbox h-4 w-4 text-primary-500 border-gray-300 rounded focus:ring-primary-500"
                     checked={checkedBoxes[gateway.id] || false}
-                    onChange={() =>
-                      handleCheckboxChange(
-                        gateway.id,
-                        gateway["Payment Gateway Name"]
-                      )
-                    }
+                    onChange={() => handleCheckboxChange(gateway.id, gateway)}
                   />
                 </td>
-                <td className="border border-gray-200 px-4 py-2">
+                <td className="border border-cyan-200 px-4 py-2">
                   {gateway["Payment Gateway Name"]}
                 </td>
-                <td className="border border-gray-200 px-4 py-2">
-                  {/* {Array.isArray(gateway["Payment Methods"])
-                    ? gateway["Payment Methods"].join(", ")
-                    : gateway["Payment Methods"]} */}
+                <td className="border border-cyan-200 px-4 py-2">
                   {Array.isArray(gateway["Payment Methods"]) ? (
-                    gateway["Payment Methods"].map((method, index) => (
-                      <span
-                        key={index}
-                        className="border border-gray-200 bg-purple-300 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
-                      >
-                        {method}
-                      </span>
-                    ))
+                    <>
+                      {gateway["Payment Methods"]
+                        .slice(0, 3)
+                        .map((method, index) => (
+                          <span
+                            key={index}
+                            className="border border-cyan-200 bg-cyan-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
+                          >
+                            {method}
+                          </span>
+                        ))}
+                      {!showAll && gateway["Payment Methods"].length > 3 && (
+                        <span
+                          onClick={toggleShowAll}
+                          className="text-cyan-300 mr-2 mb-2 px-2 py-1 rounded-md inline-block cursor-pointer"
+                        >
+                          more...
+                        </span>
+                      )}
+                      {showAll &&
+                        gateway["Payment Methods"].map((method, index) => (
+                          <span
+                            key={index}
+                            className="border border-cyan-200 bg-cyan-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
+                          >
+                            {method}
+                          </span>
+                        ))}
+                    </>
                   ) : (
                     <span className="payment-method">
                       {gateway["Payment Methods"]}
@@ -445,54 +578,104 @@ export default function Home() {
                   )}
                 </td>
 
-                <td className="border border-gray-200 px-4 py-2">
+                <td className="border border-cyan-200 px-4 py-2">
                   {Array.isArray(gateway["API Languages"]) ? (
-                    gateway["API Languages"].map((language, index) => (
-                      <span
-                        key={index}
-                        className="border border-gray-200 bg-blue-300 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
-                      >
-                        {language}
-                      </span>
-                    ))
+                    <>
+                      {!showLanguages ? (
+                        <>
+                          {gateway["API Languages"]
+                            .slice(0, 3)
+                            .map((language, index) => (
+                              <span
+                                key={index}
+                                className="border border-cyan-200 bg-cyan-200 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
+                              >
+                                {language}
+                              </span>
+                            ))}
+                          {gateway["API Languages"].length > 3 && (
+                            <span
+                              onClick={toggleShowLanguages}
+                              className="text-cyan-300 mr-2 mb-2 px-2 py-1 rounded-md inline-block cursor-pointer"
+                            >
+                              more...
+                            </span>
+                          )}
+                        </>
+                      ) : (
+                        gateway["API Languages"].map((language, index) => (
+                          <span
+                            key={index}
+                            className="border border-cyan-200 bg-cyan-200 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
+                          >
+                            {language}
+                          </span>
+                        ))
+                      )}
+                    </>
                   ) : (
                     <span className="api-language">
                       {gateway["API Languages"]}
                     </span>
                   )}
                 </td>
-                <td className="border border-gray-200 px-4 py-2">
+
+                <td className="border border-cyan-200 px-4 py-2">
                   {Array.isArray(gateway["Security/Compliance"])
                     ? gateway["Security/Compliance"].join(", ")
                     : gateway["Security/Compliance"]}
                 </td>
-                <td className="border border-gray-200 px-4 py-2">
+                <td className="border border-cyan-200 px-4 py-2">
                   {Array.isArray(gateway.Countries)
                     ? gateway.Countries.join(", ")
                     : gateway.Countries}
                 </td>
-                <td className="border border-gray-200 px-4 py-2">
-                  {Array.isArray(gateway.Currencies) &&
-                  gateway.Currencies.length > 3 ? (
-                    <select className="w-20">
-                      {gateway.Currencies.map((currency) => (
-                        <option key={currency} value={currency}>
-                          {currency}
-                        </option>
-                      ))}
-                    </select>
-                  ) : Array.isArray(gateway.Currencies) ? (
-                    gateway.Currencies.join(", ")
+                <td className="border border-cyan-200 px-4 py-2">
+                  {Array.isArray(gateway.Currencies) ? (
+                    <>
+                      {!showCurrencies ? (
+                        <>
+                          {gateway.Currencies.slice(0, 3).map(
+                            (currency, index) => (
+                              <span
+                                key={index}
+                                className="border border-cyan-200 bg-cyan-200 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
+                              >
+                                {currency}
+                              </span>
+                            )
+                          )}
+                          {gateway.Currencies.length > 3 && (
+                            <span
+                              onClick={toggleShowCurrencies}
+                              className="text-cyan-300 mr-2 mb-2 px-2 py-1 rounded-md inline-block cursor-pointer"
+                            >
+                              more...
+                            </span>
+                          )}
+                        </>
+                      ) : (
+                        gateway.Currencies.map((currency, index) => (
+                          <span
+                            key={index}
+                            className="border border-cyan-200 bg-cyan-200 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
+                          >
+                            {currency}
+                          </span>
+                        ))
+                      )}
+                    </>
                   ) : (
-                    gateway.Currencies
+                    <span className="currency">{gateway.Currencies}</span>
                   )}
                 </td>
-                <td className="border border-gray-200 px-4 py-2">
+
+                <td className="border border-cyan-200 px-4 py-2">
                   {Array.isArray(gateway.Fee)
                     ? gateway.Fee.join(", ")
                     : gateway.Fee}
                 </td>
-                <td className="border border-gray-200 px-4 py-2">
+                <td className="border border-cyan-200 px-4 py-2">
                   <a href={gateway.Website}>
                     {gateway["Payment Gateway Name"]}
                   </a>
@@ -504,12 +687,42 @@ export default function Home() {
         {checkedCount >= 2 && (
           <div className="flex justify-center m-4">
             <button
-              className="bg-blue-500 text-white px-4 py-2 rounded-lg focus:outline-none"
-              onClick={handleCompareClick}
+              className={`bg-cyan-500 text-white px-4 py-2 w-40 mt-2 rounded-lg focus:outline-none relative ${
+                isLoading ? "opacity-50 pointer-events-none" : ""
+              }`}
+              onClick={!isLoading ? handleCompareClick : undefined}
+              disabled={isLoading}
             >
-              Compare({checkedCount})
+              {isLoading ? (
+                <div className=" flex items-center justify-center">
+                  <svg
+                    className="animate-spin h-5 w-5 mr-2"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-100"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                      strokeDasharray="60 40"
+                      fill="none"
+                    />
+                  </svg>
+                </div>
+              ) : (
+                `Compare(${checkedCount})`
+              )}
             </button>
           </div>
+        )}
+
+        {isPopupVisible && (
+          <Popup
+            finalCompareResponse={finalCompareResponse}
+            onClose={handleClosePopup}
+          />
         )}
       </div>
     );
@@ -520,6 +733,9 @@ export default function Home() {
     const [checkedCount, setCheckedCount] = useState(0);
     const [checkedBoxes, setCheckedBoxes] = useState({});
     let filteredPOS = [];
+    const [isPopupVisible, setIsPopupVisible] = useState(false);
+    const [finalCompareResponse, setFinalCompareResponse] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
 
     let response;
 
@@ -533,7 +749,7 @@ export default function Home() {
       }
     }, [response]);
 
-    const handleCheckboxChange = (id, posName) => {
+    const handleCheckboxChange = (id, posData) => {
       const newCheckedBoxes = { ...checkedBoxes };
       newCheckedBoxes[id] = !newCheckedBoxes[id];
       setCheckedBoxes(newCheckedBoxes);
@@ -545,26 +761,92 @@ export default function Home() {
 
       const sessionStorageKey = `checkbox_${id}`;
       if (isChecked) {
-        sessionStorage.setItem(sessionStorageKey, JSON.stringify({ posName }));
+        sessionStorage.setItem(sessionStorageKey, JSON.stringify({ posData }));
       } else {
         sessionStorage.removeItem(sessionStorageKey);
       }
     };
 
-    const handleCompareClick = () => {
-      const selectedPOS = [];
-      for (const id in checkedBoxes) {
-        if (checkedBoxes[id]) {
-          const pos = response.POS[id];
-          selectedPOS.push(pos);
-        }
-      }
+    const handleClosePopup = () => {
+      setIsPopupVisible(false);
+    };
 
-      window.open(
-        "",
-        "ComparePopup",
-        "width=600,height=400,scrollbars=yes,resizable=yes"
-      );
+    const handleCompareClick = async () => {
+      try {
+        // Set isLoading to true to indicate loading state
+        setIsLoading(true);
+
+        function retrieveCheckboxSessionStorageItems() {
+          const items = {};
+
+          // Loop through sessionStorage keys
+          for (let i = 0; i < sessionStorage.length; i++) {
+            const key = sessionStorage.key(i);
+
+            // Check if key starts with "checkbox_"
+            if (key.startsWith("checkbox_")) {
+              // Retrieve the item from sessionStorage
+              const item = sessionStorage.getItem(key);
+
+              // Parse the item value from JSON
+              const parsedItem = JSON.parse(item);
+
+              // Add the item to the result object
+              items[key] = parsedItem;
+            }
+          }
+
+          return items;
+        }
+
+        const checkboxItems = retrieveCheckboxSessionStorageItems();
+        const checkboxItemsJson = JSON.stringify(checkboxItems);
+
+        const compareResponse = await fetch(
+          `https://ut4vfwn4rrk53nl36ymmnv3xem0iezgi.lambda-url.us-east-1.on.aws/`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              checkboxItems: checkboxItemsJson,
+            }),
+          }
+        );
+
+        if (!compareResponse.ok) {
+          console.log("error receiving response");
+          throw new Error("Failed to fetch data");
+        }
+
+        const compareResponseData = await compareResponse.json();
+        const finalCompareResponse = compareResponseData.bot.trim();
+        console.log(finalCompareResponse);
+
+        const paragraphs = finalCompareResponse
+          .split("\n")
+          .map((paragraph, index) => (
+            <p key={index}>
+              <br></br>
+              {paragraph}
+            </p>
+          ));
+
+        // Set finalCompareResponse state
+        setFinalCompareResponse(paragraphs);
+        // Set finalCompareResponse state
+        // setFinalCompareResponse(finalCompareResponse);
+
+        // Set isLoading to false to indicate end of loading state
+        setIsLoading(false);
+
+        // Show the popup
+        setIsPopupVisible(true);
+      } catch (error) {
+        console.error("Error occurred:", error);
+        setIsLoading(false); // Ensure isLoading is set to false in case of errors
+      }
     };
 
     try {
@@ -626,7 +908,7 @@ export default function Home() {
               <input
                 type="text"
                 id="simple-search"
-                className="bg-gray-100 border min-w-72 border-gray-200 text-gray-900 text-sm rounded-lg focus:outline-none block w-full pl-10 p-2 dark:placeholder-gray-400 dark:text-black"
+                className="bg-gray-100 border min-w-72 border-cyan-200 text-gray-900 text-sm rounded-lg focus:outline-none block w-full pl-10 p-2 dark:placeholder-gray-400 dark:text-black"
                 placeholder="Search"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -646,15 +928,15 @@ export default function Home() {
           </form>
         </div>
         <table className="border border-gray-200">
-          <thead>
+          <thead className=" bg-cyan-500 text-white ">
             <tr>
-              <th className="border border-gray-200 px-4 py-2 text-black bg-gray-300 font-semibold">
+              <th className="border border-gray-200 px-4 py-2   font-semibold">
                 Select
               </th>
-              <th className="border border-gray-200 px-4 py-2 text-black bg-gray-300 font-semibold">
+              <th className="border border-gray-200 px-4 py-2   font-semibold">
                 POS Name
               </th>
-              <th className="border border-gray-200 px-4 py-2 text-black bg-gray-300 font-semibold min-w-60 pt-3">
+              <th className="border border-gray-200 px-4 py-2   font-semibold min-w-60 pt-3">
                 <div className="flex flex-col">
                   <span className="text-sm font-medium">Reviews</span>
                   <div className="flex flex-row border-t border-gray-200 mt-1 pt-1">
@@ -668,16 +950,16 @@ export default function Home() {
                 </div>
               </th>
 
-              <th className="border border-gray-200 px-4 py-2 text-black bg-gray-300 font-semibold min-w-52">
+              <th className="border border-gray-200 px-4 py-2  font-semibold min-w-52">
                 Device Cost
               </th>
-              <th className="border border-gray-200 px-4 py-2 text-black bg-gray-300 font-semibold min-w-48">
+              <th className="border border-gray-200 px-4 py-2   font-semibold min-w-48">
                 Works with (Payment Gateway)
               </th>
-              <th className="border border-gray-200 px-4 py-2 text-black bg-gray-300 font-semibold min-w-40">
+              <th className="border border-gray-200 px-4 py-2  font-semibold min-w-40">
                 Payment processing cost
               </th>
-              <th className="border border-gray-200 px-4 py-2 text-black bg-gray-300 font-semibold">
+              <th className="border border-gray-200 px-4 py-2  font-semibold">
                 Industries
               </th>
               {/* <th className="border border-gray-200 px-4 py-2 text-black bg-gray-300 font-semibold">
@@ -699,9 +981,7 @@ export default function Home() {
                       type="checkbox"
                       className="form-checkbox h-4 w-4 text-primary-500 border-gray-300 rounded focus:ring-primary-500"
                       checked={checkedBoxes[pos.id] || false}
-                      onChange={() =>
-                        handleCheckboxChange(pos.id, pos["POS Name"])
-                      }
+                      onChange={() => handleCheckboxChange(pos.id, pos)}
                     />
                   </td>
                   <td className="border border-gray-200 px-4 py-2">
@@ -741,12 +1021,42 @@ export default function Home() {
         {checkedCount >= 2 && (
           <div className="flex justify-center m-4">
             <button
-              className="bg-blue-500 text-white px-4 py-2 rounded-lg focus:outline-none"
-              onClick={handleCompareClick}
+              className={`bg-blue-500 text-white px-4 py-2 w-40 mt-2 rounded-lg focus:outline-none relative ${
+                isLoading ? "opacity-50 pointer-events-none" : ""
+              }`}
+              onClick={!isLoading ? handleCompareClick : undefined}
+              disabled={isLoading}
             >
-              Compare({checkedCount})
+              {isLoading ? (
+                <div className=" flex items-center justify-center">
+                  <svg
+                    className="animate-spin h-5 w-5 mr-2"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-100"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                      strokeDasharray="60 40"
+                      fill="none"
+                    />
+                  </svg>
+                </div>
+              ) : (
+                `Compare(${checkedCount})`
+              )}
             </button>
           </div>
+        )}
+
+        {isPopupVisible && (
+          <Popup
+            finalCompareResponse={finalCompareResponse}
+            onClose={handleClosePopup}
+          />
         )}
       </div>
     );
@@ -1032,7 +1342,11 @@ export default function Home() {
               } overflow-x-auto overflow-y-auto relative text-black custom-scrollbar`}
             >
               <button
-                className="absolute top-2 right-10 text-gray-600 hover:text-gray-800"
+                className={`text-gray-600 hover:text-gray-800 ${
+                  isFullScreen
+                    ? "fixed top-2 right-20"
+                    : "fixed top-32 right-96"
+                }`}
                 onClick={handleResizePopup}
               >
                 {isFullScreen ? (
@@ -1071,7 +1385,11 @@ export default function Home() {
                 )}
               </button>
               <button
-                className="absolute top-2 right-2 text-gray-600 hover:text-gray-800"
+                className={`text-gray-600 hover:text-gray-800 ${
+                  isFullScreen
+                    ? "fixed top-2 right-12"
+                    : "fixed top-32 right-80 mr-6 mb-4"
+                }`}
                 onClick={handleClosePopup}
               >
                 <svg
