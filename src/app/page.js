@@ -6,6 +6,7 @@ import { getCountries } from "country-state-picker";
 import { getAllCurrencies } from "../../components/currencyAPI";
 import getSymbolFromCurrency from "currency-symbol-map";
 import { Country } from "country-state-city";
+import PaymentIcon from "react-payment-icons";
 
 import "./globals.css";
 import { useState, useRef, useEffect } from "react";
@@ -21,11 +22,26 @@ export default function Home() {
   const [consultationNeeded, setConsultationNeeded] = useState(true);
   const [currencies, setCurrencies] = useState([]);
   const [product, setProduct] = useState(null);
-  const [selected, setSelected] = useState("");
+  const [isPGFullScreen, setPGFullScreen] = useState(false);
+  const [isPOSFullScreen, setPOSFullScreen] = useState(false);
+  const [isPGPopupVisible, setIsPopupVisible] = useState(false);
+  const [isPOSPopupVisible, setIsPOSPopupVisible] = useState(false);
+  const [selectedGateways, setSelectedGateways] = useState([]);
+  const [selectedPOS, setSelectedPOS] = useState([]);
+  const [finalCompareResponse, setFinalCompareResponse] = useState("");
+  const [finalCompareResponsePOS, setFinalCompareResponsePOS] = useState("");
   const [selectedValuesFilters, setSelectedValuesFilters] = useState({
     country: "option1",
     currency: "option1",
   });
+
+  const handleClosePGPopup = () => {
+    setIsPopupVisible(false);
+  };
+
+  const handleClosePOSPopup = () => {
+    setIsPOSPopupVisible(false);
+  };
 
   const [isOpen, setIsOpen] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -33,6 +49,14 @@ export default function Home() {
   const handleResizePopup = () => {
     setIsFullScreen(!isFullScreen);
   };
+
+  const handleResizePGPopup = () => {
+    setPGFullScreen(!isPGFullScreen);
+  };
+
+  const handleResizePOSPopup = () => {
+    setPOSFullScreen(!isPOSFullScreen);
+  }
 
   const handleScheduleSubmit = async (event) => {
     window.open("https://crabroom.com/hr-interview", "_blank");
@@ -232,14 +256,20 @@ export default function Home() {
     currencySymbol = getSymbolFromCurrency(countryDetails.currency);
   }
 
-  function Popup({ finalCompareResponse, onClose }) {
+  function PaymentGatewayPopup({ finalCompareResponse, selectedGateways }) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 p-4">
-        <div className="bg-white rounded-lg shadow-md max-w-4xl w-auto max-h-3/4 min-h-20 overflow-x-auto overflow-y-auto relative text-black custom-scrollbar">
+        <div
+          className={`bg-white rounded-lg shadow-md ${
+            isPGFullScreen
+              ? "w-screen h-screen"
+              : "max-w-4xl w-auto max-h-3/4 min-h-20"
+          } overflow-x-auto overflow-y-auto relative text-black custom-scrollbar`}
+        >
           <div className="p-4">
             <button
               className="absolute top-2 right-2 text-gray-600 hover:text-gray-800"
-              onClick={onClose}
+              onClick={handleClosePGPopup}
             >
               <svg
                 className="h-8 w-8 p-1"
@@ -256,9 +286,345 @@ export default function Home() {
                 />
               </svg>
             </button>
-            <h1 className="text-2xl p-1 font-semibold">Comparison Result</h1>
-            <div className="max-h-full overflow-y-auto pt-4">
+            <button
+              className={`text-gray-600 hover:text-gray-800 ${
+                isPGFullScreen
+                  ? "absolute top-2 right-10"
+                  : "absolute top-2 right-10"
+              }`}
+              onClick={handleResizePGPopup}
+            >
+              {isPGFullScreen ? (
+                <svg
+                  className="h-8 w-8 p-1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M20 12H4"
+                  />
+                </svg>
+              ) : (
+                <svg
+                  fill="none"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  className="pt-2"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M13.8995 4.10052V2.10052H21.8995V10.1005H19.8995V5.51477L14.1213 11.293L12.7071 9.87878L18.4854 4.10052H13.8995Z"
+                    fill="currentColor"
+                  />
+                  <path
+                    d="M4.10046 13.8995H2.10046V21.8995H10.1005V19.8995H5.51468L11.2929 14.1212L9.87872 12.707L4.10046 18.4853V13.8995Z"
+                    fill="currentColor"
+                  />
+                </svg>
+              )}
+            </button>
+            <h2 className="font-semibold text-2xl p-2">Selected Gateways</h2>
+            <div className="rounded-lg">
+              <table>
+                <thead className=" bg-cyan-500 text-white rounded-md">
+                  <tr className="rounded-lg">
+                    <th className=" px-4 py-2 font-semibold rounded-xl">
+                      Payment Gateway Name
+                    </th>
+                    <th className="border border-cyan-200 px-4 py-2 min-w-96 font-semibold rounded-lg">
+                      Payment Methods
+                    </th>
+                    <th className="border border-cyan-200 px-4 py-2 min-w-60 font-semibold rounded-lg">
+                      API Languages
+                    </th>
+                    <th className="border border-cyan-200 px-4 py-2 font-semibold rounded-lg">
+                      Security/Compliance
+                    </th>
+                    <th className="border border-cyan-200 px-4 py-2 min-w-60 font-semibold rounded-lg">
+                      Countries
+                    </th>
+                    <th className="border border-cyan-200 px-4 py-2 min-w-72 max-w-72 font-semibold rounded-lg">
+                      Currencies
+                    </th>
+                    <th className="border border-cyan-200 px-4 py-2 min-w-60 font-semibold rounded-lg">
+                      Fee
+                    </th>
+                    <th className="border border-cyan-200 px-4 py-2 font-semibold rounded-lg">
+                      Website
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {selectedGateways.map((gateway, index) => (
+                    <tr
+                      key={index}
+                      className={index % 2 === 0 ? "" : "bg-cyan-50"}
+                    >
+                      <td className="border border-gray-400 px-4 py-2 rounded-md">
+                        {gateway["Payment Gateway Name"] || "-"}
+                      </td>
+                      <td className="border border-gray-400 px-4 py-2">
+                        {Array.isArray(gateway["Payment Methods"]) ? (
+                          <>
+                            {gateway["Payment Methods"].map((method, index) => (
+                              <span
+                                key={index}
+                                className="border border-cyan-200 bg-cyan-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
+                              >
+                                {method}
+                              </span>
+                            ))}
+                          </>
+                        ) : (
+                          <span className="payment-method">
+                            {gateway["Payment Methods"] || "-"}
+                          </span>
+                        )}
+                      </td>
+                      <td className="border border-gray-400 px-4 py-2">
+                        {Array.isArray(gateway["API Languages"]) ? (
+                          <>
+                            {gateway["API Languages"].map((language, index) => (
+                              <span
+                                key={index}
+                                className="border border-cyan-200 bg-cyan-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
+                              >
+                                {language}
+                              </span>
+                            ))}
+                          </>
+                        ) : (
+                          <span className="payment-method">
+                            {gateway["API Languages"] || "-"}
+                          </span>
+                        )}
+                      </td>
+
+                      <td className="border border-gray-400 px-4 py-2">
+                        {gateway["Security/Compliance"] || "-"}
+                      </td>
+                      <td className="border border-gray-400 px-4 py-2">
+                        {Array.isArray(gateway["Countries"]) ? (
+                          <>
+                            {gateway["Countries"].map((country, index) => (
+                              <span
+                                key={index}
+                                className="border border-cyan-200 bg-cyan-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
+                              >
+                                {country}
+                              </span>
+                            ))}
+                          </>
+                        ) : (
+                          <span className="payment-method">
+                            {gateway["Countries"] || "-"}
+                          </span>
+                        )}
+                      </td>
+
+                      <td className="border border-gray-400 px-4 py-2">
+                        {Array.isArray(gateway["Currencies"]) ? (
+                          <>
+                            {gateway["Currencies"].map((currency, index) => (
+                              <span
+                                key={index}
+                                className="border border-cyan-200 bg-cyan-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
+                              >
+                                {currency}
+                              </span>
+                            ))}
+                          </>
+                        ) : (
+                          <span className="payment-method">
+                            {gateway["Currencies"] || "-"}
+                          </span>
+                        )}
+                      </td>
+
+                      <td className="border border-gray-400 px-4 py-2">
+                        {gateway["Fee"] || "-"}
+                      </td>
+                      <td className="border border-gray-400 px-4 py-2">
+                        <a
+                          href={gateway["Website"] || ""}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-500 underline"
+                        >
+                          Visit Website
+                        </a>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <h1 className="text-2xl p-1 font-semibold mt-4">
+              Comparison Result
+            </h1>
+            <div className="max-h-full overflow-y-auto pt-2">
               {finalCompareResponse}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  function POSPopup({ finalCompareResponsePOS, selectedPOS }) {
+    console.log(selectedPOS);
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 p-4">
+        <div className={`bg-white rounded-lg shadow-md ${
+            isPOSFullScreen
+              ? "w-screen h-screen"
+              : "max-w-4xl w-auto max-h-3/4 min-h-20"
+          } overflow-x-auto overflow-y-auto relative text-black custom-scrollbar`}>
+          <div className="p-4">
+            <button
+              className="absolute top-2 right-2 text-gray-600 hover:text-gray-800"
+              onClick={handleClosePOSPopup}
+            >
+              <svg
+                className="h-8 w-8 p-1"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+            <button
+              className={`text-gray-600 hover:text-gray-800 ${
+                isPOSFullScreen
+                  ? "absolute top-2 right-10"
+                  : "absolute top-2 right-10"
+              }`}
+              onClick={handleResizePOSPopup}
+            >
+              {isPOSFullScreen ? (
+                <svg
+                  className="h-8 w-8 p-1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M20 12H4"
+                  />
+                </svg>
+              ) : (
+                <svg
+                  fill="none"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  className="pt-2"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M13.8995 4.10052V2.10052H21.8995V10.1005H19.8995V5.51477L14.1213 11.293L12.7071 9.87878L18.4854 4.10052H13.8995Z"
+                    fill="currentColor"
+                  />
+                  <path
+                    d="M4.10046 13.8995H2.10046V21.8995H10.1005V19.8995H5.51468L11.2929 14.1212L9.87872 12.707L4.10046 18.4853V13.8995Z"
+                    fill="currentColor"
+                  />
+                </svg>
+              )}
+            </button>
+            
+            <div className="max-h-full overflow-y-auto pt-4">
+              <h2 className="text-2xl font-semibold pb-4">POS Data</h2>
+              <table className="rounded-md pt-4">
+                <thead className="bg-cyan-500 text-white">
+                  <tr>
+                    <th className="border border-gray-200 px-4 py-2 font-semibold">
+                      POS Name
+                    </th>
+                    <th className="border border-gray-200 px-4 py-2 font-semibold min-w-60 pt-3">
+                      <div className="flex flex-col">
+                        <span className="text-sm font-medium">Reviews</span>
+                        <div className="flex flex-row border-t border-gray-200 mt-1 pt-1">
+                          <span className="flex-1 text-xs font-normal text-center">
+                            Google Reviews
+                          </span>
+                          <span className="flex-1 text-xs font-normal text-center border-l border-gray-200">
+                            Trust Pilot Reviews
+                          </span>
+                        </div>
+                      </div>
+                    </th>
+                    <th className="border border-gray-200 px-4 py-2 font-semibold min-w-52">
+                      Device Cost
+                    </th>
+                    <th className="border border-gray-200 px-4 py-2 font-semibold min-w-48">
+                      Works with (Payment Gateway)
+                    </th>
+                    <th className="border border-gray-200 px-4 py-2 font-semibold min-w-40">
+                      Payment processing cost
+                    </th>
+                    <th className="border border-gray-200 px-4 py-2 font-semibold">
+                      Industries
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {selectedPOS.map((pos, index) => (
+                    <tr
+                      key={index}
+                      className={`border-b border-gray-200 ${
+                        index % 2 === 0 ? "" : "bg-cyan-50"
+                      }`}
+                    >
+                      <td className="border border-gray-200 px-4 py-2">
+                        {pos.posData["POS Name"] || "-"}
+                      </td>
+                      <td className="border border-gray-200 px-4 py-2">
+                        <div className="flex flex-row">
+                          <span className="flex-1 text-sm font-normal text-center">
+                            {pos.posData["Google Reviews"] || "-"}
+                          </span>
+                          <span className="flex-1 text-sm font-normal text-center border-l border-gray-200">
+                            {pos.posData["Trust Pilot Reviews"] || "-"}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="border border-gray-200 px-4 py-2">
+                        {pos.posData["Device Cost"] || "-"}
+                      </td>
+                      <td className="border border-gray-200 px-4 py-2">
+                        {pos.posData["Works with (Payment Gateway)"] || "-"}
+                      </td>
+                      <td className="border border-gray-200 px-4 py-2">
+                        {pos.posData["Payment processing cost"] || "-"}
+                      </td>
+                      <td className="border border-gray-200 px-4 py-2">
+                        {pos.posData["Industries"] || "-"}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+
+              <h1 className="text-2xl p-1 font-semibold pt-4">Comparison Result</h1>
+              {finalCompareResponsePOS}
             </div>
           </div>
         </div>
@@ -272,12 +638,14 @@ export default function Home() {
     const [checkedBoxes, setCheckedBoxes] = useState({});
     let filteredGateways = [];
     const [showDropdown, setShowDropdown] = useState(false);
-    const [isPopupVisible, setIsPopupVisible] = useState(false);
-    const [finalCompareResponse, setFinalCompareResponse] = useState("");
+
+    // const [finalCompareResponse, setFinalCompareResponse] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [showAll, setShowAll] = useState(false);
     const [showLanguages, setShowLanguages] = useState(false);
     const [showCurrencies, setShowCurrencies] = useState(false);
+    const [showCountries, setShowCountries] = useState(false);
+    // const [selectedGateways, setSelectedGateways] = useState([]);
 
     const toggleShowAll = () => {
       setShowAll(!showAll);
@@ -293,6 +661,10 @@ export default function Home() {
 
     const toggleShowCurrencies = () => {
       setShowCurrencies(!showCurrencies);
+    };
+
+    const toggleShowCountries = () => {
+      setShowCountries(!showCountries);
     };
 
     let response;
@@ -323,10 +695,6 @@ export default function Home() {
       } else {
         sessionStorage.removeItem(sessionStorageKey);
       }
-    };
-
-    const handleClosePopup = () => {
-      setIsPopupVisible(false);
     };
 
     const handleCompareClick = async () => {
@@ -360,6 +728,21 @@ export default function Home() {
         const checkboxItems = retrieveCheckboxSessionStorageItems();
         const checkboxItemsJson = JSON.stringify(checkboxItems);
 
+        let currencyVal = sessionStorage.getItem("currency");
+        if (!currencyVal) {
+          currencyVal = null;
+        }
+
+        let countryVal = sessionStorage.getItem("country");
+        if (!countryVal) {
+          countryVal = null;
+        }
+
+        let inputVal = inputText;
+        if (!inputText) {
+          inputVal = null;
+        }
+
         const compareResponse = await fetch(
           `https://ut4vfwn4rrk53nl36ymmnv3xem0iezgi.lambda-url.us-east-1.on.aws/`,
           {
@@ -369,6 +752,9 @@ export default function Home() {
             },
             body: JSON.stringify({
               checkboxItems: checkboxItemsJson,
+              country: countryVal,
+              currency: currencyVal,
+              userinput: inputVal,
             }),
           }
         );
@@ -390,6 +776,11 @@ export default function Home() {
               {paragraph}
             </p>
           ));
+
+        const selectedGateways = Object.values(checkboxItems);
+        console.log(selectedGateways);
+
+        setSelectedGateways(selectedGateways);
 
         // Set finalCompareResponse state
         setFinalCompareResponse(paragraphs);
@@ -444,7 +835,10 @@ export default function Home() {
       <div className="flex flex-col">
         <div className="min-w-1/2 md:w-1/2 m-4">
           <form className="flex items-center">
-            <label htmlFor="simple-search" className="sr-only border border-cyan-100">
+            <label
+              htmlFor="simple-search"
+              className="sr-only border border-cyan-100"
+            >
               Search
             </label>
             <div className="relative w-full">
@@ -489,9 +883,7 @@ export default function Home() {
         <table className="rounded-lg">
           <thead className=" bg-cyan-500 text-white rounded-md">
             <tr>
-              <th className=" px-4 py-2 font-semibold rounded-lg">
-                Select
-              </th>
+              <th className=" px-4 py-2 font-semibold rounded-lg">Select</th>
               <th className="border border-cyan-200 px-4 py-2 font-semibold rounded-lg">
                 Payment Gateway Name
               </th>
@@ -504,7 +896,7 @@ export default function Home() {
               <th className="border border-cyan-200 px-4 py-2 font-semibold rounded-lg">
                 Security/Compliance
               </th>
-              <th className="border border-cyan-200 px-4 py-2 min-w-40 font-semibold rounded-lg">
+              <th className="border border-cyan-200 px-4 py-2 min-w-60 font-semibold rounded-lg">
                 Countries
               </th>
               <th className="border border-cyan-200 px-4 py-2 min-w-72 max-w-72 font-semibold rounded-lg">
@@ -540,7 +932,7 @@ export default function Home() {
                 <td className="border border-cyan-200 px-4 py-2">
                   {gateway["Payment Gateway Name"]}
                 </td>
-                <td className="border border-cyan-200 px-4 py-2">
+                <td className="border border-cyan-200 px-4 py-2 relative">
                   {Array.isArray(gateway["Payment Methods"]) ? (
                     <>
                       {gateway["Payment Methods"]
@@ -550,26 +942,43 @@ export default function Home() {
                             key={index}
                             className="border border-cyan-200 bg-cyan-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
                           >
-                            {method}
+                            <span className="flex">
+                              <PaymentIcon
+                                id={method.toLowerCase()}
+                                style={{}}
+                                className="payment-icon h-6 w-6 mr-1"
+                              />
+                              {method}
+                            </span>
                           </span>
                         ))}
+
+                      {showAll &&
+                        gateway["Payment Methods"]
+                          .slice(3)
+                          .map((method, index) => (
+                            <span
+                              key={index}
+                              className="border border-cyan-200 bg-cyan-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
+                            >
+                              <span className="flex">
+                                <PaymentIcon
+                                  id={method.toLowerCase()}
+                                  style={{}}
+                                  className="payment-icon h-6 w-6 mr-1"
+                                />
+                                {method}
+                              </span>
+                            </span>
+                          ))}
                       {!showAll && gateway["Payment Methods"].length > 3 && (
                         <span
                           onClick={toggleShowAll}
-                          className="text-cyan-300 mr-2 mb-2 px-2 py-1 rounded-md inline-block cursor-pointer"
+                          className="text-cyan-300 absolute right-0 bottom-0 mr-2 mb-2 px-2 py-1 rounded-md cursor-pointer"
                         >
                           more...
                         </span>
                       )}
-                      {showAll &&
-                        gateway["Payment Methods"].map((method, index) => (
-                          <span
-                            key={index}
-                            className="border border-cyan-200 bg-cyan-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
-                          >
-                            {method}
-                          </span>
-                        ))}
                     </>
                   ) : (
                     <span className="payment-method">
@@ -578,7 +987,7 @@ export default function Home() {
                   )}
                 </td>
 
-                <td className="border border-cyan-200 px-4 py-2">
+                <td className="border border-cyan-200 px-4 py-2 relative">
                   {Array.isArray(gateway["API Languages"]) ? (
                     <>
                       {!showLanguages ? (
@@ -588,15 +997,16 @@ export default function Home() {
                             .map((language, index) => (
                               <span
                                 key={index}
-                                className="border border-cyan-200 bg-cyan-200 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
+                                className="border border-cyan-200 bg-cyan-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
                               >
                                 {language}
                               </span>
                             ))}
+
                           {gateway["API Languages"].length > 3 && (
                             <span
                               onClick={toggleShowLanguages}
-                              className="text-cyan-300 mr-2 mb-2 px-2 py-1 rounded-md inline-block cursor-pointer"
+                              className="text-cyan-300 absolute right-0 bottom-0 mr-2 mb-2 px-2 py-1 rounded-md cursor-pointer"
                             >
                               more...
                             </span>
@@ -606,7 +1016,7 @@ export default function Home() {
                         gateway["API Languages"].map((language, index) => (
                           <span
                             key={index}
-                            className="border border-cyan-200 bg-cyan-200 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
+                            className="border border-cyan-200 bg-cyan-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
                           >
                             {language}
                           </span>
@@ -625,12 +1035,53 @@ export default function Home() {
                     ? gateway["Security/Compliance"].join(", ")
                     : gateway["Security/Compliance"]}
                 </td>
-                <td className="border border-cyan-200 px-4 py-2">
-                  {Array.isArray(gateway.Countries)
-                    ? gateway.Countries.join(", ")
-                    : gateway.Countries}
+                <td className="border border-cyan-200 px-4 py-2 relative">
+                  {Array.isArray(gateway.Countries) ? (
+                    <>
+                      {!showCountries ? (
+                        <>
+                          {gateway.Countries.slice(0, 3).map(
+                            (country, index) => (
+                              <span
+                                key={index}
+                                className="border border-cyan-200 bg-cyan-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
+                              >
+                                <span
+                                  className={`ml-1 mr-1 h-4 w-4 flag-icon flag-icon-${country.toLowerCase()}`}
+                                ></span>
+                                {country}
+                              </span>
+                            )
+                          )}
+                          {gateway.Countries.length > 3 && (
+                            <span
+                              onClick={toggleShowCountries}
+                              className="text-cyan-300 absolute right-0 bottom-0 mr-2 mb-2 px-2 py-1 rounded-md cursor-pointer"
+                            >
+                              more...
+                            </span>
+                          )}
+                        </>
+                      ) : (
+                        gateway.Countries.map((country, index) => (
+                          <span
+                            key={index}
+                            className="border border-cyan-200 bg-cyan-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
+                          >
+                            <span
+                              className={`ml-1 mr-1 h-4 w-4 flag-icon flag-icon-${country.toLowerCase()}`}
+                            ></span>
+                            {country}
+                          </span>
+                        ))
+                      )}
+                    </>
+                  ) : (
+                    <span className="api-country">{gateway.Countries}</span>
+                  )}
                 </td>
-                <td className="border border-cyan-200 px-4 py-2">
+
+                <td className="border border-cyan-200 px-4 py-2 relative">
                   {Array.isArray(gateway.Currencies) ? (
                     <>
                       {!showCurrencies ? (
@@ -639,8 +1090,11 @@ export default function Home() {
                             (currency, index) => (
                               <span
                                 key={index}
-                                className="border border-cyan-200 bg-cyan-200 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
+                                className="border border-cyan-200 bg-cyan-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
                               >
+                                <span className="pr-1">
+                                  {getSymbolFromCurrency(currency)}
+                                </span>
                                 {currency}
                               </span>
                             )
@@ -648,7 +1102,7 @@ export default function Home() {
                           {gateway.Currencies.length > 3 && (
                             <span
                               onClick={toggleShowCurrencies}
-                              className="text-cyan-300 mr-2 mb-2 px-2 py-1 rounded-md inline-block cursor-pointer"
+                              className="text-cyan-300 mr-2 mb-2 px-2 py-1 absolute right-0 bottom-0 rounded-md inline-block cursor-pointer"
                             >
                               more...
                             </span>
@@ -658,8 +1112,11 @@ export default function Home() {
                         gateway.Currencies.map((currency, index) => (
                           <span
                             key={index}
-                            className="border border-cyan-200 bg-cyan-200 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
+                            className="border border-cyan-200 bg-cyan-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
                           >
+                            <span className="pr-1">
+                              {getSymbolFromCurrency(currency)}
+                            </span>
                             {currency}
                           </span>
                         ))
@@ -718,10 +1175,10 @@ export default function Home() {
           </div>
         )}
 
-        {isPopupVisible && (
-          <Popup
+        {isPGPopupVisible && (
+          <PaymentGatewayPopup
             finalCompareResponse={finalCompareResponse}
-            onClose={handleClosePopup}
+            selectedGateways={selectedGateways}
           />
         )}
       </div>
@@ -733,8 +1190,7 @@ export default function Home() {
     const [checkedCount, setCheckedCount] = useState(0);
     const [checkedBoxes, setCheckedBoxes] = useState({});
     let filteredPOS = [];
-    const [isPopupVisible, setIsPopupVisible] = useState(false);
-    const [finalCompareResponse, setFinalCompareResponse] = useState("");
+
     const [isLoading, setIsLoading] = useState(false);
 
     let response;
@@ -765,10 +1221,6 @@ export default function Home() {
       } else {
         sessionStorage.removeItem(sessionStorageKey);
       }
-    };
-
-    const handleClosePopup = () => {
-      setIsPopupVisible(false);
     };
 
     const handleCompareClick = async () => {
@@ -802,6 +1254,21 @@ export default function Home() {
         const checkboxItems = retrieveCheckboxSessionStorageItems();
         const checkboxItemsJson = JSON.stringify(checkboxItems);
 
+        let currencyVal = sessionStorage.getItem("currency");
+        if (!currencyVal) {
+          currencyVal = null;
+        }
+
+        let countryVal = sessionStorage.getItem("country");
+        if (!countryVal) {
+          countryVal = null;
+        }
+
+        let inputVal = inputText;
+        if (!inputText) {
+          inputVal = null;
+        }
+
         const compareResponse = await fetch(
           `https://ut4vfwn4rrk53nl36ymmnv3xem0iezgi.lambda-url.us-east-1.on.aws/`,
           {
@@ -811,6 +1278,9 @@ export default function Home() {
             },
             body: JSON.stringify({
               checkboxItems: checkboxItemsJson,
+              country: countryVal,
+              currency: currencyVal,
+              userinput: inputVal,
             }),
           }
         );
@@ -833,8 +1303,11 @@ export default function Home() {
             </p>
           ));
 
+        const selectedPOS = Object.values(checkboxItems);
+
+        setSelectedPOS(selectedPOS);
         // Set finalCompareResponse state
-        setFinalCompareResponse(paragraphs);
+        setFinalCompareResponsePOS(paragraphs);
         // Set finalCompareResponse state
         // setFinalCompareResponse(finalCompareResponse);
 
@@ -842,7 +1315,7 @@ export default function Home() {
         setIsLoading(false);
 
         // Show the popup
-        setIsPopupVisible(true);
+        setIsPOSPopupVisible(true);
       } catch (error) {
         console.error("Error occurred:", error);
         setIsLoading(false); // Ensure isLoading is set to false in case of errors
@@ -919,7 +1392,7 @@ export default function Home() {
             <div className="ml-60">
               <button
                 type="button"
-                className="mt-2 px-4 py-2 mb-2 text-white rounded-md transition-colors w-full bg-indigo-500 min-w-60"
+                className="mt-2 px-4 py-2 mb-2 text-white rounded-md transition-colors w-full bg-cyan-500 min-w-60"
                 onClick={handleScheduleSubmit}
               >
                 I need consultation 🡢
@@ -973,13 +1446,13 @@ export default function Home() {
                 <tr
                   key={pos.id}
                   className={`border-b border-gray-200 ${
-                    index % 2 === 0 ? "" : "bg-gray-100"
+                    index % 2 === 0 ? "" : "bg-cyan-50"
                   }`}
                 >
                   <td className="border border-gray-200 px-4 py-2">
                     <input
                       type="checkbox"
-                      className="form-checkbox h-4 w-4 text-primary-500 border-gray-300 rounded focus:ring-primary-500"
+                      className="form-checkbox h-4 w-4 text-primary-500 border-gray-300 rounded focus:ring-primary-500 checked:bg-cyan-500"
                       checked={checkedBoxes[pos.id] || false}
                       onChange={() => handleCheckboxChange(pos.id, pos)}
                     />
@@ -1021,7 +1494,7 @@ export default function Home() {
         {checkedCount >= 2 && (
           <div className="flex justify-center m-4">
             <button
-              className={`bg-blue-500 text-white px-4 py-2 w-40 mt-2 rounded-lg focus:outline-none relative ${
+              className={`bg-cyan-500 text-white px-4 py-2 w-40 mt-2 rounded-lg focus:outline-none relative ${
                 isLoading ? "opacity-50 pointer-events-none" : ""
               }`}
               onClick={!isLoading ? handleCompareClick : undefined}
@@ -1038,6 +1511,7 @@ export default function Home() {
                       cx="12"
                       cy="12"
                       r="10"
+                      setSelectedPOS
                       stroke="currentColor"
                       strokeWidth="4"
                       strokeDasharray="60 40"
@@ -1052,10 +1526,10 @@ export default function Home() {
           </div>
         )}
 
-        {isPopupVisible && (
-          <Popup
-            finalCompareResponse={finalCompareResponse}
-            onClose={handleClosePopup}
+        {isPOSPopupVisible && (
+          <POSPopup
+            finalCompareResponsePOS={finalCompareResponsePOS}
+            selectedPOS={selectedPOS}
           />
         )}
       </div>
@@ -1338,7 +1812,7 @@ export default function Home() {
               className={`bg-white rounded-lg shadow-md ${
                 isFullScreen
                   ? "w-screen h-screen"
-                  : "max-w-4xl w-auto max-h-3/4 min-h-20"
+                  : "max-w-4xl w-auto max-h-3/4 min-h-3/4"
               } overflow-x-auto overflow-y-auto relative text-black custom-scrollbar`}
             >
               <button
