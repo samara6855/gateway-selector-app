@@ -184,8 +184,8 @@ const ContactForm = () => {
           type="submit"
           className={` px-4 py-2 text-white text-sm rounded-md transition-colors ${
             isButtonDisabled
-              ? "bg-indigo-500 bg-opacity-55 cursor-not-allowed"
-              : "hover:border-gray-300 bg-indigo-500 hover:bg-blue-500 cursor-pointer"
+              ? "bg-cyan-500 bg-opacity-55 cursor-not-allowed"
+              : "hover:border-gray-300 bg-cyan-500 hover:bg-cyan-400 cursor-pointer"
           }`}
           onClick={handleSubmit}
           disabled={isButtonDisabled}

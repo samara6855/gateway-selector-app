@@ -6,6 +6,7 @@ import { getCountries } from "country-state-picker";
 import { getAllCurrencies } from "../../components/currencyAPI";
 import getSymbolFromCurrency from "currency-symbol-map";
 import { Country } from "country-state-city";
+import { countryToAlpha2 } from "country-to-iso"; // https://www.npmjs.com/package/country-to-iso
 import PaymentIcon from "react-payment-icons"; // https://www.npmjs.com/package/react-payment-icons
 
 import "./globals.css";
@@ -264,7 +265,7 @@ export default function Home() {
             isPGFullScreen
               ? "w-screen h-screen"
               : "max-w-4xl w-auto max-h-3/4 min-h-20"
-          } overflow-x-auto overflow-y-auto relative text-black custom-scrollbar`}
+          }  overflow-y-auto relative text-black custom-scrollbar`}
         >
           <div className="p-4">
             <button
@@ -336,7 +337,7 @@ export default function Home() {
               {finalCompareResponse}
             </div>
             <h2 className="font-semibold text-2xl p-2">Selected Gateways</h2>
-            <div className="rounded-lg">
+            <div className="rounded-lg overflow-x-auto">
               <table>
                 <thead className=" bg-cyan-500 text-white rounded-md">
                   <tr className="rounded-lg">
@@ -471,7 +472,6 @@ export default function Home() {
                 </tbody>
               </table>
             </div>
-            
           </div>
         </div>
       </div>
@@ -554,9 +554,9 @@ export default function Home() {
             </button>
 
             <h1 className="text-2xl p-1 font-semibold pt-4">
-                Comparison Result
-              </h1>
-              {finalCompareResponsePOS}
+              Comparison Result
+            </h1>
+            {finalCompareResponsePOS}
 
             <div className="max-h-full overflow-y-auto pt-4">
               <h2 className="text-2xl font-semibold pb-4">POS Data</h2>
@@ -650,6 +650,13 @@ export default function Home() {
     const [showLanguages, setShowLanguages] = useState(false);
     const [showCurrencies, setShowCurrencies] = useState(false);
     const [showCountries, setShowCountries] = useState(false);
+    const [showPMinfo, setShowPMinfo] = useState(false);
+    const [showAPILangInfo, setShowAPILangInfo] = useState(false);
+    const [showSecurityInfo, setShowSecurityInfo] = useState(false);
+    const [showCountriesInfo, setShowCountriesInfo] = useState(false);
+    const [showCurrenciesInfo, setShowCurrenciesInfo] = useState(false);
+    const [showFeeInfo, setShowFeeInfo] = useState(false);
+    const [showWebsiteInfo, setShowWebsiteInfo] = useState(false);
     // const [selectedGateways, setSelectedGateways] = useState([]);
 
     const toggleShowAll = () => {
@@ -921,29 +928,137 @@ export default function Home() {
             <thead className=" bg-cyan-500 text-white rounded-md">
               <tr>
                 <th className=" px-4 py-2 font-semibold rounded-lg">Select</th>
-                <th className="border border-gray-200 px-4 py-2 font-semibold rounded-lg">
+                <th className="border border-gray-200 px-4 py-2 font-semibold rounded-lg min-w-40">
                   Payment Gateway Name
                 </th>
-                <th className="border border-gray-200 px-4 py-2 min-w-72 font-semibold rounded-lg">
+                <th className="border border-gray-200 px-4 py-2 min-w-72 font-semibold rounded-lg relative">
                   Payment Methods
+                  <span
+                    className="pl-1 h-3 w-3 text-gray-300 cursor-pointer"
+                    onMouseEnter={() => setShowPMinfo(true)}
+                    onMouseLeave={() => setShowPMinfo(false)}
+                  >
+                    ?
+                  </span>
+                  {showPMinfo && (
+                    <div className="absolute bg-gray-100 border border-gray-200 p-2 rounded shadow z-10">
+                      <p className="text-sm text-cyan-900 font-normal">
+                        A payment method refers to the various options available
+                        for customers to make payments when purchasing a product
+                        or service.
+                      </p>
+                    </div>
+                  )}
                 </th>
-                <th className="border border-gray-200 px-4 py-2 min-w-60 font-semibold rounded-lg">
+                <th className="border border-gray-200 px-4 py-2 min-w-60 font-semibold rounded-lg relative">
                   API Languages
+                  <span
+                    className="pl-1 h-5 w-5 text-gray-300 cursor-pointer"
+                    onMouseEnter={() => setShowAPILangInfo(true)}
+                    onMouseLeave={() => setShowAPILangInfo(false)}
+                  >
+                    ?
+                  </span>
+                  {showAPILangInfo && (
+                    <div className="absolute bg-gray-100 border border-gray-200 p-2 rounded shadow z-10">
+                      <p className="text-sm text-cyan-900 font-normal">
+                        API Languages refers to the programming languages
+                        supported by an API for developers to interact with it.
+                      </p>
+                    </div>
+                  )}
                 </th>
-                <th className="border border-gray-200 px-4 py-2 font-semibold rounded-lg">
+
+                <th className="border border-gray-200 px-4 py-2 font-semibold rounded-lg relative">
                   Security/Compliance
+                  <span
+                    className="pl-1 h-5 w-5 text-gray-300 cursor-pointer"
+                    onMouseEnter={() => setShowSecurityInfo(true)}
+                    onMouseLeave={() => setShowSecurityInfo(false)}
+                  >
+                    ?
+                  </span>
+                  {showSecurityInfo && (
+                    <div className="absolute bg-gray-100 border border-gray-200 p-2 rounded shadow z-10">
+                      <p className="text-sm text-cyan-900 font-normal">
+                        Security/Compliance refers to the measures taken by a
+                        service provider to ensure data security and regulatory
+                        compliance.
+                      </p>
+                    </div>
+                  )}
                 </th>
-                <th className="border border-gray-200 px-4 py-2 min-w-60 font-semibold rounded-lg">
+                <th className="border border-gray-200 px-4 py-2 min-w-60 font-semibold rounded-lg relative">
                   Countries
+                  <span
+                    className="pl-1 h-5 w-5 text-gray-300 cursor-pointer"
+                    onMouseEnter={() => setShowCountriesInfo(true)}
+                    onMouseLeave={() => setShowCountriesInfo(false)}
+                  >
+                    ?
+                  </span>
+                  {showCountriesInfo && (
+                    <div className="absolute bg-gray-100 border border-gray-200 p-2 rounded shadow z-10">
+                      <p className="text-sm text-cyan-900 font-normal">
+                        Countries refers to the list of nations where a service
+                        or product is available or supported.
+                      </p>
+                    </div>
+                  )}
                 </th>
-                <th className="border border-gray-200 px-4 py-2 min-w-72 max-w-72 font-semibold rounded-lg">
+                <th className="border border-gray-200 px-4 py-2 min-w-72 max-w-72 font-semibold rounded-lg relative">
                   Currencies
+                  <span
+                    className="pl-1 h-5 w-5 text-gray-300 cursor-pointer"
+                    onMouseEnter={() => setShowCurrenciesInfo(true)}
+                    onMouseLeave={() => setShowCurrenciesInfo(false)}
+                  >
+                    ?
+                  </span>
+                  {showCurrenciesInfo && (
+                    <div className="absolute bg-gray-100 border border-gray-200 p-2 rounded shadow z-10">
+                      <p className="text-sm text-cyan-900 font-normal">
+                        Currencies refers to the types of currency accepted for
+                        transactions.
+                      </p>
+                    </div>
+                  )}
                 </th>
-                <th className="border border-gray-200 px-4 py-2 min-w-60 font-semibold rounded-lg">
+                <th className="border border-gray-200 px-4 py-2 min-w-60 font-semibold rounded-lg relative">
                   Fee
+                  <span
+                    className="pl-1 h-5 w-5 text-gray-300 cursor-pointer"
+                    onMouseEnter={() => setShowFeeInfo(true)}
+                    onMouseLeave={() => setShowFeeInfo(false)}
+                  >
+                    ?
+                  </span>
+                  {showFeeInfo && (
+                    <div className="absolute bg-gray-100 border border-gray-200 p-2 rounded shadow z-10">
+                      <p className="text-sm text-cyan-900 font-normal">
+                        Fee refers to the charges or costs associated with using
+                        a service or product.
+                      </p>
+                    </div>
+                  )}
                 </th>
-                <th className="border border-gray-200 px-4 py-2 font-semibold rounded-lg">
+                <th className="border border-gray-200 px-4 py-2 font-semibold rounded-lg relative">
                   Website
+                  <span
+                    className="pl-1 h-5 w-5 text-gray-300 cursor-pointer"
+                    onMouseEnter={() => setShowWebsiteInfo(true)}
+                    onMouseLeave={() => setShowWebsiteInfo(false)}
+                  >
+                    ?
+                  </span>
+                  {showWebsiteInfo && (
+                    <div className="absolute bg-gray-100 border border-gray-200 p-2 rounded shadow z-10">
+                      <p className="text-sm text-cyan-900 font-normal">
+                        Website refers to the online platform or web address
+                        associated with a service or organization.
+                      </p>
+                    </div>
+                  )}
                 </th>
               </tr>
             </thead>
@@ -1083,6 +1198,7 @@ export default function Home() {
                                   key={index}
                                   className="border bg-gray-100 shadow-md shadow-gray-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
                                 >
+                                {/* {countryToAlpha2("United States")} */}
                                   <span
                                     className={`ml-1 mr-1 h-4 w-4 flag-icon flag-icon-${country.toLowerCase()}`}
                                   ></span>
@@ -1819,7 +1935,7 @@ export default function Home() {
               className={`bg-white rounded-lg shadow-md ${
                 isFullScreen
                   ? "w-screen h-screen"
-                  : "max-w-4xl w-auto max-h-3/4 min-h-3/4"
+                  : "max-w-4xl w-auto max-h-3/4 min-h-20"
               } overflow-hidden relative text-black custom-scrollbar`}
             >
               <button
