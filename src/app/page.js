@@ -6,7 +6,7 @@ import { getCountries } from "country-state-picker";
 import { getAllCurrencies } from "../../components/currencyAPI";
 import getSymbolFromCurrency from "currency-symbol-map";
 import { Country } from "country-state-city";
-import PaymentIcon from "react-payment-icons";
+import PaymentIcon from "react-payment-icons"; // https://www.npmjs.com/package/react-payment-icons
 
 import "./globals.css";
 import { useState, useRef, useEffect } from "react";
@@ -56,7 +56,7 @@ export default function Home() {
 
   const handleResizePOSPopup = () => {
     setPOSFullScreen(!isPOSFullScreen);
-  }
+  };
 
   const handleScheduleSubmit = async (event) => {
     window.open("https://crabroom.com/hr-interview", "_blank");
@@ -329,6 +329,12 @@ export default function Home() {
                 </svg>
               )}
             </button>
+            <h1 className="text-2xl p-1 font-semibold mt-4">
+              Comparison Result
+            </h1>
+            <div className="max-h-full overflow-y-auto pt-2">
+              {finalCompareResponse}
+            </div>
             <h2 className="font-semibold text-2xl p-2">Selected Gateways</h2>
             <div className="rounded-lg">
               <table>
@@ -337,25 +343,25 @@ export default function Home() {
                     <th className=" px-4 py-2 font-semibold rounded-xl">
                       Payment Gateway Name
                     </th>
-                    <th className="border border-cyan-200 px-4 py-2 min-w-96 font-semibold rounded-lg">
+                    <th className="border border-gray-200 px-4 py-2 min-w-96 font-semibold rounded-lg">
                       Payment Methods
                     </th>
-                    <th className="border border-cyan-200 px-4 py-2 min-w-60 font-semibold rounded-lg">
+                    <th className="border border-gray-200 px-4 py-2 min-w-60 font-semibold rounded-lg">
                       API Languages
                     </th>
-                    <th className="border border-cyan-200 px-4 py-2 font-semibold rounded-lg">
+                    <th className="border border-gray-200 px-4 py-2 font-semibold rounded-lg">
                       Security/Compliance
                     </th>
-                    <th className="border border-cyan-200 px-4 py-2 min-w-60 font-semibold rounded-lg">
+                    <th className="border border-gray-200 px-4 py-2 min-w-60 font-semibold rounded-lg">
                       Countries
                     </th>
-                    <th className="border border-cyan-200 px-4 py-2 min-w-72 max-w-72 font-semibold rounded-lg">
+                    <th className="border border-gray-200 px-4 py-2 min-w-72 max-w-72 font-semibold rounded-lg">
                       Currencies
                     </th>
-                    <th className="border border-cyan-200 px-4 py-2 min-w-60 font-semibold rounded-lg">
+                    <th className="border border-gray-200 px-4 py-2 min-w-60 font-semibold rounded-lg">
                       Fee
                     </th>
-                    <th className="border border-cyan-200 px-4 py-2 font-semibold rounded-lg">
+                    <th className="border border-gray-200 px-4 py-2 font-semibold rounded-lg">
                       Website
                     </th>
                   </tr>
@@ -375,7 +381,7 @@ export default function Home() {
                             {gateway["Payment Methods"].map((method, index) => (
                               <span
                                 key={index}
-                                className="border border-cyan-200 bg-cyan-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
+                                className="border border-gray-200 bg-cyan-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
                               >
                                 {method}
                               </span>
@@ -393,7 +399,7 @@ export default function Home() {
                             {gateway["API Languages"].map((language, index) => (
                               <span
                                 key={index}
-                                className="border border-cyan-200 bg-cyan-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
+                                className="border border-gray-200 bg-cyan-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
                               >
                                 {language}
                               </span>
@@ -415,7 +421,7 @@ export default function Home() {
                             {gateway["Countries"].map((country, index) => (
                               <span
                                 key={index}
-                                className="border border-cyan-200 bg-cyan-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
+                                className="border border-gray-200 bg-cyan-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
                               >
                                 {country}
                               </span>
@@ -434,7 +440,7 @@ export default function Home() {
                             {gateway["Currencies"].map((currency, index) => (
                               <span
                                 key={index}
-                                className="border border-cyan-200 bg-cyan-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
+                                className="border border-gray-200 bg-cyan-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
                               >
                                 {currency}
                               </span>
@@ -465,12 +471,7 @@ export default function Home() {
                 </tbody>
               </table>
             </div>
-            <h1 className="text-2xl p-1 font-semibold mt-4">
-              Comparison Result
-            </h1>
-            <div className="max-h-full overflow-y-auto pt-2">
-              {finalCompareResponse}
-            </div>
+            
           </div>
         </div>
       </div>
@@ -481,11 +482,13 @@ export default function Home() {
     console.log(selectedPOS);
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 p-4">
-        <div className={`bg-white rounded-lg shadow-md ${
+        <div
+          className={`bg-white rounded-lg shadow-md ${
             isPOSFullScreen
               ? "w-screen h-screen"
               : "max-w-4xl w-auto max-h-3/4 min-h-20"
-          } overflow-x-auto overflow-y-auto relative text-black custom-scrollbar`}>
+          } overflow-x-auto overflow-y-auto relative text-black custom-scrollbar`}
+        >
           <div className="p-4">
             <button
               className="absolute top-2 right-2 text-gray-600 hover:text-gray-800"
@@ -549,7 +552,12 @@ export default function Home() {
                 </svg>
               )}
             </button>
-            
+
+            <h1 className="text-2xl p-1 font-semibold pt-4">
+                Comparison Result
+              </h1>
+              {finalCompareResponsePOS}
+
             <div className="max-h-full overflow-y-auto pt-4">
               <h2 className="text-2xl font-semibold pb-4">POS Data</h2>
               <table className="rounded-md pt-4">
@@ -622,9 +630,6 @@ export default function Home() {
                   ))}
                 </tbody>
               </table>
-
-              <h1 className="text-2xl p-1 font-semibold pt-4">Comparison Result</h1>
-              {finalCompareResponsePOS}
             </div>
           </div>
         </div>
@@ -868,7 +873,38 @@ export default function Home() {
               />
             </div>
 
-            <div className="ml-60">
+            <div className="flex justify-center ml-2 mb-2">
+              <button
+                className={`bg-cyan-500 text-white px-4 py-2 w-40 mt-2 rounded-lg focus:outline-none relative ${
+                  isLoading ? "opacity-50 pointer-events-none" : ""
+                } ${checkedCount < 2 ? "opacity-50 pointer-events-none" : ""}`}
+                onClick={!isLoading ? handleCompareClick : undefined}
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <div className=" flex items-center justify-center">
+                    <svg
+                      className="animate-spin h-5 w-5 mr-2"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-100"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                        strokeDasharray="60 40"
+                        fill="none"
+                      />
+                    </svg>
+                  </div>
+                ) : (
+                  `Compare(${checkedCount})`
+                )}
+              </button>
+            </div>
+            <div className="ml-2">
               <button
                 type="button"
                 className="mt-2 px-4 py-2 mb-2 text-white rounded-md transition-colors w-full bg-cyan-500 min-w-60"
@@ -880,86 +916,68 @@ export default function Home() {
           </form>
         </div>
 
-        <table className="rounded-lg">
-          <thead className=" bg-cyan-500 text-white rounded-md">
-            <tr>
-              <th className=" px-4 py-2 font-semibold rounded-lg">Select</th>
-              <th className="border border-cyan-200 px-4 py-2 font-semibold rounded-lg">
-                Payment Gateway Name
-              </th>
-              <th className="border border-cyan-200 px-4 py-2 min-w-72 font-semibold rounded-lg">
-                Payment Methods
-              </th>
-              <th className="border border-cyan-200 px-4 py-2 min-w-60 font-semibold rounded-lg">
-                API Languages
-              </th>
-              <th className="border border-cyan-200 px-4 py-2 font-semibold rounded-lg">
-                Security/Compliance
-              </th>
-              <th className="border border-cyan-200 px-4 py-2 min-w-60 font-semibold rounded-lg">
-                Countries
-              </th>
-              <th className="border border-cyan-200 px-4 py-2 min-w-72 max-w-72 font-semibold rounded-lg">
-                Currencies
-              </th>
-              <th className="border border-cyan-200 px-4 py-2 min-w-60 font-semibold rounded-lg">
-                Fee
-              </th>
-              <th className="border border-cyan-200 px-4 py-2 font-semibold rounded-lg">
-                Website
-              </th>
-            </tr>
-          </thead>
-          <tbody className="rounded-lg">
-            {(searchTerm === ""
-              ? response["Payment Gateways"]
-              : filteredGateways
-            ).map((gateway, index) => (
-              <tr
-                key={gateway.id}
-                className={`border-b border-cyan-200 rounded-lg ${
-                  index % 2 === 0 ? "" : "bg-cyan-50"
-                }`}
-              >
-                <td className="border border-cyan-200 px-4 py-2 rounded-lg">
-                  <input
-                    type="checkbox"
-                    className="form-checkbox h-4 w-4 text-primary-500 border-gray-300 rounded focus:ring-primary-500"
-                    checked={checkedBoxes[gateway.id] || false}
-                    onChange={() => handleCheckboxChange(gateway.id, gateway)}
-                  />
-                </td>
-                <td className="border border-cyan-200 px-4 py-2">
-                  {gateway["Payment Gateway Name"]}
-                </td>
-                <td className="border border-cyan-200 px-4 py-2 relative">
-                  {Array.isArray(gateway["Payment Methods"]) ? (
-                    <>
-                      {gateway["Payment Methods"]
-                        .slice(0, 3)
-                        .map((method, index) => (
-                          <span
-                            key={index}
-                            className="border border-cyan-200 bg-cyan-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
-                          >
-                            <span className="flex">
-                              <PaymentIcon
-                                id={method.toLowerCase()}
-                                style={{}}
-                                className="payment-icon h-6 w-6 mr-1"
-                              />
-                              {method}
-                            </span>
-                          </span>
-                        ))}
-
-                      {showAll &&
-                        gateway["Payment Methods"]
-                          .slice(3)
+        <div className="overflow-x-auto max-h-96 overflow-y-auto custom-scrollbar">
+          <table className="rounded-lg">
+            <thead className=" bg-cyan-500 text-white rounded-md">
+              <tr>
+                <th className=" px-4 py-2 font-semibold rounded-lg">Select</th>
+                <th className="border border-gray-200 px-4 py-2 font-semibold rounded-lg">
+                  Payment Gateway Name
+                </th>
+                <th className="border border-gray-200 px-4 py-2 min-w-72 font-semibold rounded-lg">
+                  Payment Methods
+                </th>
+                <th className="border border-gray-200 px-4 py-2 min-w-60 font-semibold rounded-lg">
+                  API Languages
+                </th>
+                <th className="border border-gray-200 px-4 py-2 font-semibold rounded-lg">
+                  Security/Compliance
+                </th>
+                <th className="border border-gray-200 px-4 py-2 min-w-60 font-semibold rounded-lg">
+                  Countries
+                </th>
+                <th className="border border-gray-200 px-4 py-2 min-w-72 max-w-72 font-semibold rounded-lg">
+                  Currencies
+                </th>
+                <th className="border border-gray-200 px-4 py-2 min-w-60 font-semibold rounded-lg">
+                  Fee
+                </th>
+                <th className="border border-gray-200 px-4 py-2 font-semibold rounded-lg">
+                  Website
+                </th>
+              </tr>
+            </thead>
+            <tbody className="rounded-lg">
+              {(searchTerm === ""
+                ? response["Payment Gateways"]
+                : filteredGateways
+              ).map((gateway, index) => (
+                <tr
+                  key={gateway.id}
+                  className={`border-b border-gray-200 rounded-lg ${
+                    index % 2 === 0 ? "" : "bg-gray-50"
+                  }`}
+                >
+                  <td className="border border-gray-200 px-4 py-2 rounded-lg">
+                    <input
+                      type="checkbox"
+                      className="form-checkbox h-4 w-4 text-primary-500 border-gray-300 rounded focus:ring-primary-500"
+                      checked={checkedBoxes[gateway.id] || false}
+                      onChange={() => handleCheckboxChange(gateway.id, gateway)}
+                    />
+                  </td>
+                  <td className="border border-gray-200 px-4 py-2">
+                    {gateway["Payment Gateway Name"]}
+                  </td>
+                  <td className="border border-gray-200 px-4 py-2 relative">
+                    {Array.isArray(gateway["Payment Methods"]) ? (
+                      <>
+                        {gateway["Payment Methods"]
+                          .slice(0, 3)
                           .map((method, index) => (
                             <span
                               key={index}
-                              className="border border-cyan-200 bg-cyan-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
+                              className="border bg-gray-100 shadow-md shadow-gray-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
                             >
                               <span className="flex">
                                 <PaymentIcon
@@ -971,209 +989,196 @@ export default function Home() {
                               </span>
                             </span>
                           ))}
-                      {!showAll && gateway["Payment Methods"].length > 3 && (
-                        <span
-                          onClick={toggleShowAll}
-                          className="text-cyan-300 absolute right-0 bottom-0 mr-2 mb-2 px-2 py-1 rounded-md cursor-pointer"
-                        >
-                          more...
-                        </span>
-                      )}
-                    </>
-                  ) : (
-                    <span className="payment-method">
-                      {gateway["Payment Methods"]}
-                    </span>
-                  )}
-                </td>
 
-                <td className="border border-cyan-200 px-4 py-2 relative">
-                  {Array.isArray(gateway["API Languages"]) ? (
-                    <>
-                      {!showLanguages ? (
-                        <>
-                          {gateway["API Languages"]
-                            .slice(0, 3)
-                            .map((language, index) => (
+                        {showAll &&
+                          gateway["Payment Methods"]
+                            .slice(3)
+                            .map((method, index) => (
                               <span
                                 key={index}
-                                className="border border-cyan-200 bg-cyan-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
+                                className="border bg-gray-100 shadow-md shadow-gray-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
                               >
-                                {language}
+                                <span className="flex">
+                                  <PaymentIcon
+                                    id={method.toLowerCase()}
+                                    style={{}}
+                                    className="payment-icon h-6 w-6 mr-1"
+                                  />
+                                  {method}
+                                </span>
                               </span>
                             ))}
-
-                          {gateway["API Languages"].length > 3 && (
-                            <span
-                              onClick={toggleShowLanguages}
-                              className="text-cyan-300 absolute right-0 bottom-0 mr-2 mb-2 px-2 py-1 rounded-md cursor-pointer"
-                            >
-                              more...
-                            </span>
-                          )}
-                        </>
-                      ) : (
-                        gateway["API Languages"].map((language, index) => (
+                        {!showAll && gateway["Payment Methods"].length > 3 && (
                           <span
-                            key={index}
-                            className="border border-cyan-200 bg-cyan-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
+                            onClick={toggleShowAll}
+                            className="text-cyan-300 absolute right-0 bottom-0 mr-2 mb-2 px-2 py-1 rounded-md cursor-pointer"
                           >
-                            {language}
+                            more...
                           </span>
-                        ))
-                      )}
-                    </>
-                  ) : (
-                    <span className="api-language">
-                      {gateway["API Languages"]}
-                    </span>
-                  )}
-                </td>
+                        )}
+                      </>
+                    ) : (
+                      <span className="payment-method">
+                        {gateway["Payment Methods"]}
+                      </span>
+                    )}
+                  </td>
 
-                <td className="border border-cyan-200 px-4 py-2">
-                  {Array.isArray(gateway["Security/Compliance"])
-                    ? gateway["Security/Compliance"].join(", ")
-                    : gateway["Security/Compliance"]}
-                </td>
-                <td className="border border-cyan-200 px-4 py-2 relative">
-                  {Array.isArray(gateway.Countries) ? (
-                    <>
-                      {!showCountries ? (
-                        <>
-                          {gateway.Countries.slice(0, 3).map(
-                            (country, index) => (
-                              <span
-                                key={index}
-                                className="border border-cyan-200 bg-cyan-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
-                              >
+                  <td className="border border-gray-200 px-4 py-2 relative">
+                    {Array.isArray(gateway["API Languages"]) ? (
+                      <>
+                        {!showLanguages ? (
+                          <>
+                            {gateway["API Languages"]
+                              .slice(0, 3)
+                              .map((language, index) => (
                                 <span
-                                  className={`ml-1 mr-1 h-4 w-4 flag-icon flag-icon-${country.toLowerCase()}`}
-                                ></span>
-                                {country}
-                              </span>
-                            )
-                          )}
-                          {gateway.Countries.length > 3 && (
-                            <span
-                              onClick={toggleShowCountries}
-                              className="text-cyan-300 absolute right-0 bottom-0 mr-2 mb-2 px-2 py-1 rounded-md cursor-pointer"
-                            >
-                              more...
-                            </span>
-                          )}
-                        </>
-                      ) : (
-                        gateway.Countries.map((country, index) => (
-                          <span
-                            key={index}
-                            className="border border-cyan-200 bg-cyan-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
-                          >
-                            <span
-                              className={`ml-1 mr-1 h-4 w-4 flag-icon flag-icon-${country.toLowerCase()}`}
-                            ></span>
-                            {country}
-                          </span>
-                        ))
-                      )}
-                    </>
-                  ) : (
-                    <span className="api-country">{gateway.Countries}</span>
-                  )}
-                </td>
-
-                <td className="border border-cyan-200 px-4 py-2 relative">
-                  {Array.isArray(gateway.Currencies) ? (
-                    <>
-                      {!showCurrencies ? (
-                        <>
-                          {gateway.Currencies.slice(0, 3).map(
-                            (currency, index) => (
-                              <span
-                                key={index}
-                                className="border border-cyan-200 bg-cyan-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
-                              >
-                                <span className="pr-1">
-                                  {getSymbolFromCurrency(currency)}
+                                  key={index}
+                                  className="border bg-gray-100 shadow-md shadow-gray-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
+                                >
+                                  {language}
                                 </span>
-                                {currency}
-                              </span>
-                            )
-                          )}
-                          {gateway.Currencies.length > 3 && (
-                            <span
-                              onClick={toggleShowCurrencies}
-                              className="text-cyan-300 mr-2 mb-2 px-2 py-1 absolute right-0 bottom-0 rounded-md inline-block cursor-pointer"
-                            >
-                              more...
-                            </span>
-                          )}
-                        </>
-                      ) : (
-                        gateway.Currencies.map((currency, index) => (
-                          <span
-                            key={index}
-                            className="border border-cyan-200 bg-cyan-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
-                          >
-                            <span className="pr-1">
-                              {getSymbolFromCurrency(currency)}
-                            </span>
-                            {currency}
-                          </span>
-                        ))
-                      )}
-                    </>
-                  ) : (
-                    <span className="currency">{gateway.Currencies}</span>
-                  )}
-                </td>
+                              ))}
 
-                <td className="border border-cyan-200 px-4 py-2">
-                  {Array.isArray(gateway.Fee)
-                    ? gateway.Fee.join(", ")
-                    : gateway.Fee}
-                </td>
-                <td className="border border-cyan-200 px-4 py-2">
-                  <a href={gateway.Website}>
-                    {gateway["Payment Gateway Name"]}
-                  </a>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        {checkedCount >= 2 && (
-          <div className="flex justify-center m-4">
-            <button
-              className={`bg-cyan-500 text-white px-4 py-2 w-40 mt-2 rounded-lg focus:outline-none relative ${
-                isLoading ? "opacity-50 pointer-events-none" : ""
-              }`}
-              onClick={!isLoading ? handleCompareClick : undefined}
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <div className=" flex items-center justify-center">
-                  <svg
-                    className="animate-spin h-5 w-5 mr-2"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-100"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                      strokeDasharray="60 40"
-                      fill="none"
-                    />
-                  </svg>
-                </div>
-              ) : (
-                `Compare(${checkedCount})`
-              )}
-            </button>
-          </div>
-        )}
+                            {gateway["API Languages"].length > 3 && (
+                              <span
+                                onClick={toggleShowLanguages}
+                                className="text-cyan-300 absolute right-0 bottom-0 mr-2 mb-2 px-2 py-1 rounded-md cursor-pointer"
+                              >
+                                more...
+                              </span>
+                            )}
+                          </>
+                        ) : (
+                          gateway["API Languages"].map((language, index) => (
+                            <span
+                              key={index}
+                              className="border bg-gray-100 shadow-md shadow-gray-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
+                            >
+                              {language}
+                            </span>
+                          ))
+                        )}
+                      </>
+                    ) : (
+                      <span className="api-language">
+                        {gateway["API Languages"]}
+                      </span>
+                    )}
+                  </td>
+
+                  <td className="border border-gray-200 px-4 py-2">
+                    {Array.isArray(gateway["Security/Compliance"])
+                      ? gateway["Security/Compliance"].join(", ")
+                      : gateway["Security/Compliance"]}
+                  </td>
+                  <td className="border border-gray-200 px-4 py-2 relative">
+                    {Array.isArray(gateway.Countries) ? (
+                      <>
+                        {!showCountries ? (
+                          <>
+                            {gateway.Countries.slice(0, 3).map(
+                              (country, index) => (
+                                <span
+                                  key={index}
+                                  className="border bg-gray-100 shadow-md shadow-gray-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
+                                >
+                                  <span
+                                    className={`ml-1 mr-1 h-4 w-4 flag-icon flag-icon-${country.toLowerCase()}`}
+                                  ></span>
+                                  {country}
+                                </span>
+                              )
+                            )}
+                            {gateway.Countries.length > 3 && (
+                              <span
+                                onClick={toggleShowCountries}
+                                className="text-cyan-300 absolute right-0 bottom-0 mr-2 mb-2 px-2 py-1 rounded-md cursor-pointer"
+                              >
+                                more...
+                              </span>
+                            )}
+                          </>
+                        ) : (
+                          gateway.Countries.map((country, index) => (
+                            <span
+                              key={index}
+                              className="border bg-gray-100 shadow-md shadow-gray-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
+                            >
+                              <span
+                                className={`ml-1 mr-1 h-4 w-4 flag-icon flag-icon-${country.toLowerCase()}`}
+                              ></span>
+                              {country}
+                            </span>
+                          ))
+                        )}
+                      </>
+                    ) : (
+                      <span className="api-country">{gateway.Countries}</span>
+                    )}
+                  </td>
+
+                  <td className="border border-gray-200 px-4 py-2 relative">
+                    {Array.isArray(gateway.Currencies) ? (
+                      <>
+                        {!showCurrencies ? (
+                          <>
+                            {gateway.Currencies.slice(0, 3).map(
+                              (currency, index) => (
+                                <span
+                                  key={index}
+                                  className="border bg-gray-100 shadow-md shadow-gray-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
+                                >
+                                  <span className="pr-1">
+                                    {getSymbolFromCurrency(currency)}
+                                  </span>
+                                  {currency}
+                                </span>
+                              )
+                            )}
+                            {gateway.Currencies.length > 3 && (
+                              <span
+                                onClick={toggleShowCurrencies}
+                                className="text-cyan-300 mr-2 mb-2 px-2 py-1 absolute right-0 bottom-0 rounded-md inline-block cursor-pointer"
+                              >
+                                more...
+                              </span>
+                            )}
+                          </>
+                        ) : (
+                          gateway.Currencies.map((currency, index) => (
+                            <span
+                              key={index}
+                              className="border bg-gray-100 shadow-md shadow-gray-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
+                            >
+                              <span className="pr-1">
+                                {getSymbolFromCurrency(currency)}
+                              </span>
+                              {currency}
+                            </span>
+                          ))
+                        )}
+                      </>
+                    ) : (
+                      <span className="currency">{gateway.Currencies}</span>
+                    )}
+                  </td>
+
+                  <td className="border border-gray-200 px-4 py-2">
+                    {Array.isArray(gateway.Fee)
+                      ? gateway.Fee.join(", ")
+                      : gateway.Fee}
+                  </td>
+                  <td className="border border-gray-200 px-4 py-2">
+                    <a href={gateway.Website}>
+                      {gateway["Payment Gateway Name"]}
+                    </a>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
         {isPGPopupVisible && (
           <PaymentGatewayPopup
@@ -1381,7 +1386,7 @@ export default function Home() {
               <input
                 type="text"
                 id="simple-search"
-                className="bg-gray-100 border min-w-72 border-cyan-200 text-gray-900 text-sm rounded-lg focus:outline-none block w-full pl-10 p-2 dark:placeholder-gray-400 dark:text-black"
+                className="bg-gray-100 border min-w-72 border-gray-200 text-gray-900 text-sm rounded-lg focus:outline-none block w-full pl-10 p-2 dark:placeholder-gray-400 dark:text-black"
                 placeholder="Search"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -1389,7 +1394,39 @@ export default function Home() {
               />
             </div>
 
-            <div className="ml-60">
+            <div className="flex justify-center ml-2 mb-2">
+              <button
+                className={`bg-cyan-500 text-white px-4 py-2 w-40 mt-2 rounded-lg focus:outline-none relative ${
+                  isLoading ? "opacity-50 pointer-events-none" : ""
+                } ${checkedCount < 2 ? "opacity-50 pointer-events-none" : ""}`}
+                onClick={!isLoading ? handleCompareClick : undefined}
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <div className=" flex items-center justify-center">
+                    <svg
+                      className="animate-spin h-5 w-5 mr-2"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-100"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                        strokeDasharray="60 40"
+                        fill="none"
+                      />
+                    </svg>
+                  </div>
+                ) : (
+                  `Compare(${checkedCount})`
+                )}
+              </button>
+            </div>
+
+            <div className="ml-2">
               <button
                 type="button"
                 className="mt-2 px-4 py-2 mb-2 text-white rounded-md transition-colors w-full bg-cyan-500 min-w-60"
@@ -1400,131 +1437,99 @@ export default function Home() {
             </div>
           </form>
         </div>
-        <table className="border border-gray-200">
-          <thead className=" bg-cyan-500 text-white ">
-            <tr>
-              <th className="border border-gray-200 px-4 py-2   font-semibold">
-                Select
-              </th>
-              <th className="border border-gray-200 px-4 py-2   font-semibold">
-                POS Name
-              </th>
-              <th className="border border-gray-200 px-4 py-2   font-semibold min-w-60 pt-3">
-                <div className="flex flex-col">
-                  <span className="text-sm font-medium">Reviews</span>
-                  <div className="flex flex-row border-t border-gray-200 mt-1 pt-1">
-                    <span className="flex-1 text-xs font-normal text-center">
-                      Google Reviews
-                    </span>
-                    <span className="flex-1 text-xs font-normal text-center border-l border-gray-200">
-                      Trust Pilot Reviews
-                    </span>
-                  </div>
-                </div>
-              </th>
-
-              <th className="border border-gray-200 px-4 py-2  font-semibold min-w-52">
-                Device Cost
-              </th>
-              <th className="border border-gray-200 px-4 py-2   font-semibold min-w-48">
-                Works with (Payment Gateway)
-              </th>
-              <th className="border border-gray-200 px-4 py-2  font-semibold min-w-40">
-                Payment processing cost
-              </th>
-              <th className="border border-gray-200 px-4 py-2  font-semibold">
-                Industries
-              </th>
-              {/* <th className="border border-gray-200 px-4 py-2 text-black bg-gray-300 font-semibold">
-                Inventory Management
-              </th> */}
-            </tr>
-          </thead>
-          <tbody>
-            {(searchTerm === "" ? response.POS : filteredPOS).map(
-              (pos, index) => (
-                <tr
-                  key={pos.id}
-                  className={`border-b border-gray-200 ${
-                    index % 2 === 0 ? "" : "bg-cyan-50"
-                  }`}
-                >
-                  <td className="border border-gray-200 px-4 py-2">
-                    <input
-                      type="checkbox"
-                      className="form-checkbox h-4 w-4 text-primary-500 border-gray-300 rounded focus:ring-primary-500 checked:bg-cyan-500"
-                      checked={checkedBoxes[pos.id] || false}
-                      onChange={() => handleCheckboxChange(pos.id, pos)}
-                    />
-                  </td>
-                  <td className="border border-gray-200 px-4 py-2">
-                    {pos["POS Name"] || "-"}
-                  </td>
-                  <td className="border border-gray-200 px-4 py-2">
-                    <div className="flex flex-row">
-                      <span className="flex-1 text-sm font-normal text-center">
-                        {pos["Google Reviews"] || "-"}
+        <div className="overflow-x-auto max-h-96 overflow-y-auto custom-scrollbar">
+          <table className="border border-gray-200">
+            <thead className=" bg-cyan-500 text-white ">
+              <tr>
+                <th className="border border-gray-200 px-4 py-2   font-semibold">
+                  Select
+                </th>
+                <th className="border border-gray-200 px-4 py-2   font-semibold">
+                  POS Name
+                </th>
+                <th className="border border-gray-200 px-4 py-2   font-semibold min-w-60 pt-3">
+                  <div className="flex flex-col">
+                    <span className="text-sm font-medium">Reviews</span>
+                    <div className="flex flex-row border-t border-gray-200 mt-1 pt-1">
+                      <span className="flex-1 text-xs font-normal text-center">
+                        Google Reviews
                       </span>
-                      <span className="flex-1 text-sm font-normal text-center border-l border-gray-200">
-                        {pos["Trust Pilot Reviews"] || "-"}
+                      <span className="flex-1 text-xs font-normal text-center border-l border-gray-200">
+                        Trust Pilot Reviews
                       </span>
                     </div>
-                  </td>
+                  </div>
+                </th>
 
-                  <td className="border border-gray-200 px-4 py-2">
-                    {pos["Device Cost"] || "-"}
-                  </td>
-                  <td className="border border-gray-200 px-4 py-2">
-                    {pos["Works with (Payment Gateway)"] || "-"}
-                  </td>
-                  <td className="border border-gray-200 px-4 py-2">
-                    {pos["Payment processing cost"] || "-"}
-                  </td>
-                  <td className="border border-gray-200 px-4 py-2">
-                    {pos["Industries"] || "-"}
-                  </td>
-                  {/* <td className="border border-gray-200 px-4 py-2">
+                <th className="border border-gray-200 px-4 py-2  font-semibold min-w-52">
+                  Device Cost
+                </th>
+                <th className="border border-gray-200 px-4 py-2   font-semibold min-w-48">
+                  Works with (Payment Gateway)
+                </th>
+                <th className="border border-gray-200 px-4 py-2  font-semibold min-w-40">
+                  Payment processing cost
+                </th>
+                <th className="border border-gray-200 px-4 py-2  font-semibold">
+                  Industries
+                </th>
+                {/* <th className="border border-gray-200 px-4 py-2 text-black bg-gray-300 font-semibold">
+                Inventory Management
+              </th> */}
+              </tr>
+            </thead>
+            <tbody>
+              {(searchTerm === "" ? response.POS : filteredPOS).map(
+                (pos, index) => (
+                  <tr
+                    key={pos.id}
+                    className={`border-b border-gray-200 ${
+                      index % 2 === 0 ? "" : "bg-cyan-50"
+                    }`}
+                  >
+                    <td className="border border-gray-200 px-4 py-2">
+                      <input
+                        type="checkbox"
+                        className="form-checkbox h-4 w-4 text-primary-500 border-gray-300 rounded focus:ring-primary-500 checked:bg-cyan-500"
+                        checked={checkedBoxes[pos.id] || false}
+                        onChange={() => handleCheckboxChange(pos.id, pos)}
+                      />
+                    </td>
+                    <td className="border border-gray-200 px-4 py-2">
+                      {pos["POS Name"] || "-"}
+                    </td>
+                    <td className="border border-gray-200 px-4 py-2">
+                      <div className="flex flex-row">
+                        <span className="flex-1 text-sm font-normal text-center">
+                          {pos["Google Reviews"] || "-"}
+                        </span>
+                        <span className="flex-1 text-sm font-normal text-center border-l border-gray-200">
+                          {pos["Trust Pilot Reviews"] || "-"}
+                        </span>
+                      </div>
+                    </td>
+
+                    <td className="border border-gray-200 px-4 py-2">
+                      {pos["Device Cost"] || "-"}
+                    </td>
+                    <td className="border border-gray-200 px-4 py-2">
+                      {pos["Works with (Payment Gateway)"] || "-"}
+                    </td>
+                    <td className="border border-gray-200 px-4 py-2">
+                      {pos["Payment processing cost"] || "-"}
+                    </td>
+                    <td className="border border-gray-200 px-4 py-2">
+                      {pos["Industries"] || "-"}
+                    </td>
+                    {/* <td className="border border-gray-200 px-4 py-2">
                     {pos["Inventory Management"] || "-"}
                   </td> */}
-                </tr>
-              )
-            )}
-          </tbody>
-        </table>
-        {checkedCount >= 2 && (
-          <div className="flex justify-center m-4">
-            <button
-              className={`bg-cyan-500 text-white px-4 py-2 w-40 mt-2 rounded-lg focus:outline-none relative ${
-                isLoading ? "opacity-50 pointer-events-none" : ""
-              }`}
-              onClick={!isLoading ? handleCompareClick : undefined}
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <div className=" flex items-center justify-center">
-                  <svg
-                    className="animate-spin h-5 w-5 mr-2"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-100"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      setSelectedPOS
-                      stroke="currentColor"
-                      strokeWidth="4"
-                      strokeDasharray="60 40"
-                      fill="none"
-                    />
-                  </svg>
-                </div>
-              ) : (
-                `Compare(${checkedCount})`
+                  </tr>
+                )
               )}
-            </button>
-          </div>
-        )}
+            </tbody>
+          </table>
+        </div>
 
         {isPOSPopupVisible && (
           <POSPopup
@@ -1539,7 +1544,7 @@ export default function Home() {
   return (
     <body>
       <main className="flex flex-col min-h-screen items-center justify-center p-8 sm:p-16 md:p-24 lg:p-32 xl:p-40">
-        <div className="flex flex-col items-start justify-center w-full max-w-96 border-2 border-gray-200 rounded-xl p-4">
+        <div className="flex flex-col items-start justify-center w-full max-w-96 border-2 border-gray-200 shadow-lg shadow-gray-400 rounded-xl p-4">
           <label
             htmlFor="menu-button"
             className="text-black font-semibold mb-1 text-sm mt-4"
@@ -1553,7 +1558,7 @@ export default function Home() {
                   type="button"
                   className={`inline-flex justify-center items-center h-10 w-full mt-1 rounded-md text-sm shadow-sm bg-white ${
                     selectedOption === "Payment Gateway"
-                      ? "ring-1 ring-indigo-500 text-indigo-500"
+                      ? "ring-1 ring-cyan-500 text-cyan-500"
                       : " text-gray-400"
                   }`}
                   onClick={() => handleOptionClick("Payment Gateway")}
@@ -1563,12 +1568,11 @@ export default function Home() {
                       width="21"
                       height="20"
                       viewBox="0 0 21 20"
-                      fill={
-                        selectedOption === "Payment Gateway" ? "blue" : "gray"
-                      }
-                      fillOpacity={
-                        selectedOption === "Payment Gateway" ? "0.6" : "0.6"
-                      }
+                      className={`${
+                        selectedOption === "Payment Gateway"
+                          ? "fill-cyan-500"
+                          : "fill-gray-400"
+                      }`}
                       xmlns="http://www.w3.org/2000/svg"
                     >
                       <path d="M10.5 0.25C8.57164 0.25 6.68657 0.821828 5.08319 1.89317C3.47982 2.96451 2.23013 4.48726 1.49218 6.26884C0.754225 8.05042 0.561142 10.0108 0.937348 11.9021C1.31355 13.7934 2.24215 15.5307 3.60571 16.8943C4.96928 18.2579 6.70656 19.1865 8.59787 19.5627C10.4892 19.9389 12.4496 19.7458 14.2312 19.0078C16.0127 18.2699 17.5355 17.0202 18.6068 15.4168C19.6782 13.8134 20.25 11.9284 20.25 10C20.2473 7.41498 19.2192 4.93661 17.3913 3.10872C15.5634 1.28084 13.085 0.25273 10.5 0.25ZM10.5 18.25C8.86831 18.25 7.27326 17.7661 5.91655 16.8596C4.55984 15.9531 3.50242 14.6646 2.878 13.1571C2.25358 11.6496 2.0902 9.99085 2.40853 8.3905C2.72685 6.79016 3.51259 5.32015 4.66637 4.16637C5.82016 3.01259 7.29017 2.22685 8.89051 1.90852C10.4909 1.59019 12.1497 1.75357 13.6571 2.37799C15.1646 3.00242 16.4531 4.05984 17.3596 5.41655C18.2661 6.77325 18.75 8.3683 18.75 10C18.7475 12.1873 17.8775 14.2843 16.3309 15.8309C14.7843 17.3775 12.6873 18.2475 10.5 18.25ZM7.60032 7.39937C8.02416 8.2007 8.24573 9.09348 8.24573 10C8.24573 10.9065 8.02416 11.7993 7.60032 12.6006C7.55549 12.6898 7.49332 12.7691 7.41744 12.8339C7.34157 12.8988 7.25352 12.9478 7.15845 12.9782C7.06338 13.0085 6.96321 13.0196 6.8638 13.0108C6.76439 13.002 6.66775 12.9734 6.57953 12.9267C6.49132 12.88 6.4133 12.8162 6.35006 12.739C6.28681 12.6618 6.23961 12.5728 6.21122 12.4771C6.18283 12.3814 6.17382 12.281 6.18472 12.1818C6.19562 12.0826 6.22621 11.9866 6.27469 11.8994C6.58856 11.3155 6.75284 10.6629 6.75284 10C6.75284 9.33709 6.58856 8.68452 6.27469 8.10063C6.18655 7.92531 6.17063 7.72244 6.23034 7.53553C6.29005 7.34861 6.42063 7.19254 6.59407 7.10079C6.76752 7.00903 6.97002 6.98891 7.15813 7.04473C7.34624 7.10055 7.50499 7.22787 7.60032 7.39937ZM12.8503 4.39937C13.7728 6.12305 14.2555 8.04781 14.2555 10.0028C14.2555 11.9578 13.7728 13.8826 12.8503 15.6063C12.7505 15.7702 12.5915 15.8896 12.4063 15.9399C12.221 15.9902 12.0235 15.9676 11.8544 15.8766C11.6854 15.7856 11.5576 15.6333 11.4975 15.451C11.4374 15.2687 11.4495 15.0702 11.5313 14.8966C12.3379 13.3905 12.76 11.7085 12.76 10C12.76 8.29151 12.3379 6.60949 11.5313 5.10344C11.4375 4.9279 11.4174 4.72231 11.4752 4.5319C11.533 4.34149 11.6642 4.18186 11.8397 4.08813C12.0152 3.99439 12.2208 3.97422 12.4112 4.03207C12.6016 4.08991 12.7613 4.22102 12.855 4.39656L12.8503 4.39937ZM10.2253 5.89937C10.8986 7.162 11.2508 8.57094 11.2508 10.0019C11.2508 11.4328 10.8986 12.8417 10.2253 14.1044C10.18 14.1931 10.1175 14.2718 10.0415 14.3361C9.96541 14.4004 9.87732 14.4488 9.78233 14.4787C9.68734 14.5086 9.58736 14.5192 9.48821 14.51C9.38906 14.5008 9.29273 14.472 9.20485 14.4252C9.11696 14.3784 9.03928 14.3145 8.97632 14.2374C8.91337 14.1603 8.8664 14.0713 8.83817 13.9759C8.80994 13.8804 8.80101 13.7802 8.81189 13.6812C8.82278 13.5823 8.85326 13.4864 8.90157 13.3994C9.45931 12.3538 9.75107 11.1869 9.75107 10.0019C9.75107 8.81681 9.45931 7.64998 8.90157 6.60437C8.85326 6.5173 8.82278 6.42149 8.81189 6.32251C8.80101 6.22353 8.80994 6.12338 8.83817 6.02789C8.8664 5.9324 8.91337 5.84349 8.97632 5.76635C9.03928 5.6892 9.11696 5.62536 9.20485 5.57856C9.29273 5.53175 9.38906 5.50291 9.48821 5.49373C9.58736 5.48454 9.68734 5.49519 9.78233 5.52505C9.87732 5.55492 9.96541 5.6034 10.0415 5.66766C10.1175 5.73193 10.18 5.8107 10.2253 5.89937Z" />
@@ -1576,7 +1580,7 @@ export default function Home() {
                     <p
                       className={
                         selectedOption === "Payment Gateway"
-                          ? "text-indigo-500"
+                          ? "text-cyan-500"
                           : "text-gray-400"
                       }
                     >
@@ -1591,7 +1595,7 @@ export default function Home() {
                   type="button"
                   className={`inline-flex justify-center items-center h-10 w-full mt-1 rounded-md py-2 text-sm shadow-sm bg-white  ${
                     selectedOption === "POS"
-                      ? "ring-1 ring-indigo-500 text-indigo-500"
+                      ? "ring-1 ring-cyan-500 text-cyan-500"
                       : " text-gray-400"
                   }`}
                   onClick={() => handleOptionClick("POS")}
@@ -1602,15 +1606,18 @@ export default function Home() {
                       height="15"
                       viewBox="0 0 17 15"
                       xmlns="http://www.w3.org/2000/svg"
-                      fill={selectedOption === "POS" ? "blue" : "gray"}
-                      fillOpacity={selectedOption === "POS" ? "0.6" : "0.6"}
+                      className={`${
+                        selectedOption === "POS"
+                          ? "fill-cyan-500"
+                          : "fill-gray-400"
+                      }`}
                     >
                       <path d="M14.5 6H13.5V0H3.5V6H2.5C1.96957 6 1.46086 6.21071 1.08579 6.58579C0.710714 6.96086 0.5 7.46957 0.5 8V15H16.5V8C16.5 7.46957 16.2893 6.96086 15.9142 6.58579C15.5391 6.21071 15.0304 6 14.5 6ZM5.5 2H11.5V6H5.5V2ZM14.5 13H2.5V8H14.5V13ZM13.5 11H9.5V9H13.5V11Z" />
                     </svg>
                     <p
                       className={
                         selectedOption === "POS"
-                          ? " text-indigo-500"
+                          ? " text-cyan-500"
                           : "text-gray-400"
                       }
                     >
@@ -1758,8 +1765,8 @@ export default function Home() {
             className={`mt-2 px-4 py-2 mb-2 text-white rounded-md transition-colors w-full
                 ${
                   isButtonDisabled
-                    ? " bg-indigo-500 bg-opacity-55 cursor-not-allowed"
-                    : "hover:border-gray-300 bg-indigo-500 hover:bg-blue-500 cursor-pointer"
+                    ? " bg-cyan-500 bg-opacity-55 cursor-not-allowed"
+                    : "hover:border-gray-300 bg-cyan-500 hover:bg-cyan-400 cursor-pointer"
                 }`}
             onClick={handleButtonClick}
             disabled={isButtonDisabled}
@@ -1813,13 +1820,13 @@ export default function Home() {
                 isFullScreen
                   ? "w-screen h-screen"
                   : "max-w-4xl w-auto max-h-3/4 min-h-3/4"
-              } overflow-x-auto overflow-y-auto relative text-black custom-scrollbar`}
+              } overflow-hidden relative text-black custom-scrollbar`}
             >
               <button
                 className={`text-gray-600 hover:text-gray-800 ${
                   isFullScreen
-                    ? "fixed top-2 right-20"
-                    : "fixed top-32 right-96"
+                    ? "absolute top-2 right-20"
+                    : "absolute top-4 right-16"
                 }`}
                 onClick={handleResizePopup}
               >
@@ -1861,8 +1868,8 @@ export default function Home() {
               <button
                 className={`text-gray-600 hover:text-gray-800 ${
                   isFullScreen
-                    ? "fixed top-2 right-12"
-                    : "fixed top-32 right-80 mr-6 mb-4"
+                    ? "absolute top-2 right-10"
+                    : "absolute top-4 right-8"
                 }`}
                 onClick={handleClosePopup}
               >
