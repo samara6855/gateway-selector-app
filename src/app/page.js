@@ -258,6 +258,27 @@ export default function Home() {
   }
 
   function PaymentGatewayPopup({ finalCompareResponse, selectedGateways }) {
+    const [showAll, setShowAll] = useState(false);
+    const [showLanguages, setShowLanguages] = useState(false);
+    const [showCurrencies, setShowCurrencies] = useState(false);
+    const [showCountries, setShowCountries] = useState(false);
+
+    const toggleShowAll = () => {
+      setShowAll(!showAll);
+    };
+
+    const toggleShowLanguages = () => {
+      setShowLanguages(!showLanguages);
+    };
+
+    const toggleShowCurrencies = () => {
+      setShowCurrencies(!showCurrencies);
+    };
+
+    const toggleShowCountries = () => {
+      setShowCountries(!showCountries);
+    };
+
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 p-4">
         <div
@@ -283,7 +304,7 @@ export default function Home() {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
+                  d="M6 18L18 6M6 6l12 12" 
                 />
               </svg>
             </button>
@@ -333,11 +354,11 @@ export default function Home() {
             <h1 className="text-2xl p-1 font-semibold mt-4">
               Comparison Result
             </h1>
-            <div className="max-h-full overflow-y-auto pt-2">
+            <div className="max-h-full overflow-y-auto custom-scrollbar pt-2">
               {finalCompareResponse}
             </div>
             <h2 className="font-semibold text-2xl p-2">Selected Gateways</h2>
-            <div className="rounded-lg overflow-x-auto">
+            <div className="rounded-lg overflow-x-auto custom-scrollbar">
               <table>
                 <thead className=" bg-cyan-500 text-white rounded-md">
                   <tr className="rounded-lg">
@@ -367,104 +388,232 @@ export default function Home() {
                     </th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className="rounded-lg">
                   {selectedGateways.map((gateway, index) => (
                     <tr
-                      key={index}
-                      className={index % 2 === 0 ? "" : "bg-cyan-50"}
+                      key={gateway.id}
+                      className={`border-b border-gray-200 rounded-lg ${
+                        index % 2 === 0 ? "" : "bg-gray-50"
+                      }`}
                     >
-                      <td className="border border-gray-400 px-4 py-2 rounded-md">
-                        {gateway["Payment Gateway Name"] || "-"}
+                      <td className="border border-gray-200 px-4 py-2">
+                        {gateway["Payment Gateway Name"]}
                       </td>
-                      <td className="border border-gray-400 px-4 py-2">
+                      <td className="border border-gray-200 px-4 py-2 relative">
                         {Array.isArray(gateway["Payment Methods"]) ? (
                           <>
-                            {gateway["Payment Methods"].map((method, index) => (
-                              <span
-                                key={index}
-                                className="border border-gray-200 bg-cyan-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
-                              >
-                                {method}
-                              </span>
-                            ))}
+                            {gateway["Payment Methods"]
+                              .slice(0, 3)
+                              .map((method, index) => (
+                                <span
+                                  key={index}
+                                  className="border bg-gray-100 shadow-md shadow-gray-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
+                                >
+                                  <span className="flex">
+                                    <PaymentIcon
+                                      id={method.toLowerCase()}
+                                      style={{}}
+                                      className="payment-icon h-6 w-6 mr-1"
+                                    />
+                                    {method}
+                                  </span>
+                                </span>
+                              ))}
+
+                            {showAll &&
+                              gateway["Payment Methods"]
+                                .slice(3)
+                                .map((method, index) => (
+                                  <span
+                                    key={index}
+                                    className="border bg-gray-100 shadow-md shadow-gray-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
+                                  >
+                                    <span className="flex">
+                                      <PaymentIcon
+                                        id={method.toLowerCase()}
+                                        style={{}}
+                                        className="payment-icon h-6 w-6 mr-1"
+                                      />
+                                      {method}
+                                    </span>
+                                  </span>
+                                ))}
+                            {!showAll &&
+                              gateway["Payment Methods"].length > 3 && (
+                                <span
+                                  onClick={toggleShowAll}
+                                  className="text-cyan-300 absolute right-0 bottom-0 mr-2 mb-2 px-2 py-1 rounded-md cursor-pointer"
+                                >
+                                  more...
+                                </span>
+                              )}
                           </>
                         ) : (
                           <span className="payment-method">
-                            {gateway["Payment Methods"] || "-"}
+                            {gateway["Payment Methods"]}
                           </span>
                         )}
                       </td>
-                      <td className="border border-gray-400 px-4 py-2">
+
+                      <td className="border border-gray-200 px-4 py-2 relative">
                         {Array.isArray(gateway["API Languages"]) ? (
                           <>
-                            {gateway["API Languages"].map((language, index) => (
-                              <span
-                                key={index}
-                                className="border border-gray-200 bg-cyan-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
-                              >
-                                {language}
-                              </span>
-                            ))}
+                            {!showLanguages ? (
+                              <>
+                                {gateway["API Languages"]
+                                  .slice(0, 3)
+                                  .map((language, index) => (
+                                    <span
+                                      key={index}
+                                      className="border bg-gray-100 shadow-md shadow-gray-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
+                                    >
+                                      {language}
+                                    </span>
+                                  ))}
+
+                                {gateway["API Languages"].length > 3 && (
+                                  <span
+                                    onClick={toggleShowLanguages}
+                                    className="text-cyan-300 absolute right-0 bottom-0 mr-2 mb-2 px-2 py-1 rounded-md cursor-pointer"
+                                  >
+                                    more...
+                                  </span>
+                                )}
+                              </>
+                            ) : (
+                              gateway["API Languages"].map(
+                                (language, index) => (
+                                  <span
+                                    key={index}
+                                    className="border bg-gray-100 shadow-md shadow-gray-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
+                                  >
+                                    {language}
+                                  </span>
+                                )
+                              )
+                            )}
                           </>
                         ) : (
-                          <span className="payment-method">
-                            {gateway["API Languages"] || "-"}
+                          <span className="api-language">
+                            {gateway["API Languages"]}
                           </span>
                         )}
                       </td>
 
-                      <td className="border border-gray-400 px-4 py-2">
-                        {gateway["Security/Compliance"] || "-"}
+                      <td className="border border-gray-200 px-4 py-2">
+                        {Array.isArray(gateway["Security/Compliance"])
+                          ? gateway["Security/Compliance"].join(", ")
+                          : gateway["Security/Compliance"]}
                       </td>
-                      <td className="border border-gray-400 px-4 py-2">
-                        {Array.isArray(gateway["Countries"]) ? (
+                      <td className="border border-gray-200 px-4 py-2 relative">
+                        {Array.isArray(gateway.Countries) ? (
                           <>
-                            {gateway["Countries"].map((country, index) => (
-                              <span
-                                key={index}
-                                className="border border-gray-200 bg-cyan-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
-                              >
-                                {country}
-                              </span>
-                            ))}
+                            {!showCountries ? (
+                              <>
+                                {gateway.Countries.slice(0, 3).map(
+                                  (country, index) => (
+                                    <span
+                                      key={index}
+                                      className="border bg-gray-100 shadow-md shadow-gray-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
+                                    >
+                                      <span
+                                        className={`ml-1 mr-1 h-4 w-4 flag-icon flag-icon-${countryToAlpha2(
+                                          country
+                                        ).toLowerCase()}`}
+                                      ></span>
+                                      {country}
+                                    </span>
+                                  )
+                                )}
+                                {gateway.Countries.length > 3 && (
+                                  <span
+                                    onClick={toggleShowCountries}
+                                    className="text-cyan-300 absolute right-0 bottom-0 mr-2 mb-2 px-2 py-1 rounded-md cursor-pointer"
+                                  >
+                                    more...
+                                  </span>
+                                )}
+                              </>
+                            ) : (
+                              gateway.Countries.map((country, index) => (
+                                <span
+                                  key={index}
+                                  className="border bg-gray-100 shadow-md shadow-gray-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
+                                >
+                                  <span
+                                    className={`ml-1 mr-1 h-4 w-4 flag-icon flag-icon-${
+                                      countryToAlpha2(country)
+                                        ? countryToAlpha2(country).toLowerCase()
+                                        : ""
+                                    }`}
+                                  ></span>
+
+                                  {country}
+                                </span>
+                              ))
+                            )}
                           </>
                         ) : (
-                          <span className="payment-method">
-                            {gateway["Countries"] || "-"}
+                          <span className="api-country">
+                            {gateway.Countries}
                           </span>
                         )}
                       </td>
 
-                      <td className="border border-gray-400 px-4 py-2">
-                        {Array.isArray(gateway["Currencies"]) ? (
+                      <td className="border border-gray-200 px-4 py-2 relative">
+                        {Array.isArray(gateway.Currencies) ? (
                           <>
-                            {gateway["Currencies"].map((currency, index) => (
-                              <span
-                                key={index}
-                                className="border border-gray-200 bg-cyan-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
-                              >
-                                {currency}
-                              </span>
-                            ))}
+                            {!showCurrencies ? (
+                              <>
+                                {gateway.Currencies.slice(0, 3).map(
+                                  (currency, index) => (
+                                    <span
+                                      key={index}
+                                      className="border bg-gray-100 shadow-md shadow-gray-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
+                                    >
+                                      <span className="pr-1">
+                                        {getSymbolFromCurrency(currency)}
+                                      </span>
+                                      {currency}
+                                    </span>
+                                  )
+                                )}
+                                {gateway.Currencies.length > 3 && (
+                                  <span
+                                    onClick={toggleShowCurrencies}
+                                    className="text-cyan-300 mr-2 mb-2 px-2 py-1 absolute right-0 bottom-0 rounded-md inline-block cursor-pointer"
+                                  >
+                                    more...
+                                  </span>
+                                )}
+                              </>
+                            ) : (
+                              gateway.Currencies.map((currency, index) => (
+                                <span
+                                  key={index}
+                                  className="border bg-gray-100 shadow-md shadow-gray-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
+                                >
+                                  <span className="pr-1">
+                                    {getSymbolFromCurrency(currency)}
+                                  </span>
+                                  {currency}
+                                </span>
+                              ))
+                            )}
                           </>
                         ) : (
-                          <span className="payment-method">
-                            {gateway["Currencies"] || "-"}
-                          </span>
+                          <span className="currency">{gateway.Currencies}</span>
                         )}
                       </td>
 
-                      <td className="border border-gray-400 px-4 py-2">
-                        {gateway["Fee"] || "-"}
+                      <td className="border border-gray-200 px-4 py-2">
+                        {Array.isArray(gateway.Fee)
+                          ? gateway.Fee.join(", ")
+                          : gateway.Fee}
                       </td>
-                      <td className="border border-gray-400 px-4 py-2">
-                        <a
-                          href={gateway["Website"] || ""}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-500 underline"
-                        >
-                          Visit Website
+                      <td className="border border-gray-200 px-4 py-2">
+                        <a href={gateway.Website}>
+                          {gateway["Payment Gateway Name"]}
                         </a>
                       </td>
                     </tr>
@@ -1198,9 +1347,10 @@ export default function Home() {
                                   key={index}
                                   className="border bg-gray-100 shadow-md shadow-gray-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
                                 >
-                                {/* {countryToAlpha2("United States")} */}
                                   <span
-                                    className={`ml-1 mr-1 h-4 w-4 flag-icon flag-icon-${country.toLowerCase()}`}
+                                    className={`ml-1 mr-1 h-4 w-4 flag-icon flag-icon-${countryToAlpha2(
+                                      country
+                                    ).toLowerCase()}`}
                                   ></span>
                                   {country}
                                 </span>
@@ -1222,7 +1372,9 @@ export default function Home() {
                               className="border bg-gray-100 shadow-md shadow-gray-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
                             >
                               <span
-                                className={`ml-1 mr-1 h-4 w-4 flag-icon flag-icon-${country.toLowerCase()}`}
+                                className={`ml-1 mr-1 h-4 w-4 flag-icon flag-icon-${countryToAlpha2(
+                                  country
+                                ).toLowerCase()}`}
                               ></span>
                               {country}
                             </span>
