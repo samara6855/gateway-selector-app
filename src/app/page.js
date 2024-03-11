@@ -2149,13 +2149,13 @@ export default function Home() {
           <table className="border border-gray-200">
             <thead className=" bg-cyan-500 text-white ">
               <tr>
-                <th className="border border-gray-200 px-4 py-2   font-semibold">
+                <th className="border border-gray-200 px-4 py-2 font-semibold">
                   Select
                 </th>
-                <th className="border border-gray-200 px-4 py-2   font-semibold">
+                <th className="border border-gray-200 px-4 py-2 font-semibold">
                   POS Name
                 </th>
-                <th className="border border-gray-200 px-4 py-2   font-semibold min-w-60 pt-3">
+                <th className="border border-gray-200 px-4 py-2 font-semibold min-w-60 pt-3">
                   <div className="flex flex-col">
                     <span className="text-sm font-medium">Reviews</span>
                     <div className="flex flex-row border-t border-gray-200 mt-1 pt-1">
