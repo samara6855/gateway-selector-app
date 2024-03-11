@@ -304,7 +304,7 @@ export default function Home() {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12" 
+                  d="M6 18L18 6M6 6l12 12"
                 />
               </svg>
             </button>
@@ -806,6 +806,19 @@ export default function Home() {
     const [showCurrenciesInfo, setShowCurrenciesInfo] = useState(false);
     const [showFeeInfo, setShowFeeInfo] = useState(false);
     const [showWebsiteInfo, setShowWebsiteInfo] = useState(false);
+    const [showPMFilter, setShowPMFilter] = useState(false);
+    const [showAPILangFilter, setShowAPILangFilter] = useState(false);
+    const [showSecurityFilter, setShowSecurityFilter] = useState(false);
+    const [showCountriesFilter, setShowCountriesFilter] = useState(false);
+    const [showCurrenciesFilter, setShowCurrenciesFilter] = useState(false);
+
+    // Add state variables
+    const [selectedMethods, setSelectedMethods] = useState([]);
+    const [selectedLanguages, setSelectedLanguages] = useState([]);
+    const [selectedSecurityOptions, setSelectedSecurityOptions] = useState([]);
+    const [selectedCountries, setSelectedCountries] = useState([]);
+    const [selectedCurrencies, setSelectedCurrencies] = useState([]);
+
     // const [selectedGateways, setSelectedGateways] = useState([]);
 
     const toggleShowAll = () => {
@@ -814,6 +827,46 @@ export default function Home() {
 
     const handleMoreClick = () => {
       setShowDropdown(!showDropdown);
+    };
+
+    const handleMethodSelect = (value) => {
+      setSelectedMethods((prevMethods) =>
+        prevMethods.includes(value)
+          ? prevMethods.filter((method) => method !== value)
+          : [...prevMethods, value]
+      );
+    };
+
+    const handleLanguageSelect = (value) => {
+      setSelectedLanguages((prevLanguages) =>
+        prevLanguages.includes(value)
+          ? prevLanguages.filter((lang) => lang !== value)
+          : [...prevLanguages, value]
+      );
+    };
+
+    const handleSecurityOptionSelect = (value) => {
+      setSelectedSecurityOptions((prevOptions) =>
+        prevOptions.includes(value)
+          ? prevOptions.filter((option) => option !== value)
+          : [...prevOptions, value]
+      );
+    };
+
+    const handleCountrySelect = (value) => {
+      setSelectedCountries((prevCountries) =>
+        prevCountries.includes(value)
+          ? prevCountries.filter((country) => country !== value)
+          : [...prevCountries, value]
+      );
+    };
+
+    const handleCurrencySelect = (value) => {
+      setSelectedCurrencies((prevCurrencies) =>
+        prevCurrencies.includes(value)
+          ? prevCurrencies.filter((currency) => currency !== value)
+          : [...prevCurrencies, value]
+      );
     };
 
     const toggleShowLanguages = () => {
@@ -856,6 +909,30 @@ export default function Home() {
       } else {
         sessionStorage.removeItem(sessionStorageKey);
       }
+    };
+
+    const filterTableData = () => {
+      return response["Payment Gateways"].filter((gateway) => {
+        const gatewayMethods = gateway["Payment Methods"];
+        const gatewayLanguages = gateway["API Languages"];
+        const gatewaySecurityOptions = gateway["Security/Compliance"];
+        const gatewayCountries = gateway["Countries"];
+        const gatewayCurrencies = gateway["Currencies"];
+
+        return (
+          selectedMethods.every((method) => gatewayMethods.includes(method)) &&
+          selectedLanguages.every((lang) => gatewayLanguages.includes(lang)) &&
+          selectedSecurityOptions.every((option) =>
+            gatewaySecurityOptions.includes(option)
+          ) &&
+          selectedCountries.every((country) =>
+            gatewayCountries.includes(country)
+          ) &&
+          selectedCurrencies.every((currency) =>
+            gatewayCurrencies.includes(currency)
+          )
+        );
+      });
     };
 
     const handleCompareClick = async () => {
@@ -1072,7 +1149,11 @@ export default function Home() {
           </form>
         </div>
 
-        <div className="overflow-x-auto max-h-96 overflow-y-auto custom-scrollbar">
+        <div className={`overflow-x-auto  overflow-y-auto custom-scrollbar ${
+                isFullScreen
+                  ? "max-h-screen"
+                  : "max-h-96"
+              }`}>
           <table className="rounded-lg">
             <thead className=" bg-cyan-500 text-white rounded-md">
               <tr>
@@ -1081,145 +1162,488 @@ export default function Home() {
                   Payment Gateway Name
                 </th>
                 <th className="border border-gray-200 px-4 py-2 min-w-72 font-semibold rounded-lg relative">
-                  Payment Methods
-                  <span
-                    className="pl-1 h-3 w-3 text-gray-300 cursor-pointer"
-                    onMouseEnter={() => setShowPMinfo(true)}
-                    onMouseLeave={() => setShowPMinfo(false)}
-                  >
-                    ?
-                  </span>
-                  {showPMinfo && (
-                    <div className="absolute bg-gray-100 border border-gray-200 p-2 rounded shadow z-10">
-                      <p className="text-sm text-cyan-900 font-normal">
-                        A payment method refers to the various options available
-                        for customers to make payments when purchasing a product
-                        or service.
-                      </p>
-                    </div>
-                  )}
+                  <div className="flex justify-center items-center ">
+                    Payment Methods
+                    <span
+                      className="pl-1 h-3 w-3 text-gray-300 cursor-pointer mb-2"
+                      onMouseEnter={() => setShowPMinfo(true)}
+                      onMouseLeave={() => setShowPMinfo(false)}
+                    >
+                      <svg
+                        enable-background="new 0 0 48 48"
+                        height={24}
+                        id="Layer_3"
+                        version="1.1"
+                        viewBox="0 0 48 48"
+                        width={24}
+                        className="h-4 w-4 mt-1"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M24,48c13.255,0,24-10.745,24-24S37.255,0,24,0S0,10.745,0,24S10.745,48,24,48z M22,36.5V19.438h4V36.5H22z   M24,11.5c1.106,0,2,0.896,2,2s-0.895,2-2,2c-1.103,0-2-0.896-2-2S22.896,11.5,24,11.5z"
+                          fill="#ffffff"
+                        />
+                      </svg>
+                    </span>
+                    {showPMinfo && (
+                      <div className="absolute bg-gray-100 border border-gray-200 p-2 rounded shadow z-20 top-3/4 ml-2">
+                        <p className="text-sm text-cyan-900 font-normal">
+                          A payment method refers to the various options
+                          available for customers to make payments when
+                          purchasing a product or service.
+                        </p>
+                      </div>
+                    )}
+                    <span
+                      className="pl-4 mt-1 text-gray-300 cursor-pointer"
+                      onClick={() => setShowPMFilter(!showPMFilter)}
+                    >
+                      <svg
+                        viewBox="0 0 512 512"
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 w-4"
+                      >
+                        <path
+                          d="M256 0C114.6 0 0 114.6 0 256c0 141.4 114.6 256 256 256s256-114.6 256-256C512 114.6 397.4 0 256 0zM390.6 246.6l-112 112C272.4 364.9 264.2 368 256 368s-16.38-3.125-22.62-9.375l-112-112c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L256 290.8l89.38-89.38c12.5-12.5 32.75-12.5 45.25 0S403.1 234.1 390.6 246.6z"
+                          fill="#ffffff"
+                        />
+                      </svg>
+                    </span>
+                    {showPMFilter && (
+                      <div className="absolute bg-gray-100 border border-gray-200 p-2 rounded shadow z-10 max-h-40 overflow-y-auto top-full mt-1 custom-scrollbar">
+                        {response["Payment Gateways"]
+                          .flatMap((gateway) => gateway["Payment Methods"])
+                          .filter(
+                            (method, index, self) =>
+                              self.indexOf(method) === index
+                          )
+                          .map((method, index) => (
+                            <label
+                              key={index}
+                              className="flex flex-row justify-start cursor-pointer text-cyan-900 font-normal text-sm gap-1"
+                            >
+                              <input
+                                type="checkbox"
+                                className="pr-1 checked:bg-cyan-400"
+                                value={method}
+                                checked={selectedMethods.includes(method)}
+                                onChange={(e) =>
+                                  handleMethodSelect(e.target.value)
+                                }
+                              />
+                              {method}
+                            </label>
+                          ))}
+                      </div>
+                    )}
+                  </div>
                 </th>
+
                 <th className="border border-gray-200 px-4 py-2 min-w-60 font-semibold rounded-lg relative">
-                  API Languages
-                  <span
-                    className="pl-1 h-5 w-5 text-gray-300 cursor-pointer"
-                    onMouseEnter={() => setShowAPILangInfo(true)}
-                    onMouseLeave={() => setShowAPILangInfo(false)}
-                  >
-                    ?
-                  </span>
-                  {showAPILangInfo && (
-                    <div className="absolute bg-gray-100 border border-gray-200 p-2 rounded shadow z-10">
-                      <p className="text-sm text-cyan-900 font-normal">
-                        API Languages refers to the programming languages
-                        supported by an API for developers to interact with it.
-                      </p>
-                    </div>
-                  )}
+                  <div className="flex justify-center items-center">
+                    API Languages
+                    <span
+                      className="pl-1 mt-2 text-gray-300 cursor-pointer mb-1"
+                      onMouseEnter={() => setShowAPILangInfo(true)}
+                      onMouseLeave={() => setShowAPILangInfo(false)}
+                    >
+                      <svg
+                        enable-background="new 0 0 48 48"
+                        height={24}
+                        id="Layer_3"
+                        version="1.1"
+                        viewBox="0 0 48 48"
+                        width={24}
+                        className="h-4 w-4 "
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M24,48c13.255,0,24-10.745,24-24S37.255,0,24,0S0,10.745,0,24S10.745,48,24,48z M22,36.5V19.438h4V36.5H22z   M24,11.5c1.106,0,2,0.896,2,2s-0.895,2-2,2c-1.103,0-2-0.896-2-2S22.896,11.5,24,11.5z"
+                          fill="#ffffff"
+                        />
+                      </svg>
+                    </span>
+                    {showAPILangInfo && (
+                      <div className="absolute bg-gray-100 border border-gray-200 p-2 rounded shadow z-20 top-3/4 ml-2">
+                        <p className="text-sm text-cyan-900 font-normal">
+                          API Languages refers to the programming languages
+                          supported by an API for developers to interact with
+                          it.
+                        </p>
+                      </div>
+                    )}
+                    <span
+                      className="pl-2 text-gray-300 cursor-pointer mt-1"
+                      onClick={() => setShowAPILangFilter(!showAPILangFilter)}
+                    >
+                      <svg
+                        viewBox="0 0 512 512"
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 w-4"
+                      >
+                        <path
+                          d="M256 0C114.6 0 0 114.6 0 256c0 141.4 114.6 256 256 256s256-114.6 256-256C512 114.6 397.4 0 256 0zM390.6 246.6l-112 112C272.4 364.9 264.2 368 256 368s-16.38-3.125-22.62-9.375l-112-112c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L256 290.8l89.38-89.38c12.5-12.5 32.75-12.5 45.25 0S403.1 234.1 390.6 246.6z"
+                          fill="#ffffff"
+                        />
+                      </svg>
+                    </span>
+                    {showAPILangFilter && (
+                      <div className="absolute bg-gray-100 border border-gray-200 p-2 rounded shadow z-10 max-h-40 overflow-y-auto top-full mt-1 custom-scrollbar">
+                        {response["Payment Gateways"]
+                          .flatMap((language) => language["API Languages"])
+                          .filter(
+                            (lang, index, self) => self.indexOf(lang) === index
+                          )
+                          .map((lang, index) => (
+                            <label
+                              key={index}
+                              className="flex flex-row justify-start cursor-pointer text-cyan-900 font-normal text-sm gap-1"
+                            >
+                              <input
+                                type="checkbox"
+                                className="pr-1"
+                                value={lang}
+                                checked={selectedLanguages.includes(lang)}
+                                onChange={(e) =>
+                                  handleLanguageSelect(e.target.value)
+                                }
+                              />
+                              {lang}
+                            </label>
+                          ))}
+                      </div>
+                    )}
+                  </div>
+                </th>
+
+                <th className="border border-gray-200 px-4 py-2 font-semibold rounded-lg relative min-w-60">
+                  <div className="flex justify-center items-center">
+                    Security/Compliance
+                    <span
+                      className="pl-1 h-4 w-4 text-gray-300 cursor-pointer "
+                      onMouseEnter={() => setShowSecurityInfo(true)}
+                      onMouseLeave={() => setShowSecurityInfo(false)}
+                    >
+                      <svg
+                        enable-background="new 0 0 48 48"
+                        height={24}
+                        id="Layer_3"
+                        version="1.1"
+                        viewBox="0 0 48 48"
+                        width={24}
+                        className="h-4 w-4 "
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M24,48c13.255,0,24-10.745,24-24S37.255,0,24,0S0,10.745,0,24S10.745,48,24,48z M22,36.5V19.438h4V36.5H22z   M24,11.5c1.106,0,2,0.896,2,2s-0.895,2-2,2c-1.103,0-2-0.896-2-2S22.896,11.5,24,11.5z"
+                          fill="#ffffff"
+                        />
+                      </svg>
+                    </span>
+                    {showSecurityInfo && (
+                      <div className="absolute bg-gray-100 border border-gray-200 p-2 rounded shadow z-10 top-3/4 ml-2">
+                        <p className="text-sm text-cyan-900 font-normal">
+                          Security/Compliance refers to the measures taken by a
+                          service provider to ensure data security and
+                          regulatory compliance.
+                        </p>
+                      </div>
+                    )}
+                    <span
+                      className="pl-2 h-5 w-5 text-gray-300 cursor-pointer mt-1"
+                      onClick={() => setShowSecurityFilter(!showSecurityFilter)}
+                    >
+                      <svg
+                        viewBox="0 0 512 512"
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 w-4"
+                      >
+                        <path
+                          d="M256 0C114.6 0 0 114.6 0 256c0 141.4 114.6 256 256 256s256-114.6 256-256C512 114.6 397.4 0 256 0zM390.6 246.6l-112 112C272.4 364.9 264.2 368 256 368s-16.38-3.125-22.62-9.375l-112-112c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L256 290.8l89.38-89.38c12.5-12.5 32.75-12.5 45.25 0S403.1 234.1 390.6 246.6z"
+                          fill="#ffffff"
+                        />
+                      </svg>
+                    </span>
+                    {showSecurityFilter && (
+                      <div className="absolute bg-gray-100 border border-gray-200 p-2 rounded shadow z-10 max-h-40 overflow-y-auto top-full mt-1 custom-scrollbar">
+                        {/* Replace response["Security/Compliance Options"] with your API response */}
+                        {response["Payment Gateways"]
+                          .flatMap(
+                            (security) => security["Security/Compliance"]
+                          )
+                          .filter(
+                            (lang, index, self) => self.indexOf(lang) === index
+                          )
+                          .map((option, index) => (
+                            <label
+                              key={index}
+                              className="flex flex-row justify-start cursor-pointer text-cyan-900 font-normal text-sm gap-1 mt-1"
+                            >
+                              <input
+                                type="checkbox"
+                                className="pr-1"
+                                value={option}
+                                checked={selectedSecurityOptions.includes(
+                                  option
+                                )}
+                                onChange={(e) =>
+                                  handleSecurityOptionSelect(e.target.value)
+                                }
+                              />
+                              {option}
+                            </label>
+                          ))}
+                      </div>
+                    )}
+                  </div>
+                </th>
+
+                <th className="border border-gray-200 px-4 py-2 min-w-60 font-semibold rounded-lg relative">
+                  <div className="flex justify-center items-center">
+                    Countries
+                    <span
+                      className="pl-1 h-5 w-5 text-gray-300 cursor-pointer mt-1"
+                      onMouseEnter={() => setShowCountriesInfo(true)}
+                      onMouseLeave={() => setShowCountriesInfo(false)}
+                    >
+                      <svg
+                        enable-background="new 0 0 48 48"
+                        height={24}
+                        id="Layer_3"
+                        version="1.1"
+                        viewBox="0 0 48 48"
+                        width={24}
+                        className="h-4 w-4 "
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M24,48c13.255,0,24-10.745,24-24S37.255,0,24,0S0,10.745,0,24S10.745,48,24,48z M22,36.5V19.438h4V36.5H22z   M24,11.5c1.106,0,2,0.896,2,2s-0.895,2-2,2c-1.103,0-2-0.896-2-2S22.896,11.5,24,11.5z"
+                          fill="#ffffff"
+                        />
+                      </svg>
+                    </span>
+                    {showCountriesInfo && (
+                      <div className="absolute bg-gray-100 border border-gray-200 p-2 rounded shadow z-10 top-3/4 ml-2">
+                        <p className="text-sm text-cyan-900 font-normal">
+                          Countries refers to the list of nations where a
+                          service or product is available or supported.
+                        </p>
+                      </div>
+                    )}
+                    <span
+                      className="pl-2 h-5 w-5 text-gray-300 cursor-pointer mt-1"
+                      onClick={() =>
+                        setShowCountriesFilter(!showCountriesFilter)
+                      }
+                    >
+                      <svg
+                        viewBox="0 0 512 512"
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 w-4"
+                      >
+                        <path
+                          d="M256 0C114.6 0 0 114.6 0 256c0 141.4 114.6 256 256 256s256-114.6 256-256C512 114.6 397.4 0 256 0zM390.6 246.6l-112 112C272.4 364.9 264.2 368 256 368s-16.38-3.125-22.62-9.375l-112-112c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L256 290.8l89.38-89.38c12.5-12.5 32.75-12.5 45.25 0S403.1 234.1 390.6 246.6z"
+                          fill="#ffffff"
+                        />
+                      </svg>
+                    </span>
+                    {showCountriesFilter && (
+                      <div className="absolute bg-gray-100 border border-gray-200 p-2 rounded shadow z-10 max-h-40 overflow-y-auto top-full mt-1 custom-scrollbar">
+                        {/* Replace response["Countries"] with your API response */}
+                        {response["Payment Gateways"]
+                          .flatMap((countries) => countries["Countries"])
+                          .filter(
+                            (country, index, self) =>
+                              self.indexOf(country) === index
+                          )
+                          .map((country, index) => (
+                            <label
+                              key={index}
+                              className="flex flex-row justify-start cursor-pointer text-cyan-900 font-normal text-sm gap-1"
+                            >
+                              <input
+                                type="checkbox"
+                                className="pr-1"
+                                value={country}
+                                checked={selectedCountries.includes(country)}
+                                onChange={(e) =>
+                                  handleCountrySelect(e.target.value)
+                                }
+                              />
+                              {country}
+                            </label>
+                          ))}
+                      </div>
+                    )}
+                  </div>
+                </th>
+
+                <th className="border border-gray-200 px-4 py-2 min-w-72 max-w-72 font-semibold rounded-lg relative">
+                  <div className="flex justify-center items-center">
+                    Currencies
+                    <span
+                      className="pl-1 h-5 w-5 text-gray-300 cursor-pointer mt-1"
+                      onMouseEnter={() => setShowCurrenciesInfo(true)}
+                      onMouseLeave={() => setShowCurrenciesInfo(false)}
+                    >
+                      <svg
+                        enable-background="new 0 0 48 48"
+                        height={24}
+                        id="Layer_3"
+                        version="1.1"
+                        viewBox="0 0 48 48"
+                        width={24}
+                        className="h-4 w-4"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M24,48c13.255,0,24-10.745,24-24S37.255,0,24,0S0,10.745,0,24S10.745,48,24,48z M22,36.5V19.438h4V36.5H22z   M24,11.5c1.106,0,2,0.896,2,2s-0.895,2-2,2c-1.103,0-2-0.896-2-2S22.896,11.5,24,11.5z"
+                          fill="#ffffff"
+                        />
+                      </svg>
+                    </span>
+                    {showCurrenciesInfo && (
+                      <div className="absolute bg-gray-100 border border-gray-200 p-2 rounded shadow z-10 top-3/4 ml-2">
+                        <p className="text-sm text-cyan-900 font-normal">
+                          Currencies refers to the types of currency accepted
+                          for transactions.
+                        </p>
+                      </div>
+                    )}
+                    <span
+                      className="pl-2 h-5 w-5 text-gray-300 cursor-pointer mt-1"
+                      onClick={() =>
+                        setShowCurrenciesFilter(!showCurrenciesFilter)
+                      }
+                    >
+                      <svg
+                        viewBox="0 0 512 512"
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 w-4"
+                      >
+                        <path
+                          d="M256 0C114.6 0 0 114.6 0 256c0 141.4 114.6 256 256 256s256-114.6 256-256C512 114.6 397.4 0 256 0zM390.6 246.6l-112 112C272.4 364.9 264.2 368 256 368s-16.38-3.125-22.62-9.375l-112-112c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L256 290.8l89.38-89.38c12.5-12.5 32.75-12.5 45.25 0S403.1 234.1 390.6 246.6z"
+                          fill="#ffffff"
+                        />
+                      </svg>
+                    </span>
+                    {showCurrenciesFilter && (
+                      <div className="absolute bg-gray-100 border border-gray-200 p-2 rounded shadow z-10 max-h-40 overflow-y-auto top-full mt-1 custom-scrollbar">
+                        {response["Payment Gateways"]
+                          .flatMap((currencies) => currencies["Currencies"])
+                          .filter(
+                            (currency, index, self) =>
+                              self.indexOf(currency) === index
+                          )
+                          .map((currency, index) => (
+                            <label
+                              key={index}
+                              className="flex flex-row justify-start cursor-pointer text-cyan-900 font-normal text-sm gap-1"
+                            >
+                              <input
+                                type="checkbox"
+                                className="pr-1"
+                                value={currency}
+                                checked={selectedCurrencies.includes(currency)}
+                                onChange={(e) =>
+                                  handleCurrencySelect(e.target.value)
+                                }
+                              />
+                              {currency}
+                            </label>
+                          ))}
+                      </div>
+                    )}
+                  </div>
+                </th>
+
+                <th className="border border-gray-200 px-4 py-2 min-w-60 font-semibold rounded-lg relative">
+                  <div className="flex justify-center items-center">
+                    Fee
+                    <span
+                      className="pl-1 h-5 w-5 text-gray-300 cursor-pointer mt-1"
+                      onMouseEnter={() => setShowFeeInfo(true)}
+                      onMouseLeave={() => setShowFeeInfo(false)}
+                    >
+                      <svg
+                        enable-background="new 0 0 48 48"
+                        height={24}
+                        id="Layer_3"
+                        version="1.1"
+                        viewBox="0 0 48 48"
+                        width={24}
+                        className="h-4 w-4 "
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M24,48c13.255,0,24-10.745,24-24S37.255,0,24,0S0,10.745,0,24S10.745,48,24,48z M22,36.5V19.438h4V36.5H22z   M24,11.5c1.106,0,2,0.896,2,2s-0.895,2-2,2c-1.103,0-2-0.896-2-2S22.896,11.5,24,11.5z"
+                          fill="#ffffff"
+                        />
+                      </svg>
+                    </span>
+                    {showFeeInfo && (
+                      <div className="absolute bg-gray-100 border border-gray-200 p-2 rounded shadow z-10 top-3/4 ml-2">
+                        <p className="text-sm text-cyan-900 font-normal">
+                          Fee refers to the charges or costs associated with
+                          using a service or product.
+                        </p>
+                      </div>
+                    )}
+                  </div>
                 </th>
 
                 <th className="border border-gray-200 px-4 py-2 font-semibold rounded-lg relative">
-                  Security/Compliance
-                  <span
-                    className="pl-1 h-5 w-5 text-gray-300 cursor-pointer"
-                    onMouseEnter={() => setShowSecurityInfo(true)}
-                    onMouseLeave={() => setShowSecurityInfo(false)}
-                  >
-                    ?
-                  </span>
-                  {showSecurityInfo && (
-                    <div className="absolute bg-gray-100 border border-gray-200 p-2 rounded shadow z-10">
-                      <p className="text-sm text-cyan-900 font-normal">
-                        Security/Compliance refers to the measures taken by a
-                        service provider to ensure data security and regulatory
-                        compliance.
-                      </p>
-                    </div>
-                  )}
-                </th>
-                <th className="border border-gray-200 px-4 py-2 min-w-60 font-semibold rounded-lg relative">
-                  Countries
-                  <span
-                    className="pl-1 h-5 w-5 text-gray-300 cursor-pointer"
-                    onMouseEnter={() => setShowCountriesInfo(true)}
-                    onMouseLeave={() => setShowCountriesInfo(false)}
-                  >
-                    ?
-                  </span>
-                  {showCountriesInfo && (
-                    <div className="absolute bg-gray-100 border border-gray-200 p-2 rounded shadow z-10">
-                      <p className="text-sm text-cyan-900 font-normal">
-                        Countries refers to the list of nations where a service
-                        or product is available or supported.
-                      </p>
-                    </div>
-                  )}
-                </th>
-                <th className="border border-gray-200 px-4 py-2 min-w-72 max-w-72 font-semibold rounded-lg relative">
-                  Currencies
-                  <span
-                    className="pl-1 h-5 w-5 text-gray-300 cursor-pointer"
-                    onMouseEnter={() => setShowCurrenciesInfo(true)}
-                    onMouseLeave={() => setShowCurrenciesInfo(false)}
-                  >
-                    ?
-                  </span>
-                  {showCurrenciesInfo && (
-                    <div className="absolute bg-gray-100 border border-gray-200 p-2 rounded shadow z-10">
-                      <p className="text-sm text-cyan-900 font-normal">
-                        Currencies refers to the types of currency accepted for
-                        transactions.
-                      </p>
-                    </div>
-                  )}
-                </th>
-                <th className="border border-gray-200 px-4 py-2 min-w-60 font-semibold rounded-lg relative">
-                  Fee
-                  <span
-                    className="pl-1 h-5 w-5 text-gray-300 cursor-pointer"
-                    onMouseEnter={() => setShowFeeInfo(true)}
-                    onMouseLeave={() => setShowFeeInfo(false)}
-                  >
-                    ?
-                  </span>
-                  {showFeeInfo && (
-                    <div className="absolute bg-gray-100 border border-gray-200 p-2 rounded shadow z-10">
-                      <p className="text-sm text-cyan-900 font-normal">
-                        Fee refers to the charges or costs associated with using
-                        a service or product.
-                      </p>
-                    </div>
-                  )}
-                </th>
-                <th className="border border-gray-200 px-4 py-2 font-semibold rounded-lg relative">
-                  Website
-                  <span
-                    className="pl-1 h-5 w-5 text-gray-300 cursor-pointer"
-                    onMouseEnter={() => setShowWebsiteInfo(true)}
-                    onMouseLeave={() => setShowWebsiteInfo(false)}
-                  >
-                    ?
-                  </span>
-                  {showWebsiteInfo && (
-                    <div className="absolute bg-gray-100 border border-gray-200 p-2 rounded shadow z-10">
-                      <p className="text-sm text-cyan-900 font-normal">
-                        Website refers to the online platform or web address
-                        associated with a service or organization.
-                      </p>
-                    </div>
-                  )}
+                  <div className="flex items-center justify-center">
+                    Website
+                    <span
+                      className="pl-1 h-5 w-5 text-gray-300 cursor-pointer mt-1 "
+                      onMouseEnter={() => setShowWebsiteInfo(true)}
+                      onMouseLeave={() => setShowWebsiteInfo(false)}
+                    >
+                      <svg
+                        enable-background="new 0 0 48 48"
+                        height={24}
+                        id="Layer_3"
+                        version="1.1"
+                        viewBox="0 0 48 48"
+                        width={24}
+                        className="h-4 w-4 "
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M24,48c13.255,0,24-10.745,24-24S37.255,0,24,0S0,10.745,0,24S10.745,48,24,48z M22,36.5V19.438h4V36.5H22z   M24,11.5c1.106,0,2,0.896,2,2s-0.895,2-2,2c-1.103,0-2-0.896-2-2S22.896,11.5,24,11.5z"
+                          fill="#ffffff"
+                        />
+                      </svg>
+                    </span>
+                    {showWebsiteInfo && (
+                      <div className="absolute bg-gray-100 border border-gray-200 p-2 rounded shadow z-10 top-3/4 ml-2">
+                        <p className="text-sm text-cyan-900 font-normal">
+                          Website refers to the online platform or web address
+                          associated with a service or organization.
+                        </p>
+                      </div>
+                    )}
+                  </div>
                 </th>
               </tr>
             </thead>
             <tbody className="rounded-lg">
-              {(searchTerm === ""
+              {(searchTerm === "" &&
+              selectedMethods.length === 0 &&
+              selectedLanguages.length === 0 &&
+              selectedSecurityOptions.length === 0 &&
+              selectedCountries.length === 0 &&
+              selectedCurrencies.length === 0
                 ? response["Payment Gateways"]
+                : searchTerm === ""
+                ? filterTableData(response["Payment Gateways"])
                 : filteredGateways
-              ).map((gateway, index) => (
+              ).map((gateway, index1) => (
                 <tr
                   key={gateway.id}
                   className={`border-b border-gray-200 rounded-lg ${
-                    index % 2 === 0 ? "" : "bg-gray-50"
+                    index1 % 2 === 0 ? "" : "bg-gray-50"
                   }`}
                 >
                   <td className="border border-gray-200 px-4 py-2 rounded-lg">
@@ -1230,10 +1654,10 @@ export default function Home() {
                       onChange={() => handleCheckboxChange(gateway.id, gateway)}
                     />
                   </td>
-                  <td className="border border-gray-200 px-4 py-2">
+                  <td className="border border-gray-200 px-4 py-2 text-cyan-900">
                     {gateway["Payment Gateway Name"]}
                   </td>
-                  <td className="border border-gray-200 px-4 py-2 relative">
+                  <td className="border border-gray-200 px-4 py-5 relative">
                     {Array.isArray(gateway["Payment Methods"]) ? (
                       <>
                         {gateway["Payment Methods"]
@@ -1241,7 +1665,9 @@ export default function Home() {
                           .map((method, index) => (
                             <span
                               key={index}
-                              className="border bg-gray-100 shadow-md shadow-gray-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
+                              className={`border bg-gray-100 shadow-md shadow-gray-200 ${
+                                index1 % 2 === 0 ? "" : "bg-white"
+                              } text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block`}
                             >
                               <span className="flex">
                                 <PaymentIcon
@@ -1260,7 +1686,9 @@ export default function Home() {
                             .map((method, index) => (
                               <span
                                 key={index}
-                                className="border bg-gray-100 shadow-md shadow-gray-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
+                                className={`border bg-gray-100 shadow-md shadow-gray-200 ${
+                                  index1 % 2 === 0 ? "" : "bg-white"
+                                } text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block`}
                               >
                                 <span className="flex">
                                   <PaymentIcon
@@ -1298,7 +1726,9 @@ export default function Home() {
                               .map((language, index) => (
                                 <span
                                   key={index}
-                                  className="border bg-gray-100 shadow-md shadow-gray-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
+                                  className={`border bg-gray-100 shadow-md shadow-gray-200 ${
+                                    index1 % 2 === 0 ? "" : "bg-white"
+                                  } text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block`}
                                 >
                                   {language}
                                 </span>
@@ -1317,7 +1747,9 @@ export default function Home() {
                           gateway["API Languages"].map((language, index) => (
                             <span
                               key={index}
-                              className="border bg-gray-100 shadow-md shadow-gray-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
+                              className={`border bg-gray-100 shadow-md shadow-gray-200 ${
+                                index1 % 2 === 0 ? "" : "bg-white"
+                              } text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block`}
                             >
                               {language}
                             </span>
@@ -1331,7 +1763,7 @@ export default function Home() {
                     )}
                   </td>
 
-                  <td className="border border-gray-200 px-4 py-2">
+                  <td className="border border-gray-200 px-4 py-2 text-cyan-900">
                     {Array.isArray(gateway["Security/Compliance"])
                       ? gateway["Security/Compliance"].join(", ")
                       : gateway["Security/Compliance"]}
@@ -1345,7 +1777,9 @@ export default function Home() {
                               (country, index) => (
                                 <span
                                   key={index}
-                                  className="border bg-gray-100 shadow-md shadow-gray-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
+                                  className={`border bg-gray-100 shadow-md shadow-gray-200 ${
+                                    index1 % 2 === 0 ? "" : "bg-white"
+                                  } text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block`}
                                 >
                                   <span
                                     className={`ml-1 mr-1 h-4 w-4 flag-icon flag-icon-${countryToAlpha2(
@@ -1369,7 +1803,9 @@ export default function Home() {
                           gateway.Countries.map((country, index) => (
                             <span
                               key={index}
-                              className="border bg-gray-100 shadow-md shadow-gray-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
+                              className={`border bg-gray-100 shadow-md shadow-gray-200 ${
+                                index1 % 2 === 0 ? "" : "bg-white"
+                              } text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block`}
                             >
                               <span
                                 className={`ml-1 mr-1 h-4 w-4 flag-icon flag-icon-${countryToAlpha2(
@@ -1395,7 +1831,9 @@ export default function Home() {
                               (currency, index) => (
                                 <span
                                   key={index}
-                                  className="border bg-gray-100 shadow-md shadow-gray-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
+                                  className={`border bg-gray-100 shadow-md shadow-gray-200 ${
+                                    index1 % 2 === 0 ? "" : "bg-white"
+                                  } text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block`}
                                 >
                                   <span className="pr-1">
                                     {getSymbolFromCurrency(currency)}
@@ -1417,7 +1855,9 @@ export default function Home() {
                           gateway.Currencies.map((currency, index) => (
                             <span
                               key={index}
-                              className="border bg-gray-100 shadow-md shadow-gray-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
+                              className={`border bg-gray-100 shadow-md shadow-gray-200 ${
+                                index1 % 2 === 0 ? "" : "bg-white"
+                              } text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block`}
                             >
                               <span className="pr-1">
                                 {getSymbolFromCurrency(currency)}
@@ -1432,12 +1872,12 @@ export default function Home() {
                     )}
                   </td>
 
-                  <td className="border border-gray-200 px-4 py-2">
+                  <td className="border border-gray-200 px-4 py-2 text-cyan-900">
                     {Array.isArray(gateway.Fee)
                       ? gateway.Fee.join(", ")
                       : gateway.Fee}
                   </td>
-                  <td className="border border-gray-200 px-4 py-2">
+                  <td className="border border-gray-200 px-4 py-2 text-cyan-900">
                     <a href={gateway.Website}>
                       {gateway["Payment Gateway Name"]}
                     </a>
