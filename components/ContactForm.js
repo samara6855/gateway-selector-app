@@ -90,7 +90,7 @@ const ContactForm = () => {
             required
           />
         </div>
-        <div className="mt-2 w-full md:w-1/2 pl-2">
+        <div className="mt-2 w-1/2 pl-2">
           <label
             htmlFor="lastName"
             className="block mb-1 text-sm font-semibold text-black"
@@ -126,7 +126,7 @@ const ContactForm = () => {
             required
           />
         </div>
-        <div className="mt-2 w-full md:w-1/2 sm:w-1/2 pl-2">
+        <div className="mt-2 w-full md:w-1/2 sm:w-1/2 pl-2 ">
           <div className="pl-8">
             <label
               htmlFor="contactNumber"
@@ -140,7 +140,7 @@ const ContactForm = () => {
                 required: true,
                 autoFocus: true,
                 className:
-                  "p-3 pl-5 w-full border border-gray-500 rounded-md text-sm focus:outline-none",
+                  "p-3 pl-5 w-full border border-gray-500 rounded-md text-sm focus:outline-none ",
                 placeholder: "Phone number",
               }}
               // inputStyle={{paddingLeft:'42px'}}
@@ -156,7 +156,7 @@ const ContactForm = () => {
               value={contactNumber}
               onChange={handleChange}
               containerClass="mt-2 relative pr-8 rounded-lg"
-              dropdownClass="absolute z-10 mt-2 w-full bg-white border border-gray-300 rounded-lg shadow-lg"
+              dropdownClass="absolute z-10 mt-2 w-full bg-white border border-gray-300 rounded-lg shadow-lg custom-scrollbar"
               searchClass="py-1 px-2 border-b border-gray-200 focus:outline-none"
             />
           </div>
