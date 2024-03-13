@@ -2309,7 +2309,6 @@ export default function Home() {
 
   return (
     <body>
-      <main className="flex flex-col min-h-screen items-center justify-center p-8 sm:p-16 md:p-24 lg:p-32 xl:p-40">
         <div className="flex flex-col items-start justify-center w-3/4 max-w-full rounded-xl p-4">
           <div className="flex items-center justify-end w-full mb-1 gap-2">
             <input
@@ -2434,6 +2433,8 @@ export default function Home() {
             </button>
           </div>
         </div>
+
+        {/* <iframe src="https://gateway-selector-app.vercel.app/" name="iframe_a" className="w-full h-96 bg-white" style={{"backgroundColor": "#ffffff"}} title="Iframe Example"></iframe> */}
 
         {/* <div className="justify-center w-full max-w-96">
           <div className="flex justify-end mt-4">
@@ -2580,7 +2581,6 @@ export default function Home() {
             </div>
           </div>
         )}
-      </main>
     </body>
   );
 }

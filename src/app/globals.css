@@ -73,7 +73,7 @@ textarea:not(:placeholder-shown) + span {
   height: 100%;
 } */
 
-body {
+/* body {
   width: 100%;
   height: 100%;
   margin: 0;
@@ -83,4 +83,4 @@ body {
   background-size: cover;
   background-position: center;
   color: rgb(var(--foreground-rgb));
-}
+} */
