@@ -2295,7 +2295,18 @@ export default function Home() {
                       {pos["Payment processing cost"] || "-"}
                     </td>
                     <td className="border border-gray-200 px-4 py-2">
-                      {pos["Industries"] || "-"}
+                      {/* {pos["Industries"] || "-"} */}
+                      {Array.isArray(pos.Industries)
+                      ? pos.Industries.map((industry, index) => (
+                            <span
+                              key={index}
+                              className={`border bg-gray-100 shadow-md shadow-gray-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block`}
+                            >
+                              {industry}
+                            </span>
+                          ))
+                      : pos.Industries}
+                      
                     </td>
                     {/* <td className="border border-gray-200 px-4 py-2">
                     {pos["Inventory Management"] || "-"}
@@ -2415,7 +2426,7 @@ export default function Home() {
             </div>
             <button
               type="button"
-              className={` mb-2 ml-2 h-20 text-white transition-colors min-w-20 rounded-3xl shadow-md shadow-cyan-600
+              className={`mb-2 ml-2 h-20 text-white transition-colors min-w-20 rounded-3xl shadow-md shadow-cyan-600
                 ${
                   isButtonDisabled
                     ? " bg-cyan-500 bg-opacity-55 cursor-not-allowed"
