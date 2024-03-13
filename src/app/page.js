@@ -1233,7 +1233,7 @@ export default function Home() {
                         version="1.1"
                         viewBox="0 0 48 48"
                         width={24}
-                        className="h-4 w-4 mt-1"
+                        className="h-4 w-4 mt-0.5"
                         xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
@@ -1251,8 +1251,9 @@ export default function Home() {
                         </p>
                       </div>
                     )}
+                    <div className="absolute right-2">
                     <span
-                      className="pl-4 mt-1 text-gray-300 cursor-pointer"
+                      className=" text-gray-300 cursor-pointer"
                       onClick={() => setShowPMFilter(!showPMFilter)}
                     >
                       <svg
@@ -1266,8 +1267,9 @@ export default function Home() {
                         />
                       </svg>
                     </span>
+                    </div>
                     {showPMFilter && (
-                      <div className="absolute bg-gray-100 border border-gray-200 p-2 rounded shadow z-10 max-h-40 overflow-y-auto top-full mt-1 custom-scrollbar">
+                      <div className="absolute right-2 bg-gray-100 border border-gray-200 p-2 rounded shadow z-10 max-h-40 overflow-y-auto top-full mt-1 custom-scrollbar">
                         {response["Payment Gateways"]
                           .flatMap((gateway) => gateway["Payment Methods"])
                           .filter(
@@ -1300,7 +1302,7 @@ export default function Home() {
                   <div className="flex justify-center items-center">
                     API Languages
                     <span
-                      className="pl-1 mt-2 text-gray-300 cursor-pointer mb-1"
+                      className="pl-1 mt-1.5 text-gray-300 cursor-pointer mb-1"
                       onMouseEnter={() => setShowAPILangInfo(true)}
                       onMouseLeave={() => setShowAPILangInfo(false)}
                     >
@@ -1329,8 +1331,9 @@ export default function Home() {
                         </p>
                       </div>
                     )}
+                    <div className="absolute right-2 mt-0.5">
                     <span
-                      className="pl-2 text-gray-300 cursor-pointer mt-1"
+                      className=" text-gray-300 cursor-pointer"
                       onClick={() => setShowAPILangFilter(!showAPILangFilter)}
                     >
                       <svg
@@ -1344,8 +1347,9 @@ export default function Home() {
                         />
                       </svg>
                     </span>
+                    </div>
                     {showAPILangFilter && (
-                      <div className="absolute bg-gray-100 border border-gray-200 p-2 rounded shadow z-10 max-h-40 overflow-y-auto top-full mt-1 custom-scrollbar">
+                      <div className="absolute right-2 bg-gray-100 border border-gray-200 p-2 rounded shadow z-10 max-h-40 overflow-y-auto top-full mt-1 custom-scrollbar">
                         {response["Payment Gateways"]
                           .flatMap((language) => language["API Languages"])
                           .filter(
@@ -1377,7 +1381,7 @@ export default function Home() {
                   <div className="flex justify-center items-center">
                     Security/Compliance
                     <span
-                      className="pl-1 h-4 w-4 text-gray-300 cursor-pointer "
+                      className="pl-1 mt-0.5 h-4 w-4 text-gray-300 cursor-pointer "
                       onMouseEnter={() => setShowSecurityInfo(true)}
                       onMouseLeave={() => setShowSecurityInfo(false)}
                     >
@@ -1398,7 +1402,7 @@ export default function Home() {
                       </svg>
                     </span>
                     {showSecurityInfo && (
-                      <div className="absolute bg-gray-100 border border-gray-200 p-2 rounded shadow z-10 top-3/4 ml-2">
+                      <div className="absolute bg-gray-100 border border-gray-200 p-2 rounded shadow z-20 top-3/4 ml-2">
                         <p className="text-sm text-cyan-900 font-normal">
                           Security/Compliance refers to the measures taken by a
                           service provider to ensure data security and
@@ -1406,8 +1410,9 @@ export default function Home() {
                         </p>
                       </div>
                     )}
+                    <div className="absolute mb-5 pb-0.5 right-2">
                     <span
-                      className="pl-2 h-5 w-5 text-gray-300 cursor-pointer mt-1"
+                      className="pl-2 h-5 w-5 text-gray-300 cursor-pointer"
                       onClick={() => setShowSecurityFilter(!showSecurityFilter)}
                     >
                       <svg
@@ -1421,8 +1426,9 @@ export default function Home() {
                         />
                       </svg>
                     </span>
+                    </div>
                     {showSecurityFilter && (
-                      <div className="absolute bg-gray-100 border border-gray-200 p-2 rounded shadow z-10 max-h-40 overflow-y-auto top-full mt-1 custom-scrollbar">
+                      <div className="absolute right-2 bg-gray-100 border border-gray-200 p-2 rounded shadow z-10 max-h-40 overflow-y-auto top-full mt-1 custom-scrollbar">
                         {/* Replace response["Security/Compliance Options"] with your API response */}
                         {response["Payment Gateways"]
                           .flatMap(
@@ -1480,15 +1486,16 @@ export default function Home() {
                       </svg>
                     </span>
                     {showCountriesInfo && (
-                      <div className="absolute bg-gray-100 border border-gray-200 p-2 rounded shadow z-10 top-3/4 ml-2">
+                      <div className="absolute bg-gray-100 border border-gray-200 p-2 rounded shadow z-20 top-3/4 ml-2">
                         <p className="text-sm text-cyan-900 font-normal">
                           Countries refers to the list of nations where a
                           service or product is available or supported.
                         </p>
                       </div>
                     )}
+                    <div className="absolute right-2 mb-6">
                     <span
-                      className="pl-2 h-5 w-5 text-gray-300 cursor-pointer mt-1"
+                      className="pl-2 h-5 w-5 text-gray-300 cursor-pointer"
                       onClick={() =>
                         setShowCountriesFilter(!showCountriesFilter)
                       }
@@ -1504,8 +1511,9 @@ export default function Home() {
                         />
                       </svg>
                     </span>
+                    </div>
                     {showCountriesFilter && (
-                      <div className="absolute bg-gray-100 border border-gray-200 p-2 rounded shadow z-10 max-h-40 overflow-y-auto top-full mt-1 custom-scrollbar">
+                      <div className="absolute right-2 bg-gray-100 border border-gray-200 p-2 rounded shadow z-10 max-h-40 overflow-y-auto top-full mt-1 custom-scrollbar">
                         {/* Replace response["Countries"] with your API response */}
                         {response["Payment Gateways"]
                           .flatMap((countries) => countries["Countries"])
@@ -1560,15 +1568,16 @@ export default function Home() {
                       </svg>
                     </span>
                     {showCurrenciesInfo && (
-                      <div className="absolute bg-gray-100 border border-gray-200 p-2 rounded shadow z-10 top-3/4 ml-2">
+                      <div className="absolute bg-gray-100 border border-gray-200 p-2 rounded shadow z-20 top-3/4 ml-2">
                         <p className="text-sm text-cyan-900 font-normal">
                           Currencies refers to the types of currency accepted
                           for transactions.
                         </p>
                       </div>
                     )}
+                    <div className="absolute right-2 mb-6">
                     <span
-                      className="pl-2 h-5 w-5 text-gray-300 cursor-pointer mt-1"
+                      className="pl-2 h-5 w-5 text-gray-300 cursor-pointer"
                       onClick={() =>
                         setShowCurrenciesFilter(!showCurrenciesFilter)
                       }
@@ -1584,8 +1593,9 @@ export default function Home() {
                         />
                       </svg>
                     </span>
+                    </div>
                     {showCurrenciesFilter && (
-                      <div className="absolute bg-gray-100 border border-gray-200 p-2 rounded shadow z-10 max-h-40 overflow-y-auto top-full mt-1 custom-scrollbar">
+                      <div className="absolute right-2 bg-gray-100 border border-gray-200 p-2 rounded shadow z-10 max-h-40 overflow-y-auto top-full mt-1 custom-scrollbar">
                         {response["Payment Gateways"]
                           .flatMap((currencies) => currencies["Currencies"])
                           .filter(
@@ -2309,6 +2319,7 @@ export default function Home() {
 
   return (
     <body>
+      <main className="flex flex-col min-h-screen items-center justify-center p-8 sm:p-16 md:p-24 lg:p-32 xl:p-40">
         <div className="flex flex-col items-start justify-center w-3/4 max-w-full rounded-xl p-4">
           <div className="flex items-center justify-end w-full mb-1 gap-2">
             <input
@@ -2335,12 +2346,12 @@ export default function Home() {
                     onChange={handleToggle}
                     className="sr-only"
                   />
-                  <div className=" h-10 w-52 rounded-full bg-cyan-500 shadow-md shadow-gray-400 flex justify-between items-center px-4">
-                    <span className="text-white font-semibold pl-6">
+                  <div className=" h-10 w-56 rounded-full bg-cyan-500 shadow-md shadow-cyan-600 flex justify-between items-center px-4">
+                    <span className="text-white font-semibold pl-12">
                       {isChecked ? "POS" : "Payment Gateway"}
                     </span>
                     <div
-                      className={`dot absolute h-8 w-8 rounded-full transition ${
+                      className={`dot absolute h-8 w-12 rounded-full transition ${
                         isChecked
                           ? " bg-white top-1 right-1"
                           : "bg-white top-1 left-1"
@@ -2353,7 +2364,7 @@ export default function Home() {
               <div className="w-3/4 flex items-center">
                 <div className="flex ml-2 w-3/4 gap-2">
                   <select
-                    className="rounded-xl w-full shadow-md shadow-gray-400 h-10 text-sm pl-2 text-gray-400 cursor-pointer border-none focus:outline-none"
+                    className="rounded-full w-full shadow-md shadow-gray-400 h-10 text-sm pl-2 text-gray-400 cursor-pointer border-none focus:outline-none"
                     value={selectedValuesFilters.country}
                     onChange={handleCountryChange}
                   >
@@ -2368,7 +2379,7 @@ export default function Home() {
                 <div className="flex gap-2 w-3/4 ml-2">
                   <select
                     id="currencyDropdown"
-                    className="rounded-xl shadow-md shadow-gray-400 w-full h-10 text-sm pl-2 text-gray-400 border-none cursor-pointer focus:outline-none"
+                    className="rounded-full shadow-md shadow-gray-400 w-full h-10 text-sm pl-2 text-gray-400 border-none cursor-pointer focus:outline-none"
                     onChange={handleCurrencyChange}
                     value={selectedValuesFilters.currency}
                   >
@@ -2391,20 +2402,20 @@ export default function Home() {
               <input
                 type="text"
                 id="floating_outlined"
-                className="block px-2.5 pb-2.5 pt-4 w-full shadow-md shadow-gray-400 h-20 text-sm text-black bg-white rounded-2xl border border-gray-300 dark:text-black dark:border-gray-200 dark:focus:border-gray-400 focus:outline-none focus:ring- focus:border-gray-400 peer"
+                className="block px-2.5 pb-2.5 pt-4 w-full shadow-md shadow-gray-400 h-20 text-sm text-black bg-white rounded-3xl border border-gray-300 dark:text-black dark:border-gray-200 dark:focus:border-gray-400 focus:outline-none focus:ring- focus:border-gray-400 peer"
                 placeholder=" "
                 onChange={handleInputChange}
               />
               <label
                 htmlFor="floating_outlined"
-                className="absolute text-md pb-1 rounded-md text-gray-500 bg-white dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0]  px-2 peer-focus:px-2 peer-focus:text-gray-500 peer-focus:dark:text-gray-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
+                className="absolute text-lg pb-1 ml-2 rounded-md text-gray-500 bg-white dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0]  px-2 peer-focus:px-2 peer-focus:text-gray-500 peer-focus:dark:text-gray-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
               >
                 Requirements
               </label>
             </div>
             <button
               type="button"
-              className={` mb-2 ml-2 h-20 text-white transition-colors min-w-20 rounded-2xl shadow-md shadow-cyan-600
+              className={` mb-2 ml-2 h-20 text-white transition-colors min-w-20 rounded-3xl shadow-md shadow-cyan-600
                 ${
                   isButtonDisabled
                     ? " bg-cyan-500 bg-opacity-55 cursor-not-allowed"
@@ -2517,13 +2528,13 @@ export default function Home() {
               <button
                 className={`text-gray-600 hover:text-gray-800 ${
                   isFullScreen
-                    ? "absolute top-2 right-10"
-                    : "absolute top-4 right-8"
+                    ? "absolute top-2.5 right-10"
+                    : "absolute top-5 right-9"
                 }`}
                 onClick={handleClosePopup}
               >
                 <svg
-                  className="h-8 w-8 p-1"
+                  className="h-6 w-6"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -2581,6 +2592,7 @@ export default function Home() {
             </div>
           </div>
         )}
+      </main>
     </body>
   );
 }
