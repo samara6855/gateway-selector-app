@@ -340,46 +340,49 @@ export default function Home() {
         >
           <div className="p-4">
             <button
-              className="absolute top-2 right-2 text-gray-600 hover:text-gray-800"
+              className="absolute top-3 right-auto mb-2 text-gray-600 hover:text-gray-800"
               onClick={handleClosePGPopup}
             >
               <svg
-                className="h-8 w-8 p-1"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+                data-name="Layer 1"
+                id="Layer_1"
+                viewBox="0 0 32 32"
                 xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5"
               >
+                <title />
                 <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
+                  d="M27,14H9.83l6.58-6.59a2,2,0,0,0-2.82-2.82l-10,10a1.79,1.79,0,0,0-.25.31,1.19,1.19,0,0,0-.09.15l-.1.2-.06.2a.84.84,0,0,0,0,.17,2,2,0,0,0,0,.78.84.84,0,0,0,0,.17l.06.2c0,.07.07.13.1.2a1.19,1.19,0,0,0,.09.15,1.79,1.79,0,0,0,.25.31l10,10a2,2,0,0,0,2.82-2.82L9.83,18H27a2,2,0,0,0,0-4Z"
+                  fill="#5a5a5a"
                 />
               </svg>
             </button>
             <button
               className={`text-gray-600 hover:text-gray-800 ${
                 isPGFullScreen
-                  ? "absolute top-2 right-10"
-                  : "absolute top-2 right-10"
+                  ? "absolute top-3.5 right-2"
+                  : "absolute top-2 right-2"
               }`}
               onClick={handleResizePGPopup}
             >
               {isPGFullScreen ? (
                 <svg
-                  className="h-8 w-8 p-1"
+                  class="feather feather-minimize-2"
                   fill="none"
+                  height="24"
                   stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
                   viewBox="0 0 24 24"
+                  width="24"
                   xmlns="http://www.w3.org/2000/svg"
+                  className="h-4 w-4"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M20 12H4"
-                  />
+                  <polyline points="4 14 10 14 10 20" />
+                  <polyline points="20 10 14 10 14 4" />
+                  <line x1="14" x2="21" y1="10" y2="3" />
+                  <line x1="3" x2="10" y1="21" y2="14" />
                 </svg>
               ) : (
                 <svg
@@ -401,7 +404,7 @@ export default function Home() {
                 </svg>
               )}
             </button>
-            <h1 className="text-2xl p-1 font-semibold mt-4">
+            <h1 className="text-2xl p-1 font-semibold mt-6">
               Comparison Result
             </h1>
             <div className="max-h-full overflow-y-auto custom-scrollbar pt-2">
@@ -690,46 +693,49 @@ export default function Home() {
         >
           <div className="p-4">
             <button
-              className="absolute top-2 right-2 text-gray-600 hover:text-gray-800"
+              className="absolute top-3 right-auto mb-2 text-gray-600 hover:text-gray-800"
               onClick={handleClosePOSPopup}
             >
               <svg
-                className="h-8 w-8 p-1"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+                data-name="Layer 1"
+                id="Layer_1"
+                viewBox="0 0 32 32"
                 xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5"
               >
+                <title />
                 <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
+                  d="M27,14H9.83l6.58-6.59a2,2,0,0,0-2.82-2.82l-10,10a1.79,1.79,0,0,0-.25.31,1.19,1.19,0,0,0-.09.15l-.1.2-.06.2a.84.84,0,0,0,0,.17,2,2,0,0,0,0,.78.84.84,0,0,0,0,.17l.06.2c0,.07.07.13.1.2a1.19,1.19,0,0,0,.09.15,1.79,1.79,0,0,0,.25.31l10,10a2,2,0,0,0,2.82-2.82L9.83,18H27a2,2,0,0,0,0-4Z"
+                  fill="#5a5a5a"
                 />
               </svg>
             </button>
             <button
               className={`text-gray-600 hover:text-gray-800 ${
                 isPOSFullScreen
-                  ? "absolute top-2 right-10"
-                  : "absolute top-2 right-10"
+                  ? "absolute top-3.5 right-2"
+                  : "absolute top-2 right-2"
               }`}
               onClick={handleResizePOSPopup}
             >
               {isPOSFullScreen ? (
                 <svg
-                  className="h-8 w-8 p-1"
+                  class="feather feather-minimize-2"
                   fill="none"
+                  height="24"
                   stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
                   viewBox="0 0 24 24"
+                  width="24"
                   xmlns="http://www.w3.org/2000/svg"
+                  className="h-4 w-4"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M20 12H4"
-                  />
+                  <polyline points="4 14 10 14 10 20" />
+                  <polyline points="20 10 14 10 14 4" />
+                  <line x1="14" x2="21" y1="10" y2="3" />
+                  <line x1="3" x2="10" y1="21" y2="14" />
                 </svg>
               ) : (
                 <svg
@@ -1194,11 +1200,7 @@ export default function Home() {
                 onClick={handleScheduleSubmit}
               >
                 {/* I need consultation 🡢 */}
-                {buttonText ? (
-                  buttonText
-                ) : (
-                  "I need consultation 🡢"
-                )}
+                {buttonText ? buttonText : "I need consultation 🡢"}
               </button>
             </div>
           </form>
@@ -2196,11 +2198,7 @@ export default function Home() {
                 onClick={handleScheduleSubmit}
               >
                 {/* I need consultation 🡢 */}
-                {buttonText ? (
-                  buttonText
-                ) : (
-                  "I need consultation 🡢"
-                )}
+                {buttonText ? buttonText : "I need consultation 🡢"}
               </button>
             </div>
           </form>
@@ -2313,7 +2311,7 @@ export default function Home() {
     <body>
       <main className="flex flex-col min-h-screen items-center justify-center p-8 sm:p-16 md:p-24 lg:p-32 xl:p-40">
         <div className="flex flex-col items-start justify-center w-3/4 max-w-full rounded-xl p-4">
-        <div className="flex items-center justify-end w-full mb-1 gap-2">
+          <div className="flex items-center justify-end w-full mb-1 gap-2">
             <input
               type="checkbox"
               id="consultationCheckbox"
@@ -2435,7 +2433,6 @@ export default function Home() {
               {!isLoading && "🡢"}
             </button>
           </div>
-            
         </div>
 
         {/* <div className="justify-center w-full max-w-96">
@@ -2472,25 +2469,29 @@ export default function Home() {
               <button
                 className={`text-gray-600 hover:text-gray-800 ${
                   isFullScreen
-                    ? "absolute top-2 right-20"
+                    ? "absolute top-3.5 right-20"
                     : "absolute top-4 right-16"
                 }`}
                 onClick={handleResizePopup}
               >
                 {isFullScreen ? (
                   <svg
-                    className="h-8 w-8 p-1"
+                    class="feather feather-minimize-2"
                     fill="none"
+                    height="24"
                     stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
                     viewBox="0 0 24 24"
+                    width="24"
                     xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4"
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M20 12H4"
-                    />
+                    <polyline points="4 14 10 14 10 20" />
+                    <polyline points="20 10 14 10 14 4" />
+                    <line x1="14" x2="21" y1="10" y2="3" />
+                    <line x1="3" x2="10" y1="21" y2="14" />
                   </svg>
                 ) : (
                   <svg
