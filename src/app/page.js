@@ -1207,8 +1207,8 @@ export default function Home() {
         </div>
 
         <div
-          className={`overflow-x-auto  overflow-y-auto custom-scrollbar ${
-            isFullScreen ? "max-h-screen" : "max-h-96"
+          className={`overflow-x-auto overflow-y-auto custom-scrollbar ${
+            isFullScreen ? "max-h-screen pb-20" : "max-h-96"
           }`}
         >
           <table className="rounded-lg">
@@ -2539,7 +2539,7 @@ export default function Home() {
               <button
                 className={`text-gray-600 hover:text-gray-800 ${
                   isFullScreen
-                    ? "absolute top-2.5 right-10"
+                    ? "absolute top-2.5 right-12"
                     : "absolute top-5 right-9"
                 }`}
                 onClick={handleClosePopup}
