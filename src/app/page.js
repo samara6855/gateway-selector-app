@@ -862,6 +862,7 @@ export default function Home() {
     const [showCurrenciesInfo, setShowCurrenciesInfo] = useState(false);
     const [showFeeInfo, setShowFeeInfo] = useState(false);
     const [showWebsiteInfo, setShowWebsiteInfo] = useState(false);
+    const [showSupportedPOSInfo, setShowSupportedPOSInfo] = useState(false);
     const [showPMFilter, setShowPMFilter] = useState(false);
     const [showAPILangFilter, setShowAPILangFilter] = useState(false);
     const [showSecurityFilter, setShowSecurityFilter] = useState(false);
@@ -884,6 +885,10 @@ export default function Home() {
     const handleMoreClick = () => {
       setShowDropdown(!showDropdown);
     };
+
+    const handleSupportedPOSClick = (e, selectedPOSSystem) =>{
+      sessionStorage.setItem(e,JSON.stringify({selectedPOSSystem}));
+    }
 
     const handleMethodSelect = (value) => {
       setSelectedMethods((prevMethods) =>
@@ -1252,21 +1257,21 @@ export default function Home() {
                       </div>
                     )}
                     <div className="absolute right-2">
-                    <span
-                      className=" text-gray-300 cursor-pointer"
-                      onClick={() => setShowPMFilter(!showPMFilter)}
-                    >
-                      <svg
-                        viewBox="0 0 512 512"
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-4 w-4"
+                      <span
+                        className=" text-gray-300 cursor-pointer"
+                        onClick={() => setShowPMFilter(!showPMFilter)}
                       >
-                        <path
-                          d="M256 0C114.6 0 0 114.6 0 256c0 141.4 114.6 256 256 256s256-114.6 256-256C512 114.6 397.4 0 256 0zM390.6 246.6l-112 112C272.4 364.9 264.2 368 256 368s-16.38-3.125-22.62-9.375l-112-112c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L256 290.8l89.38-89.38c12.5-12.5 32.75-12.5 45.25 0S403.1 234.1 390.6 246.6z"
-                          fill="#ffffff"
-                        />
-                      </svg>
-                    </span>
+                        <svg
+                          viewBox="0 0 512 512"
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-4 w-4"
+                        >
+                          <path
+                            d="M256 0C114.6 0 0 114.6 0 256c0 141.4 114.6 256 256 256s256-114.6 256-256C512 114.6 397.4 0 256 0zM390.6 246.6l-112 112C272.4 364.9 264.2 368 256 368s-16.38-3.125-22.62-9.375l-112-112c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L256 290.8l89.38-89.38c12.5-12.5 32.75-12.5 45.25 0S403.1 234.1 390.6 246.6z"
+                            fill="#ffffff"
+                          />
+                        </svg>
+                      </span>
                     </div>
                     {showPMFilter && (
                       <div className="absolute right-2 bg-gray-100 border border-gray-200 p-2 rounded shadow z-10 max-h-40 overflow-y-auto top-full mt-1 custom-scrollbar">
@@ -1332,21 +1337,21 @@ export default function Home() {
                       </div>
                     )}
                     <div className="absolute right-2 mt-0.5">
-                    <span
-                      className=" text-gray-300 cursor-pointer"
-                      onClick={() => setShowAPILangFilter(!showAPILangFilter)}
-                    >
-                      <svg
-                        viewBox="0 0 512 512"
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-4 w-4"
+                      <span
+                        className=" text-gray-300 cursor-pointer"
+                        onClick={() => setShowAPILangFilter(!showAPILangFilter)}
                       >
-                        <path
-                          d="M256 0C114.6 0 0 114.6 0 256c0 141.4 114.6 256 256 256s256-114.6 256-256C512 114.6 397.4 0 256 0zM390.6 246.6l-112 112C272.4 364.9 264.2 368 256 368s-16.38-3.125-22.62-9.375l-112-112c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L256 290.8l89.38-89.38c12.5-12.5 32.75-12.5 45.25 0S403.1 234.1 390.6 246.6z"
-                          fill="#ffffff"
-                        />
-                      </svg>
-                    </span>
+                        <svg
+                          viewBox="0 0 512 512"
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-4 w-4"
+                        >
+                          <path
+                            d="M256 0C114.6 0 0 114.6 0 256c0 141.4 114.6 256 256 256s256-114.6 256-256C512 114.6 397.4 0 256 0zM390.6 246.6l-112 112C272.4 364.9 264.2 368 256 368s-16.38-3.125-22.62-9.375l-112-112c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L256 290.8l89.38-89.38c12.5-12.5 32.75-12.5 45.25 0S403.1 234.1 390.6 246.6z"
+                            fill="#ffffff"
+                          />
+                        </svg>
+                      </span>
                     </div>
                     {showAPILangFilter && (
                       <div className="absolute right-2 bg-gray-100 border border-gray-200 p-2 rounded shadow z-10 max-h-40 overflow-y-auto top-full mt-1 custom-scrollbar">
@@ -1411,21 +1416,23 @@ export default function Home() {
                       </div>
                     )}
                     <div className="absolute mb-5 pb-0.5 right-2">
-                    <span
-                      className="pl-2 h-5 w-5 text-gray-300 cursor-pointer"
-                      onClick={() => setShowSecurityFilter(!showSecurityFilter)}
-                    >
-                      <svg
-                        viewBox="0 0 512 512"
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-4 w-4"
+                      <span
+                        className="pl-2 h-5 w-5 text-gray-300 cursor-pointer"
+                        onClick={() =>
+                          setShowSecurityFilter(!showSecurityFilter)
+                        }
                       >
-                        <path
-                          d="M256 0C114.6 0 0 114.6 0 256c0 141.4 114.6 256 256 256s256-114.6 256-256C512 114.6 397.4 0 256 0zM390.6 246.6l-112 112C272.4 364.9 264.2 368 256 368s-16.38-3.125-22.62-9.375l-112-112c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L256 290.8l89.38-89.38c12.5-12.5 32.75-12.5 45.25 0S403.1 234.1 390.6 246.6z"
-                          fill="#ffffff"
-                        />
-                      </svg>
-                    </span>
+                        <svg
+                          viewBox="0 0 512 512"
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-4 w-4"
+                        >
+                          <path
+                            d="M256 0C114.6 0 0 114.6 0 256c0 141.4 114.6 256 256 256s256-114.6 256-256C512 114.6 397.4 0 256 0zM390.6 246.6l-112 112C272.4 364.9 264.2 368 256 368s-16.38-3.125-22.62-9.375l-112-112c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L256 290.8l89.38-89.38c12.5-12.5 32.75-12.5 45.25 0S403.1 234.1 390.6 246.6z"
+                            fill="#ffffff"
+                          />
+                        </svg>
+                      </span>
                     </div>
                     {showSecurityFilter && (
                       <div className="absolute right-2 bg-gray-100 border border-gray-200 p-2 rounded shadow z-10 max-h-40 overflow-y-auto top-full mt-1 custom-scrollbar">
@@ -1494,23 +1501,23 @@ export default function Home() {
                       </div>
                     )}
                     <div className="absolute right-2 mb-6">
-                    <span
-                      className="pl-2 h-5 w-5 text-gray-300 cursor-pointer"
-                      onClick={() =>
-                        setShowCountriesFilter(!showCountriesFilter)
-                      }
-                    >
-                      <svg
-                        viewBox="0 0 512 512"
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-4 w-4"
+                      <span
+                        className="pl-2 h-5 w-5 text-gray-300 cursor-pointer"
+                        onClick={() =>
+                          setShowCountriesFilter(!showCountriesFilter)
+                        }
                       >
-                        <path
-                          d="M256 0C114.6 0 0 114.6 0 256c0 141.4 114.6 256 256 256s256-114.6 256-256C512 114.6 397.4 0 256 0zM390.6 246.6l-112 112C272.4 364.9 264.2 368 256 368s-16.38-3.125-22.62-9.375l-112-112c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L256 290.8l89.38-89.38c12.5-12.5 32.75-12.5 45.25 0S403.1 234.1 390.6 246.6z"
-                          fill="#ffffff"
-                        />
-                      </svg>
-                    </span>
+                        <svg
+                          viewBox="0 0 512 512"
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-4 w-4"
+                        >
+                          <path
+                            d="M256 0C114.6 0 0 114.6 0 256c0 141.4 114.6 256 256 256s256-114.6 256-256C512 114.6 397.4 0 256 0zM390.6 246.6l-112 112C272.4 364.9 264.2 368 256 368s-16.38-3.125-22.62-9.375l-112-112c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L256 290.8l89.38-89.38c12.5-12.5 32.75-12.5 45.25 0S403.1 234.1 390.6 246.6z"
+                            fill="#ffffff"
+                          />
+                        </svg>
+                      </span>
                     </div>
                     {showCountriesFilter && (
                       <div className="absolute right-2 bg-gray-100 border border-gray-200 p-2 rounded shadow z-10 max-h-40 overflow-y-auto top-full mt-1 custom-scrollbar">
@@ -1576,23 +1583,23 @@ export default function Home() {
                       </div>
                     )}
                     <div className="absolute right-2 mb-6">
-                    <span
-                      className="pl-2 h-5 w-5 text-gray-300 cursor-pointer"
-                      onClick={() =>
-                        setShowCurrenciesFilter(!showCurrenciesFilter)
-                      }
-                    >
-                      <svg
-                        viewBox="0 0 512 512"
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-4 w-4"
+                      <span
+                        className="pl-2 h-5 w-5 text-gray-300 cursor-pointer"
+                        onClick={() =>
+                          setShowCurrenciesFilter(!showCurrenciesFilter)
+                        }
                       >
-                        <path
-                          d="M256 0C114.6 0 0 114.6 0 256c0 141.4 114.6 256 256 256s256-114.6 256-256C512 114.6 397.4 0 256 0zM390.6 246.6l-112 112C272.4 364.9 264.2 368 256 368s-16.38-3.125-22.62-9.375l-112-112c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L256 290.8l89.38-89.38c12.5-12.5 32.75-12.5 45.25 0S403.1 234.1 390.6 246.6z"
-                          fill="#ffffff"
-                        />
-                      </svg>
-                    </span>
+                        <svg
+                          viewBox="0 0 512 512"
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-4 w-4"
+                        >
+                          <path
+                            d="M256 0C114.6 0 0 114.6 0 256c0 141.4 114.6 256 256 256s256-114.6 256-256C512 114.6 397.4 0 256 0zM390.6 246.6l-112 112C272.4 364.9 264.2 368 256 368s-16.38-3.125-22.62-9.375l-112-112c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L256 290.8l89.38-89.38c12.5-12.5 32.75-12.5 45.25 0S403.1 234.1 390.6 246.6z"
+                            fill="#ffffff"
+                          />
+                        </svg>
+                      </span>
                     </div>
                     {showCurrenciesFilter && (
                       <div className="absolute right-2 bg-gray-100 border border-gray-200 p-2 rounded shadow z-10 max-h-40 overflow-y-auto top-full mt-1 custom-scrollbar">
@@ -1688,6 +1695,41 @@ export default function Home() {
                         <p className="text-sm text-cyan-900 font-normal">
                           Website refers to the online platform or web address
                           associated with a service or organization.
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </th>
+
+                <th className="border border-gray-200 px-4 py-2 font-semibold rounded-lg relative min-w-60">
+                  <div className="flex items-center justify-center">
+                    Supported POS Systems
+                    <span
+                      className=" h-5 w-5 text-gray-300 cursor-pointer mt-1"
+                      onMouseEnter={() => setShowSupportedPOSInfo(true)}
+                      onMouseLeave={() => setShowSupportedPOSInfo(false)}
+                    >
+                      <svg
+                        enable-background="new 0 0 48 48"
+                        height={24}
+                        id="Layer_3"
+                        version="1.1"
+                        viewBox="0 0 48 48"
+                        width={24}
+                        className="h-4 w-4"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M24,48c13.255,0,24-10.745,24-24S37.255,0,24,0S0,10.745,0,24S10.745,48,24,48z M22,36.5V19.438h4V36.5H22z   M24,11.5c1.106,0,2,0.896,2,2s-0.895,2-2,2c-1.103,0-2-0.896-2-2S22.896,11.5,24,11.5z"
+                          fill="#ffffff"
+                        />
+                      </svg>
+                    </span>
+                    {showSupportedPOSInfo && (
+                      <div className="absolute bg-gray-100 border border-gray-200 p-2 rounded shadow z-10 top-3/4 ml-2">
+                        <p className="text-sm text-cyan-900 font-normal">
+                          Supported POS systems are the point of sale systems
+                          supported by a payment gateway.
                         </p>
                       </div>
                     )}
@@ -1944,10 +1986,36 @@ export default function Home() {
                       ? gateway.Fee.join(", ")
                       : gateway.Fee}
                   </td>
+
                   <td className="border border-gray-200 px-4 py-2 text-cyan-900">
                     <a href={gateway.Website}>
                       {gateway["Payment Gateway Name"]}
                     </a>
+                  </td>
+
+                  <td className="border border-gray-200 px-4 py-2 text-cyan-900">
+                    {Array.isArray(gateway["Supported POS Systems"]) ? (
+                      gateway["Supported POS Systems"].map(
+                        (selectedPOSSystem, index) => (
+                          <span
+                            key={index}
+                            onClick={(e) => handleSupportedPOSClick(e, selectedPOSSystem)}
+                            className="cursor-pointer inline-block bg-gray-100 hover:bg-gray-200 rounded-md px-3 py-1 text-sm  text-cyan-900 mr-2 mb-2"
+                          >
+                            {selectedPOSSystem}
+                          </span>
+                        )
+                      )
+                    ) : (
+                      <span
+                        onClick={(e) =>
+                          handleSupportedPOSClick(e, gateway["Supported POS Systems"])
+                        }
+                        className="cursor-pointer inline-block bg-gray-100 hover:bg-gray-200 rounded-md px-3 py-1 text-sm  text-cyan-900"
+                      >
+                        {gateway["Supported POS Systems"]}
+                      </span>
+                    )}
                   </td>
                 </tr>
               ))}
@@ -2297,7 +2365,7 @@ export default function Home() {
                     <td className="border border-gray-200 px-4 py-2">
                       {/* {pos["Industries"] || "-"} */}
                       {Array.isArray(pos.Industries)
-                      ? pos.Industries.map((industry, index) => (
+                        ? pos.Industries.map((industry, index) => (
                             <span
                               key={index}
                               className={`border bg-gray-100 shadow-md shadow-gray-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block`}
@@ -2305,8 +2373,7 @@ export default function Home() {
                               {industry}
                             </span>
                           ))
-                      : pos.Industries}
-                      
+                        : pos.Industries}
                     </td>
                     {/* <td className="border border-gray-200 px-4 py-2">
                     {pos["Inventory Management"] || "-"}
@@ -2330,8 +2397,8 @@ export default function Home() {
 
   return (
     <body>
-      <main className="flex flex-col min-h-screen items-center justify-center p-8 sm:p-16 md:p-24 lg:p-32 xl:p-40">
-        <div className="flex flex-col items-start justify-center w-3/4 max-w-full rounded-xl p-4">
+      <main className="flex flex-col items-center justify-center min-h-screen p-8 sm:p-16 md:p-24 lg:p-32 xl:p-40">
+        <div className="w-full max-w-full rounded-xl p-4 sm:w-3/4 sm:gap-2">
           <div className="flex items-center justify-end w-full mb-1 gap-2">
             <input
               type="checkbox"
@@ -2347,9 +2414,9 @@ export default function Home() {
               I need consultation
             </label>
           </div>
-          <div className="flex justify-between w-full mb-4 mt-2">
-            <div className="flex justify-between w-full">
-              <label className="flex cursor-pointer select-none items-center ml-2 mr-2">
+          <div className="mt-2 mb-4 flex flex-col sm:flex-row sm:justify-between">
+            <div className="flex w-full flex-col items-start sm:flex-row sm:justify-between">
+              <label className="flex cursor-pointer select-none items-center ml-2 mr-2 mt-2">
                 <div className="relative">
                   <input
                     type="checkbox"
@@ -2357,12 +2424,12 @@ export default function Home() {
                     onChange={handleToggle}
                     className="sr-only"
                   />
-                  <div className=" h-10 w-56 rounded-full bg-cyan-500 shadow-md shadow-cyan-600 flex justify-between items-center px-4">
+                  <div className="h-10 w-56 rounded-full bg-cyan-500 shadow-md shadow-cyan-600 flex justify-between items-center px-4">
                     <span className="text-white font-semibold pl-12">
                       {isChecked ? "POS" : "Payment Gateway"}
                     </span>
                     <div
-                      className={`dot absolute h-8 w-12 rounded-full transition ${
+                      className={`dot absolute h-8 w-12 rounded-full transition-all duration-1000 delay-1000 ${
                         isChecked
                           ? " bg-white top-1 right-1"
                           : "bg-white top-1 left-1"
@@ -2372,38 +2439,33 @@ export default function Home() {
                 </div>
               </label>
 
-              <div className="w-3/4 flex items-center">
-                <div className="flex ml-2 w-3/4 gap-2">
-                  <select
-                    className="rounded-full w-full shadow-md shadow-gray-400 h-10 text-sm pl-2 text-gray-400 cursor-pointer border-none focus:outline-none"
-                    value={selectedValuesFilters.country}
-                    onChange={handleCountryChange}
-                  >
-                    <option value="option1">Choose country</option>
-                    {countries.map((country, index) => (
-                      <option key={index} value={country.code}>
-                        {country.name}
+              <div className="flex w-full mt-2 flex-col gap-2 sm:flex-row sm:w-3/4">
+                <select
+                  className="h-10 w-full rounded-full border-none pl-2 text-sm text-gray-400 cursor-pointer shadow-md shadow-gray-400 focus:outline-none"
+                  value={selectedValuesFilters.country}
+                  onChange={handleCountryChange}
+                >
+                  <option value="option1">Choose country</option>
+                  {countries.map((country, index) => (
+                    <option key={index} value={country.code}>
+                      {country.name}
+                    </option>
+                  ))}
+                </select>
+                <select
+                  id="currencyDropdown"
+                  className="h-10 w-full rounded-full border-none pl-2 text-sm text-gray-400 cursor-pointer shadow-md shadow-gray-400 focus:outline-none"
+                  onChange={handleCurrencyChange}
+                  value={selectedValuesFilters.currency}
+                >
+                  <option value="option1">Choose currency</option>
+                  {Array.isArray(currencies) &&
+                    currencies.map((currency, index) => (
+                      <option key={index} value={currency}>
+                        {currency}
                       </option>
                     ))}
-                  </select>
-                </div>
-                <div className="flex gap-2 w-3/4 ml-2">
-                  <select
-                    id="currencyDropdown"
-                    className="rounded-full shadow-md shadow-gray-400 w-full h-10 text-sm pl-2 text-gray-400 border-none cursor-pointer focus:outline-none"
-                    onChange={handleCurrencyChange}
-                    value={selectedValuesFilters.currency}
-                  >
-                    <option value="option1">Choose currency</option>
-
-                    {Array.isArray(currencies) &&
-                      currencies.map((currency, index) => (
-                        <option key={index} value={currency}>
-                          {currency}
-                        </option>
-                      ))}
-                  </select>
-                </div>
+                </select>
               </div>
             </div>
           </div>
@@ -2437,7 +2499,7 @@ export default function Home() {
             >
               {isLoading && (
                 <div className="flex justify-center items-center">
-                  <svg className="animate-spin h-5 w-5 " viewBox="0 0 24 24">
+                  <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
                     <circle
                       className="opacity-100"
                       cx="12"
