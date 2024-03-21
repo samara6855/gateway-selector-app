@@ -25,7 +25,7 @@ export default function Home() {
   const [product, setProduct] = useState(null);
   const [isPGFullScreen, setPGFullScreen] = useState(false);
   const [isPOSFullScreen, setPOSFullScreen] = useState(false);
-  const [isPGPopupVisible, setIsPopupVisible] = useState(false);
+  const [isPGPopupVisible, setIsPGPopupVisible] = useState(false);
   const [isPOSPopupVisible, setIsPOSPopupVisible] = useState(false);
   const [selectedGateways, setSelectedGateways] = useState([]);
   const [selectedPOS, setSelectedPOS] = useState([]);
@@ -40,7 +40,7 @@ export default function Home() {
   });
 
   const handleClosePGPopup = () => {
-    setIsPopupVisible(false);
+    setIsPGPopupVisible(false);
   };
 
   const handleClosePOSPopup = () => {
@@ -273,7 +273,7 @@ export default function Home() {
         const responseDataCB = await responseCustomButton.json();
         const botResponseCB = responseDataCB.bot.trim();
         console.log(botResponseCB);
-        sessionStorage.setItem("buttonText", botResponseCB);
+        // sessionStorage.setItem("buttonText", botResponseCB);
       } catch (error) {
         console.error("Error:", error.message);
         // Handle the error if necessary
@@ -298,7 +298,6 @@ export default function Home() {
     code: country.code.toLowerCase(),
   }));
 
-  let currencySymbol = "";
   const countryDetails = Country.getCountryByCode(
     selectedValuesFilters.country
   );
@@ -306,6 +305,47 @@ export default function Home() {
   if (countryDetails && countryDetails.currency) {
     currencySymbol = getSymbolFromCurrency(countryDetails.currency);
   }
+
+  //   function PGQuestions({
+  //     handleCompareClick,
+  //     response,
+  //     finalCompareResponse,
+  //     selectedGateways,
+  //   }) {
+  //     // const [selectedMethod, setSelectedMethod] = useState(null);
+  //     const [isLoading, setIsLoading] = useState(false);
+  //     const [PGVisibility, setPGQVisibility] = useState(true);
+
+  //     const [selectedMethods, setSelectedMethods] = useState([]);
+  //     const [showPM, setShowPM] = useState(false);
+
+  //     const handleClosePGQPopup = () => {
+  //         setPGQVisibility(false);
+  //     };
+
+  //     sessionStorage.setItem(
+  //       "Selected Payment Methods",
+  //       JSON.stringify(selectedMethods)
+  //     );
+
+  //     const handleMethodSelect = (value) => {
+  //       setSelectedMethods((prevMethods) =>
+  //         prevMethods.includes(value)
+  //           ? prevMethods.filter((method) => method !== value)
+  //           : [...prevMethods, value]
+  //       );
+  //     };
+
+  //     // const handleMethodSelect = (value) => {
+  //     //   setSelectedMethod(value);
+
+  //     // };
+
+  //     return (
+
+  // );
+
+  //   }
 
   function PaymentGatewayPopup({ finalCompareResponse, selectedGateways }) {
     const [showAll, setShowAll] = useState(false);
@@ -868,27 +908,100 @@ export default function Home() {
     const [showSecurityFilter, setShowSecurityFilter] = useState(false);
     const [showCountriesFilter, setShowCountriesFilter] = useState(false);
     const [showCurrenciesFilter, setShowCurrenciesFilter] = useState(false);
+    const [isPGQVisible, setIsPGQVisible] = useState(false);
+    const [isSelectedPOSVisible, setSelectedPOSVisible] = useState(false);
+    const [finalSelectedPOSResponse, setFinalSelectedPOSResponse] = useState(
+      {}
+    );
+    const [showCountryQ, setShowCountryQ] = useState(false);
+    const [showCurrencyQ, setShowCurrencyQ] = useState(false);
+    // const [finalSelectedPOSResponse, setFinalSelectedPOSResponse] = useState([]);
 
     // Add state variables
     const [selectedMethods, setSelectedMethods] = useState([]);
+    const [selectedPMethods, setSelectedPMethods] = useState([]);
     const [selectedLanguages, setSelectedLanguages] = useState([]);
     const [selectedSecurityOptions, setSelectedSecurityOptions] = useState([]);
     const [selectedCountries, setSelectedCountries] = useState([]);
     const [selectedCurrencies, setSelectedCurrencies] = useState([]);
+    const [selectedQCountry, setSelectedQCountry] = useState("");
+    const [selectedQCurrency, setSelectedQCurrency] = useState("");
+    const [showCountriesQFilter, setShowCountriesQFilter] = useState(false);
+    const [showCurrenciesQFilter, setShowCurrenciesQFilter] = useState(false);
 
     // const [selectedGateways, setSelectedGateways] = useState([]);
 
+    const [showPM, setShowPM] = useState(false);
+
+    const handleClosePGQPopup = () => {
+      setIsPGQVisible(false);
+    };
+
+    const handleCountryQSelect = (country) => {
+      setSelectedQCountry(country);
+    };
+
+    const handleCurrencyQSelect = (currency) => {
+      setSelectedQCurrency(currency);
+    };
+
+    sessionStorage.setItem(
+      "Selected Payment Methods",
+      JSON.stringify(selectedPMethods)
+    );
+
+    sessionStorage.setItem(
+      "Selected Country",
+      JSON.stringify(selectedQCountry)
+    )
+
+    sessionStorage.setItem(
+      "Selected Currency",
+      JSON.stringify(selectedQCurrency)
+    )
+
     const toggleShowAll = () => {
       setShowAll(!showAll);
+    };
+
+    const handlePGQuestions = () => {
+      setIsPGQVisible(true);
     };
 
     const handleMoreClick = () => {
       setShowDropdown(!showDropdown);
     };
 
-    const handleSupportedPOSClick = (e, selectedPOSSystem) =>{
-      sessionStorage.setItem(e,JSON.stringify({selectedPOSSystem}));
-    }
+    const handleSupportedPOSClick = async (e, selectedPOSSystem) => {
+      sessionStorage.setItem("selectedPOSSystem", selectedPOSSystem);
+      let selectedPOS = sessionStorage.getItem("selectedPOSSystem");
+      let selectedProduct = sessionStorage.getItem("product");
+      const selectedPOSResponse = await fetch(
+        `https://t2y35cajlwlfx74pbp42xbogim0fdmlt.lambda-url.us-east-1.on.aws/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            selectedPOS: selectedPOS,
+            selectedProduct: selectedProduct,
+          }),
+        }
+      );
+
+      if (!selectedPOSResponse.ok) {
+        console.log("error receiving response");
+        throw new Error("Failed to fetch data");
+      }
+
+      const selectedPOSResponseData = await selectedPOSResponse.json();
+      const finalSelectedPOSResponseData = selectedPOSResponseData.bot.trim();
+      setFinalSelectedPOSResponse(finalSelectedPOSResponseData);
+      console.log(finalSelectedPOSResponseData);
+      setSelectedPOSVisible(true);
+      console.log(finalSelectedPOSResponse);
+    };
 
     const handleMethodSelect = (value) => {
       setSelectedMethods((prevMethods) =>
@@ -896,6 +1009,15 @@ export default function Home() {
           ? prevMethods.filter((method) => method !== value)
           : [...prevMethods, value]
       );
+    };
+
+    const handlePMethodSelect = (value) => {
+      setSelectedPMethods((prevMethods) =>
+        prevMethods.includes(value)
+          ? prevMethods.filter((method) => method !== value)
+          : [...prevMethods, value]
+      );
+      console.log(finalSelectedPOSResponse);
     };
 
     const handleLanguageSelect = (value) => {
@@ -969,6 +1091,18 @@ export default function Home() {
         sessionStorage.setItem(sessionStorageKey, JSON.stringify(gatewayData));
       } else {
         sessionStorage.removeItem(sessionStorageKey);
+      }
+
+      if (sessionStorage.getItem("country")) {
+        setShowCountryQ(false);
+      } else {
+        setShowCountryQ(true);
+      }
+
+      if(sessionStorage.getItem("currency")) {
+        setShowCurrencyQ(false);
+      }else{
+        setShowCurrencyQ(true);    
       }
     };
 
@@ -1090,7 +1224,7 @@ export default function Home() {
         setIsLoading(false);
 
         // Show the popup
-        setIsPopupVisible(true);
+        setIsPGPopupVisible(true);
       } catch (error) {
         console.error("Error occurred:", error);
         setIsLoading(false); // Ensure isLoading is set to false in case of errors
@@ -1132,8 +1266,8 @@ export default function Home() {
 
     return (
       <div className="flex flex-col">
-        <div className="min-w-1/2 md:w-1/2 m-4">
-          <form className="flex items-center">
+        <div className="min-w-1/2 md:w-1/2 m-4 sm:min-w-10">
+          <div className="flex items-center">
             <label
               htmlFor="simple-search"
               className="sr-only border border-cyan-100"
@@ -1172,30 +1306,11 @@ export default function Home() {
                 className={`bg-cyan-500 text-white px-4 py-2 w-40 mt-2 rounded-lg focus:outline-none relative ${
                   isLoading ? "opacity-50 pointer-events-none" : ""
                 } ${checkedCount < 2 ? "opacity-50 pointer-events-none" : ""}`}
-                onClick={!isLoading ? handleCompareClick : undefined}
+                // onClick={!isLoading ? handleCompareClick : undefined}
+                onClick={handlePGQuestions}
                 disabled={isLoading}
               >
-                {isLoading ? (
-                  <div className=" flex items-center justify-center">
-                    <svg
-                      className="animate-spin h-5 w-5 mr-2"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-100"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                        strokeDasharray="60 40"
-                        fill="none"
-                      />
-                    </svg>
-                  </div>
-                ) : (
-                  `Compare(${checkedCount})`
-                )}
+                {`Compare(${checkedCount})`}
               </button>
             </div>
             <div className="ml-2">
@@ -1208,11 +1323,11 @@ export default function Home() {
                 {buttonText ? buttonText : "I need consultation 🡢"}
               </button>
             </div>
-          </form>
+          </div>
         </div>
 
         <div
-          className={`overflow-x-auto overflow-y-auto custom-scrollbar ${
+          className={`overflow-x-auto overflow-y-auto rounded-lg custom-scrollbar ${
             isFullScreen ? "max-h-screen pb-20" : "max-h-96"
           }`}
         >
@@ -1999,8 +2114,10 @@ export default function Home() {
                         (selectedPOSSystem, index) => (
                           <span
                             key={index}
-                            onClick={(e) => handleSupportedPOSClick(e, selectedPOSSystem)}
-                            className="cursor-pointer inline-block bg-gray-100 hover:bg-gray-200 rounded-md px-3 py-1 text-sm  text-cyan-900 mr-2 mb-2"
+                            onClick={(e) =>
+                              handleSupportedPOSClick(e, selectedPOSSystem)
+                            }
+                            className="cursor-pointer inline-block rounded-md px-3 py-1 text-sm underline text-blue-500 mr-2 mb-2"
                           >
                             {selectedPOSSystem}
                           </span>
@@ -2009,9 +2126,12 @@ export default function Home() {
                     ) : (
                       <span
                         onClick={(e) =>
-                          handleSupportedPOSClick(e, gateway["Supported POS Systems"])
+                          handleSupportedPOSClick(
+                            e,
+                            gateway["Supported POS Systems"]
+                          )
                         }
-                        className="cursor-pointer inline-block bg-gray-100 hover:bg-gray-200 rounded-md px-3 py-1 text-sm  text-cyan-900"
+                        className="cursor-pointer inline-block rounded-md px-3 py-1 text-sm text-blue-500"
                       >
                         {gateway["Supported POS Systems"]}
                       </span>
@@ -2022,6 +2142,323 @@ export default function Home() {
             </tbody>
           </table>
         </div>
+
+        {isSelectedPOSVisible && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 p-4">
+            <div className="max-h-full min-h-60 overflow-y-auto pt-4 bg-white rounded-lg">
+              <h2 className="text-2xl font-semibold pb-4">Selected POS Data</h2>
+              <table className="rounded-md pt-4">
+                <thead className="bg-cyan-500 text-white">
+                  <tr>
+                    <th className="border border-gray-200 px-4 py-2 font-semibold">
+                      POS Name
+                    </th>
+                    <th className="border border-gray-200 px-4 py-2 font-semibold min-w-60 pt-3">
+                      <div className="flex flex-col">
+                        <span className="text-sm font-medium">Reviews</span>
+                        <div className="flex flex-row border-t border-gray-200 mt-1 pt-1">
+                          <span className="flex-1 text-xs font-normal text-center">
+                            Google Reviews
+                          </span>
+                          <span className="flex-1 text-xs font-normal text-center border-l border-gray-200">
+                            Trust Pilot Reviews
+                          </span>
+                        </div>
+                      </div>
+                    </th>
+                    <th className="border border-gray-200 px-4 py-2 font-semibold min-w-52">
+                      Device Cost
+                    </th>
+                    <th className="border border-gray-200 px-4 py-2 font-semibold min-w-48">
+                      Works with (Payment Gateway)
+                    </th>
+                    <th className="border border-gray-200 px-4 py-2 font-semibold min-w-40">
+                      Payment processing cost
+                    </th>
+                    <th className="border border-gray-200 px-4 py-2 font-semibold">
+                      Industries
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr className="border-b border-gray-200 bg-cyan-50">
+                    <td className="border border-gray-200 px-4 py-2">
+                      {finalSelectedPOSResponse["POS Name"] || "-"}
+                    </td>
+                    <td className="border border-gray-200 px-4 py-2">
+                      <div className="flex flex-row">
+                        <span className="flex-1 text-sm font-normal text-center">
+                          {finalSelectedPOSResponse["Google Reviews"] || "-"}
+                        </span>
+                        <span className="flex-1 text-sm font-normal text-center border-l border-gray-200">
+                          {finalSelectedPOSResponse["Trust Pilot Reviews"] ||
+                            "-"}
+                        </span>
+                      </div>
+                    </td>
+                    <td className="border border-gray-200 px-4 py-2">
+                      {finalSelectedPOSResponse["Device Cost"] || "-"}
+                    </td>
+                    <td className="border border-gray-200 px-4 py-2">
+                      {finalSelectedPOSResponse[
+                        "Works with (Payment Gateways)"
+                      ] || "-"}
+                    </td>
+                    <td className="border border-gray-200 px-4 py-2">
+                      {finalSelectedPOSResponse["Payment Processing Cost"] ||
+                        "-"}
+                    </td>
+                    <td className="border border-gray-200 px-4 py-2">
+                      {finalSelectedPOSResponse["Industries"] || "-"}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {isPGQVisible && (
+          <div>
+            <div className="fixed inset-0 z-60 flex items-center justify-center bg-black bg-opacity-40 p-4">
+              <div className="bg-white rounded-lg p-6 max-w-sm w-full relative">
+                <button
+                  className={`text-gray-600 hover:text-gray-800 absolute top-2 right-4`}
+                  onClick={handleClosePGQPopup}
+                >
+                  <svg
+                    className="h-6 w-6"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
+                <p className="text-lg font-semibold mb-4">
+                  Which payment methods are you looking for?
+                </p>
+                <div className="relative">
+                  <div className="relative mb-4">
+                    <div
+                      className="flex min-w-20 max-w-full bg-gray-100 border border-gray-200 rounded cursor-pointer"
+                      onClick={() => setShowPM(!showPM)}
+                    >
+                      {selectedPMethods.length === 0
+                        ? "Choose your payment methods"
+                        : selectedPMethods.join(", ")}
+                      <svg
+                        className="mt-1 right-2 h-5 w-5 text-gray-600"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                        aria-hidden="true"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                    {showPM && (
+                      <div className="absolute left-0 mt-2 bg-gray-100 border border-gray-200 p-2 rounded shadow z-10 max-h-40 overflow-y-auto custom-scrollbar">
+                        {response["Payment Gateways"]
+                          .flatMap((gateway) => gateway["Payment Methods"])
+                          .filter(
+                            (method, index, self) =>
+                              self.indexOf(method) === index
+                          )
+                          .map((method, index) => (
+                            <label
+                              key={index}
+                              className="flex flex-row justify-start cursor-pointer text-cyan-900 font-normal text-sm gap-1"
+                            >
+                              <input
+                                type="checkbox"
+                                className="pr-1 checked:bg-cyan-400"
+                                value={method}
+                                checked={selectedPMethods.includes(method)}
+                                onChange={() => handlePMethodSelect(method)}
+                              />
+                              {method}
+                            </label>
+                          ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                {showCountryQ && (
+                  <div className="mb-4">
+                    <p className="text-lg font-semibold mb-4">
+                      Which country are you looking for?
+                    </p>
+                    <div className="relative">
+                      <div className="relative">
+                        <div
+                          className="flex min-w-20 max-w-full bg-gray-100 border border-gray-200 rounded cursor-pointer"
+                          onClick={() =>
+                            setShowCountriesQFilter(!showCountriesQFilter)
+                          }
+                        >
+                          {selectedQCountry
+                            ? selectedQCountry
+                            : "Select country"}
+                          <svg
+                            className="mt-1 right-2 h-5 w-5 text-gray-600"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                            aria-hidden="true"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </div>
+                        {showCountriesQFilter && (
+                          <div className="absolute left-2 bg-gray-100 border border-gray-200 p-2 rounded shadow z-10 max-h-40 overflow-y-auto top-full mt-1 custom-scrollbar">
+                            {response["Payment Gateways"]
+                              .flatMap((gateway) => gateway["Countries"])
+                              .filter(
+                                (country, index, self) =>
+                                  self.indexOf(country) === index
+                              )
+                              .map((country, index) => (
+                                <label
+                                  key={index}
+                                  className="flex flex-row justify-start cursor-pointer text-cyan-900 font-normal text-sm gap-1"
+                                >
+                                  <input
+                                    type="checkbox"
+                                    className="pr-1"
+                                    value={country}
+                                    checked={selectedQCountry === country}
+                                    onChange={() =>
+                                      handleCountryQSelect(country)
+                                    }
+                                  />
+                                  {country}
+                                </label>
+                              ))}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )}
+                {showCurrencyQ && (
+                  <div>
+                    <p className="text-lg font-semibold mb-4">
+                      Which currency are you looking for?
+                    </p>
+                    <div className="relative">
+                      <div className="relative">
+                        <div
+                          className="flex min-w-20 max-w-full bg-gray-100 border border-gray-200 rounded cursor-pointer"
+                          onClick={() =>
+                            setShowCurrenciesQFilter(!showCurrenciesQFilter)
+                          }
+                        >
+                          {selectedQCurrency
+                            ? selectedQCurrency
+                            : "Select currency"}
+                          <svg
+                            className="mt-1 right-2 h-5 w-5 text-gray-600"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                            aria-hidden="true"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </div>
+                        {showCurrenciesQFilter && (
+                          <div className="absolute left-2 bg-gray-100 border border-gray-200 p-2 rounded shadow z-10 max-h-40 overflow-y-auto top-full mt-1 custom-scrollbar">
+                            {response["Payment Gateways"]
+                              .flatMap((gateway) => gateway["Currencies"])
+                              .filter(
+                                (currency, index, self) =>
+                                  self.indexOf(currency) === index
+                              )
+                              .map((currency, index) => (
+                                <label
+                                  key={index}
+                                  className="flex flex-row justify-start cursor-pointer text-cyan-900 font-normal text-sm gap-1"
+                                >
+                                  <input
+                                    type="checkbox"
+                                    className="pr-1"
+                                    value={currency}
+                                    checked={selectedQCurrency === currency}
+                                    onChange={() =>
+                                      handleCurrencyQSelect(currency)
+                                    }
+                                  />
+                                  {currency}
+                                </label>
+                              ))}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )}
+                <button
+                  className={`bg-cyan-500 text-white px-4 py-2 w-40 mt-4 rounded-lg focus:outline-none relative ${
+                    isLoading ? "opacity-50 pointer-events-none" : ""
+                  } ${
+                    selectedPMethods == null
+                      ? "opacity-50 pointer-events-none"
+                      : ""
+                  }`}
+                  onClick={handleCompareClick}
+                  disabled={isLoading}
+                >
+                  {isLoading ? (
+                    <div className="flex items-center justify-center">
+                      <svg
+                        className="animate-spin h-5 w-5 mr-2"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-100"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                          strokeDasharray="60 40"
+                          fill="none"
+                        />
+                      </svg>
+                    </div>
+                  ) : (
+                    "Proceed"
+                  )}
+                </button>
+                {/* {isPGPopupVisible && (
+                  <PaymentGatewayPopup
+                    finalCompareResponse={finalCompareResponse}
+                    selectedGateways={selectedGateways}
+                  />
+                )} */}
+              </div>
+            </div>
+          </div>
+        )}
 
         {isPGPopupVisible && (
           <PaymentGatewayPopup
