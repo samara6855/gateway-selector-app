@@ -370,7 +370,7 @@ export default function Home() {
     };
 
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 p-4">
+      <div className="absolute inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 p-4">
         <div
           className={`bg-white rounded-lg shadow-md ${
             isPGFullScreen
@@ -453,7 +453,7 @@ export default function Home() {
             <h2 className="font-semibold text-2xl p-2">Selected Gateways</h2>
             <div className="rounded-lg overflow-x-auto custom-scrollbar">
               <table>
-                <thead className=" bg-cyan-500 text-white rounded-md">
+                <thead className=" bg-sky-500 text-white rounded-md">
                   <tr className="rounded-lg">
                     <th className=" px-4 py-2 font-semibold rounded-xl">
                       Payment Gateway Name
@@ -500,7 +500,7 @@ export default function Home() {
                               .map((method, index) => (
                                 <span
                                   key={index}
-                                  className="border bg-gray-100 shadow-md shadow-gray-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
+                                  className="border bg-gray-100 shadow-md shadow-gray-200 text-sky-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
                                 >
                                   <span className="flex">
                                     <PaymentIcon
@@ -519,7 +519,7 @@ export default function Home() {
                                 .map((method, index) => (
                                   <span
                                     key={index}
-                                    className="border bg-gray-100 shadow-md shadow-gray-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
+                                    className="border bg-gray-100 shadow-md shadow-gray-200 text-sky-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
                                   >
                                     <span className="flex">
                                       <PaymentIcon
@@ -535,7 +535,7 @@ export default function Home() {
                               gateway["Payment Methods"].length > 3 && (
                                 <span
                                   onClick={toggleShowAll}
-                                  className="text-cyan-300 absolute right-0 bottom-0 mr-2 mb-2 px-2 py-1 rounded-md cursor-pointer"
+                                  className="text-sky-300 absolute right-0 bottom-0 mr-2 mb-2 px-2 py-1 rounded-md cursor-pointer"
                                 >
                                   more...
                                 </span>
@@ -558,7 +558,7 @@ export default function Home() {
                                   .map((language, index) => (
                                     <span
                                       key={index}
-                                      className="border bg-gray-100 shadow-md shadow-gray-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
+                                      className="border bg-gray-100 shadow-md shadow-gray-200 text-sky-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
                                     >
                                       {language}
                                     </span>
@@ -567,7 +567,7 @@ export default function Home() {
                                 {gateway["API Languages"].length > 3 && (
                                   <span
                                     onClick={toggleShowLanguages}
-                                    className="text-cyan-300 absolute right-0 bottom-0 mr-2 mb-2 px-2 py-1 rounded-md cursor-pointer"
+                                    className="text-sky-300 absolute right-0 bottom-0 mr-2 mb-2 px-2 py-1 rounded-md cursor-pointer"
                                   >
                                     more...
                                   </span>
@@ -578,7 +578,7 @@ export default function Home() {
                                 (language, index) => (
                                   <span
                                     key={index}
-                                    className="border bg-gray-100 shadow-md shadow-gray-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
+                                    className="border bg-gray-100 shadow-md shadow-gray-200 text-sky-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
                                   >
                                     {language}
                                   </span>
@@ -607,7 +607,7 @@ export default function Home() {
                                   (country, index) => (
                                     <span
                                       key={index}
-                                      className="border bg-gray-100 shadow-md shadow-gray-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
+                                      className="border bg-gray-100 shadow-md shadow-gray-200 text-sky-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
                                     >
                                       <span
                                         className={`ml-1 mr-1 h-4 w-4 flag-icon flag-icon-${countryToAlpha2(
@@ -621,7 +621,7 @@ export default function Home() {
                                 {gateway.Countries.length > 3 && (
                                   <span
                                     onClick={toggleShowCountries}
-                                    className="text-cyan-300 absolute right-0 bottom-0 mr-2 mb-2 px-2 py-1 rounded-md cursor-pointer"
+                                    className="text-sky-300 absolute right-0 bottom-0 mr-2 mb-2 px-2 py-1 rounded-md cursor-pointer"
                                   >
                                     more...
                                   </span>
@@ -631,7 +631,7 @@ export default function Home() {
                               gateway.Countries.map((country, index) => (
                                 <span
                                   key={index}
-                                  className="border bg-gray-100 shadow-md shadow-gray-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
+                                  className="border bg-gray-100 shadow-md shadow-gray-200 text-sky-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
                                 >
                                   <span
                                     className={`ml-1 mr-1 h-4 w-4 flag-icon flag-icon-${
@@ -662,7 +662,7 @@ export default function Home() {
                                   (currency, index) => (
                                     <span
                                       key={index}
-                                      className="border bg-gray-100 shadow-md shadow-gray-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
+                                      className="border bg-gray-100 shadow-md shadow-gray-200 text-sky-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
                                     >
                                       <span className="pr-1">
                                         {getSymbolFromCurrency(currency)}
@@ -674,7 +674,7 @@ export default function Home() {
                                 {gateway.Currencies.length > 3 && (
                                   <span
                                     onClick={toggleShowCurrencies}
-                                    className="text-cyan-300 mr-2 mb-2 px-2 py-1 absolute right-0 bottom-0 rounded-md inline-block cursor-pointer"
+                                    className="text-sky-300 mr-2 mb-2 px-2 py-1 absolute right-0 bottom-0 rounded-md inline-block cursor-pointer"
                                   >
                                     more...
                                   </span>
@@ -684,7 +684,7 @@ export default function Home() {
                               gateway.Currencies.map((currency, index) => (
                                 <span
                                   key={index}
-                                  className="border bg-gray-100 shadow-md shadow-gray-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
+                                  className="border bg-gray-100 shadow-md shadow-gray-200 text-sky-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block"
                                 >
                                   <span className="pr-1">
                                     {getSymbolFromCurrency(currency)}
@@ -806,7 +806,7 @@ export default function Home() {
             <div className="max-h-full overflow-y-auto pt-4">
               <h2 className="text-2xl font-semibold pb-4">POS Data</h2>
               <table className="rounded-md pt-4">
-                <thead className="bg-cyan-500 text-white">
+                <thead className="bg-sky-500 text-white">
                   <tr>
                     <th className="border border-gray-200 px-4 py-2 font-semibold">
                       POS Name
@@ -843,7 +843,7 @@ export default function Home() {
                     <tr
                       key={index}
                       className={`border-b border-gray-200 ${
-                        index % 2 === 0 ? "" : "bg-cyan-50"
+                        index % 2 === 0 ? "" : "bg-sky-50"
                       }`}
                     >
                       <td className="border border-gray-200 px-4 py-2">
@@ -910,9 +910,7 @@ export default function Home() {
     const [showCurrenciesFilter, setShowCurrenciesFilter] = useState(false);
     const [isPGQVisible, setIsPGQVisible] = useState(false);
     const [isSelectedPOSVisible, setSelectedPOSVisible] = useState(false);
-    const [finalSelectedPOSResponse, setFinalSelectedPOSResponse] = useState(
-      {}
-    );
+
     const [showCountryQ, setShowCountryQ] = useState(false);
     const [showCurrencyQ, setShowCurrencyQ] = useState(false);
     // const [finalSelectedPOSResponse, setFinalSelectedPOSResponse] = useState([]);
@@ -937,6 +935,10 @@ export default function Home() {
       setIsPGQVisible(false);
     };
 
+    const handleCloseSelectedPOSPopup = () => {
+      setSelectedPOSVisible(false);
+    };
+
     const handleCountryQSelect = (country) => {
       setSelectedQCountry(country);
     };
@@ -953,12 +955,12 @@ export default function Home() {
     sessionStorage.setItem(
       "Selected Country",
       JSON.stringify(selectedQCountry)
-    )
+    );
 
     sessionStorage.setItem(
       "Selected Currency",
       JSON.stringify(selectedQCurrency)
-    )
+    );
 
     const toggleShowAll = () => {
       setShowAll(!showAll);
@@ -997,10 +999,8 @@ export default function Home() {
 
       const selectedPOSResponseData = await selectedPOSResponse.json();
       const finalSelectedPOSResponseData = selectedPOSResponseData.bot.trim();
-      setFinalSelectedPOSResponse(finalSelectedPOSResponseData);
-      console.log(finalSelectedPOSResponseData);
+      sessionStorage.setItem("finalPOSResponse", finalSelectedPOSResponseData);
       setSelectedPOSVisible(true);
-      console.log(finalSelectedPOSResponse);
     };
 
     const handleMethodSelect = (value) => {
@@ -1017,7 +1017,6 @@ export default function Home() {
           ? prevMethods.filter((method) => method !== value)
           : [...prevMethods, value]
       );
-      console.log(finalSelectedPOSResponse);
     };
 
     const handleLanguageSelect = (value) => {
@@ -1099,10 +1098,10 @@ export default function Home() {
         setShowCountryQ(true);
       }
 
-      if(sessionStorage.getItem("currency")) {
+      if (sessionStorage.getItem("currency")) {
         setShowCurrencyQ(false);
-      }else{
-        setShowCurrencyQ(true);    
+      } else {
+        setShowCurrencyQ(true);
       }
     };
 
@@ -1270,7 +1269,7 @@ export default function Home() {
           <div className="flex items-center">
             <label
               htmlFor="simple-search"
-              className="sr-only border border-cyan-100"
+              className="sr-only border border-sky-100"
             >
               Search
             </label>
@@ -1293,7 +1292,7 @@ export default function Home() {
               <input
                 type="text"
                 id="simple-search"
-                className="bg-gray-100 border min-w-72 border-gray-200 text-gray-900 text-sm rounded-lg focus:outline-none block w-full pl-10 p-2 dark:placeholder-gray-400 dark:text-black"
+                className="bg-gray-100 border min-w-40 lg:min-w-72 border-gray-200 text-gray-900 text-sm rounded-lg focus:outline-none block w-full pl-10 p-2 dark:placeholder-gray-400 dark:text-black"
                 placeholder="Search"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -1303,7 +1302,7 @@ export default function Home() {
 
             <div className="flex justify-center ml-2 mb-2">
               <button
-                className={`bg-cyan-500 text-white px-4 py-2 w-40 mt-2 rounded-lg focus:outline-none relative ${
+                className={`bg-sky-500 text-white px-4 py-2 w-40 mt-2 rounded-lg focus:outline-none relative ${
                   isLoading ? "opacity-50 pointer-events-none" : ""
                 } ${checkedCount < 2 ? "opacity-50 pointer-events-none" : ""}`}
                 // onClick={!isLoading ? handleCompareClick : undefined}
@@ -1316,7 +1315,7 @@ export default function Home() {
             <div className="ml-2">
               <button
                 type="button"
-                className="mt-2 px-4 py-2 mb-2 text-white rounded-md transition-colors w-full bg-cyan-500 min-w-60"
+                className="mt-2 px-4 py-2 mb-2 text-white rounded-md transition-colors w-full bg-sky-500 min-w-60"
                 onClick={handleScheduleSubmit}
               >
                 {/* I need consultation 🡢 */}
@@ -1332,7 +1331,7 @@ export default function Home() {
           }`}
         >
           <table className="rounded-lg">
-            <thead className=" bg-cyan-500 text-white rounded-md">
+            <thead className=" bg-sky-500 text-white rounded-md">
               <tr>
                 <th className=" px-4 py-2 font-semibold rounded-lg">Select</th>
                 <th className="border border-gray-200 px-4 py-2 font-semibold rounded-lg min-w-40">
@@ -1364,7 +1363,7 @@ export default function Home() {
                     </span>
                     {showPMinfo && (
                       <div className="absolute bg-gray-100 border border-gray-200 p-2 rounded shadow z-20 top-3/4 ml-2">
-                        <p className="text-sm text-cyan-900 font-normal">
+                        <p className="text-sm text-sky-900 font-normal">
                           A payment method refers to the various options
                           available for customers to make payments when
                           purchasing a product or service.
@@ -1399,11 +1398,11 @@ export default function Home() {
                           .map((method, index) => (
                             <label
                               key={index}
-                              className="flex flex-row justify-start cursor-pointer text-cyan-900 font-normal text-sm gap-1"
+                              className="flex flex-row justify-start cursor-pointer text-sky-900 font-normal text-sm gap-1"
                             >
                               <input
                                 type="checkbox"
-                                className="pr-1 checked:bg-cyan-400"
+                                className="pr-1 checked:bg-sky-400"
                                 value={method}
                                 checked={selectedMethods.includes(method)}
                                 onChange={(e) =>
@@ -1444,7 +1443,7 @@ export default function Home() {
                     </span>
                     {showAPILangInfo && (
                       <div className="absolute bg-gray-100 border border-gray-200 p-2 rounded shadow z-20 top-3/4 ml-2">
-                        <p className="text-sm text-cyan-900 font-normal">
+                        <p className="text-sm text-sky-900 font-normal">
                           API Languages refers to the programming languages
                           supported by an API for developers to interact with
                           it.
@@ -1478,7 +1477,7 @@ export default function Home() {
                           .map((lang, index) => (
                             <label
                               key={index}
-                              className="flex flex-row justify-start cursor-pointer text-cyan-900 font-normal text-sm gap-1"
+                              className="flex flex-row justify-start cursor-pointer text-sky-900 font-normal text-sm gap-1"
                             >
                               <input
                                 type="checkbox"
@@ -1523,7 +1522,7 @@ export default function Home() {
                     </span>
                     {showSecurityInfo && (
                       <div className="absolute bg-gray-100 border border-gray-200 p-2 rounded shadow z-20 top-3/4 ml-2">
-                        <p className="text-sm text-cyan-900 font-normal">
+                        <p className="text-sm text-sky-900 font-normal">
                           Security/Compliance refers to the measures taken by a
                           service provider to ensure data security and
                           regulatory compliance.
@@ -1562,7 +1561,7 @@ export default function Home() {
                           .map((option, index) => (
                             <label
                               key={index}
-                              className="flex flex-row justify-start cursor-pointer text-cyan-900 font-normal text-sm gap-1 mt-1"
+                              className="flex flex-row justify-start cursor-pointer text-sky-900 font-normal text-sm gap-1 mt-1"
                             >
                               <input
                                 type="checkbox"
@@ -1609,7 +1608,7 @@ export default function Home() {
                     </span>
                     {showCountriesInfo && (
                       <div className="absolute bg-gray-100 border border-gray-200 p-2 rounded shadow z-20 top-3/4 ml-2">
-                        <p className="text-sm text-cyan-900 font-normal">
+                        <p className="text-sm text-sky-900 font-normal">
                           Countries refers to the list of nations where a
                           service or product is available or supported.
                         </p>
@@ -1646,7 +1645,7 @@ export default function Home() {
                           .map((country, index) => (
                             <label
                               key={index}
-                              className="flex flex-row justify-start cursor-pointer text-cyan-900 font-normal text-sm gap-1"
+                              className="flex flex-row justify-start cursor-pointer text-sky-900 font-normal text-sm gap-1"
                             >
                               <input
                                 type="checkbox"
@@ -1691,7 +1690,7 @@ export default function Home() {
                     </span>
                     {showCurrenciesInfo && (
                       <div className="absolute bg-gray-100 border border-gray-200 p-2 rounded shadow z-20 top-3/4 ml-2">
-                        <p className="text-sm text-cyan-900 font-normal">
+                        <p className="text-sm text-sky-900 font-normal">
                           Currencies refers to the types of currency accepted
                           for transactions.
                         </p>
@@ -1727,7 +1726,7 @@ export default function Home() {
                           .map((currency, index) => (
                             <label
                               key={index}
-                              className="flex flex-row justify-start cursor-pointer text-cyan-900 font-normal text-sm gap-1"
+                              className="flex flex-row justify-start cursor-pointer text-sky-900 font-normal text-sm gap-1"
                             >
                               <input
                                 type="checkbox"
@@ -1772,7 +1771,7 @@ export default function Home() {
                     </span>
                     {showFeeInfo && (
                       <div className="absolute bg-gray-100 border border-gray-200 p-2 rounded shadow z-10 top-3/4 ml-2">
-                        <p className="text-sm text-cyan-900 font-normal">
+                        <p className="text-sm text-sky-900 font-normal">
                           Fee refers to the charges or costs associated with
                           using a service or product.
                         </p>
@@ -1807,7 +1806,7 @@ export default function Home() {
                     </span>
                     {showWebsiteInfo && (
                       <div className="absolute bg-gray-100 border border-gray-200 p-2 rounded shadow z-10 top-3/4 ml-2">
-                        <p className="text-sm text-cyan-900 font-normal">
+                        <p className="text-sm text-sky-900 font-normal">
                           Website refers to the online platform or web address
                           associated with a service or organization.
                         </p>
@@ -1842,7 +1841,7 @@ export default function Home() {
                     </span>
                     {showSupportedPOSInfo && (
                       <div className="absolute bg-gray-100 border border-gray-200 p-2 rounded shadow z-10 top-3/4 ml-2">
-                        <p className="text-sm text-cyan-900 font-normal">
+                        <p className="text-sm text-sky-900 font-normal">
                           Supported POS systems are the point of sale systems
                           supported by a payment gateway.
                         </p>
@@ -1878,7 +1877,7 @@ export default function Home() {
                       onChange={() => handleCheckboxChange(gateway.id, gateway)}
                     />
                   </td>
-                  <td className="border border-gray-200 px-4 py-2 text-cyan-900">
+                  <td className="border border-gray-200 px-4 py-2 text-sky-900">
                     {gateway["Payment Gateway Name"]}
                   </td>
                   <td className="border border-gray-200 px-4 py-5 relative">
@@ -1891,7 +1890,7 @@ export default function Home() {
                               key={index}
                               className={`border bg-gray-100 shadow-md shadow-gray-200 ${
                                 index1 % 2 === 0 ? "" : "bg-white"
-                              } text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block`}
+                              } text-sky-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block`}
                             >
                               <span className="flex">
                                 <PaymentIcon
@@ -1912,7 +1911,7 @@ export default function Home() {
                                 key={index}
                                 className={`border bg-gray-100 shadow-md shadow-gray-200 ${
                                   index1 % 2 === 0 ? "" : "bg-white"
-                                } text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block`}
+                                } text-sky-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block`}
                               >
                                 <span className="flex">
                                   <PaymentIcon
@@ -1927,7 +1926,7 @@ export default function Home() {
                         {!showAll && gateway["Payment Methods"].length > 3 && (
                           <span
                             onClick={toggleShowAll}
-                            className="text-cyan-300 absolute right-0 bottom-0 mr-2 mb-2 px-2 py-1 rounded-md cursor-pointer"
+                            className="text-sky-300 absolute right-0 bottom-0 mr-2 mb-2 px-2 py-1 rounded-md cursor-pointer"
                           >
                             more...
                           </span>
@@ -1952,7 +1951,7 @@ export default function Home() {
                                   key={index}
                                   className={`border bg-gray-100 shadow-md shadow-gray-200 ${
                                     index1 % 2 === 0 ? "" : "bg-white"
-                                  } text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block`}
+                                  } text-sky-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block`}
                                 >
                                   {language}
                                 </span>
@@ -1961,7 +1960,7 @@ export default function Home() {
                             {gateway["API Languages"].length > 3 && (
                               <span
                                 onClick={toggleShowLanguages}
-                                className="text-cyan-300 absolute right-0 bottom-0 mr-2 mb-2 px-2 py-1 rounded-md cursor-pointer"
+                                className="text-sky-300 absolute right-0 bottom-0 mr-2 mb-2 px-2 py-1 rounded-md cursor-pointer"
                               >
                                 more...
                               </span>
@@ -1973,7 +1972,7 @@ export default function Home() {
                               key={index}
                               className={`border bg-gray-100 shadow-md shadow-gray-200 ${
                                 index1 % 2 === 0 ? "" : "bg-white"
-                              } text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block`}
+                              } text-sky-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block`}
                             >
                               {language}
                             </span>
@@ -1987,7 +1986,7 @@ export default function Home() {
                     )}
                   </td>
 
-                  <td className="border border-gray-200 px-4 py-2 text-cyan-900">
+                  <td className="border border-gray-200 px-4 py-2 text-sky-900">
                     {Array.isArray(gateway["Security/Compliance"])
                       ? gateway["Security/Compliance"].join(", ")
                       : gateway["Security/Compliance"]}
@@ -2003,7 +2002,7 @@ export default function Home() {
                                   key={index}
                                   className={`border bg-gray-100 shadow-md shadow-gray-200 ${
                                     index1 % 2 === 0 ? "" : "bg-white"
-                                  } text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block`}
+                                  } text-sky-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block`}
                                 >
                                   <span
                                     className={`ml-1 mr-1 h-4 w-4 flag-icon flag-icon-${countryToAlpha2(
@@ -2017,7 +2016,7 @@ export default function Home() {
                             {gateway.Countries.length > 3 && (
                               <span
                                 onClick={toggleShowCountries}
-                                className="text-cyan-300 absolute right-0 bottom-0 mr-2 mb-2 px-2 py-1 rounded-md cursor-pointer"
+                                className="text-sky-300 absolute right-0 bottom-0 mr-2 mb-2 px-2 py-1 rounded-md cursor-pointer"
                               >
                                 more...
                               </span>
@@ -2029,7 +2028,7 @@ export default function Home() {
                               key={index}
                               className={`border bg-gray-100 shadow-md shadow-gray-200 ${
                                 index1 % 2 === 0 ? "" : "bg-white"
-                              } text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block`}
+                              } text-sky-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block`}
                             >
                               <span
                                 className={`ml-1 mr-1 h-4 w-4 flag-icon flag-icon-${countryToAlpha2(
@@ -2057,7 +2056,7 @@ export default function Home() {
                                   key={index}
                                   className={`border bg-gray-100 shadow-md shadow-gray-200 ${
                                     index1 % 2 === 0 ? "" : "bg-white"
-                                  } text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block`}
+                                  } text-sky-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block`}
                                 >
                                   <span className="pr-1">
                                     {getSymbolFromCurrency(currency)}
@@ -2069,7 +2068,7 @@ export default function Home() {
                             {gateway.Currencies.length > 3 && (
                               <span
                                 onClick={toggleShowCurrencies}
-                                className="text-cyan-300 mr-2 mb-2 px-2 py-1 absolute right-0 bottom-0 rounded-md inline-block cursor-pointer"
+                                className="text-sky-300 mr-2 mb-2 px-2 py-1 absolute right-0 bottom-0 rounded-md inline-block cursor-pointer"
                               >
                                 more...
                               </span>
@@ -2081,7 +2080,7 @@ export default function Home() {
                               key={index}
                               className={`border bg-gray-100 shadow-md shadow-gray-200 ${
                                 index1 % 2 === 0 ? "" : "bg-white"
-                              } text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block`}
+                              } text-sky-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block`}
                             >
                               <span className="pr-1">
                                 {getSymbolFromCurrency(currency)}
@@ -2096,19 +2095,19 @@ export default function Home() {
                     )}
                   </td>
 
-                  <td className="border border-gray-200 px-4 py-2 text-cyan-900">
+                  <td className="border border-gray-200 px-4 py-2 text-sky-900">
                     {Array.isArray(gateway.Fee)
                       ? gateway.Fee.join(", ")
                       : gateway.Fee}
                   </td>
 
-                  <td className="border border-gray-200 px-4 py-2 text-cyan-900">
+                  <td className="border border-gray-200 px-4 py-2 text-sky-900">
                     <a href={gateway.Website}>
                       {gateway["Payment Gateway Name"]}
                     </a>
                   </td>
 
-                  <td className="border border-gray-200 px-4 py-2 text-cyan-900">
+                  <td className="border border-gray-200 px-4 py-2 text-sky-900">
                     {Array.isArray(gateway["Supported POS Systems"]) ? (
                       gateway["Supported POS Systems"].map(
                         (selectedPOSSystem, index) => (
@@ -2145,34 +2144,52 @@ export default function Home() {
 
         {isSelectedPOSVisible && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 p-4">
-            <div className="max-h-full min-h-60 overflow-y-auto pt-4 bg-white rounded-lg">
-              <h2 className="text-2xl font-semibold pb-4">Selected POS Data</h2>
+            <div className="max-h-full min-h-60 overflow-y-auto overflow-x-auto max-w-3/4 pt-4 bg-white relative rounded-lg">
+              <button
+                className={`text-gray-600 hover:text-gray-800 absolute top-2 right-4`}
+                onClick={handleCloseSelectedPOSPopup}
+              >
+                <svg
+                  className="h-6 w-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+              <h2 className="text-2xl font-semibold pb-4 pl-2">
+                {
+                  JSON.parse(sessionStorage.getItem("finalPOSResponse"))[
+                    "POS Name"
+                  ]
+                }
+              </h2>
               <table className="rounded-md pt-4">
-                <thead className="bg-cyan-500 text-white">
+                <thead className="bg-sky-500 text-white">
                   <tr>
                     <th className="border border-gray-200 px-4 py-2 font-semibold">
                       POS Name
                     </th>
-                    <th className="border border-gray-200 px-4 py-2 font-semibold min-w-60 pt-3">
-                      <div className="flex flex-col">
-                        <span className="text-sm font-medium">Reviews</span>
-                        <div className="flex flex-row border-t border-gray-200 mt-1 pt-1">
-                          <span className="flex-1 text-xs font-normal text-center">
-                            Google Reviews
-                          </span>
-                          <span className="flex-1 text-xs font-normal text-center border-l border-gray-200">
-                            Trust Pilot Reviews
-                          </span>
-                        </div>
-                      </div>
+                    <th className="border border-gray-200 px-4 py-2 font-semibold">
+                      Google Reviews
                     </th>
-                    <th className="border border-gray-200 px-4 py-2 font-semibold min-w-52">
+                    <th className="border border-gray-200 px-4 py-2 font-semibold">
+                      Trust Pilot Reviews
+                    </th>
+                    <th className="border border-gray-200 px-4 py-2 font-semibold">
                       Device Cost
                     </th>
-                    <th className="border border-gray-200 px-4 py-2 font-semibold min-w-48">
+                    <th className="border border-gray-200 px-4 py-2 font-semibold">
                       Works with (Payment Gateway)
                     </th>
-                    <th className="border border-gray-200 px-4 py-2 font-semibold min-w-40">
+                    <th className="border border-gray-200 px-4 py-2 font-semibold">
                       Payment processing cost
                     </th>
                     <th className="border border-gray-200 px-4 py-2 font-semibold">
@@ -2181,35 +2198,55 @@ export default function Home() {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr className="border-b border-gray-200 bg-cyan-50">
+                  <tr className="border-b border-gray-200 bg-sky-50">
                     <td className="border border-gray-200 px-4 py-2">
-                      {finalSelectedPOSResponse["POS Name"] || "-"}
+                      {
+                        JSON.parse(sessionStorage.getItem("finalPOSResponse"))[
+                          "POS Name"
+                        ]
+                      }
                     </td>
                     <td className="border border-gray-200 px-4 py-2">
-                      <div className="flex flex-row">
-                        <span className="flex-1 text-sm font-normal text-center">
-                          {finalSelectedPOSResponse["Google Reviews"] || "-"}
-                        </span>
-                        <span className="flex-1 text-sm font-normal text-center border-l border-gray-200">
-                          {finalSelectedPOSResponse["Trust Pilot Reviews"] ||
-                            "-"}
-                        </span>
-                      </div>
+                      {
+                        JSON.parse(sessionStorage.getItem("finalPOSResponse"))[
+                          "Google Reviews"
+                        ]
+                      }
                     </td>
                     <td className="border border-gray-200 px-4 py-2">
-                      {finalSelectedPOSResponse["Device Cost"] || "-"}
+                      {
+                        JSON.parse(sessionStorage.getItem("finalPOSResponse"))[
+                          "Trust Pilot Reviews"
+                        ]
+                      }
                     </td>
                     <td className="border border-gray-200 px-4 py-2">
-                      {finalSelectedPOSResponse[
-                        "Works with (Payment Gateways)"
-                      ] || "-"}
+                      {
+                        JSON.parse(sessionStorage.getItem("finalPOSResponse"))[
+                          "Device Cost"
+                        ]
+                      }
                     </td>
                     <td className="border border-gray-200 px-4 py-2">
-                      {finalSelectedPOSResponse["Payment Processing Cost"] ||
-                        "-"}
+                      {
+                        JSON.parse(sessionStorage.getItem("finalPOSResponse"))[
+                          "Works with (Payment Gateways)"
+                        ]
+                      }
                     </td>
                     <td className="border border-gray-200 px-4 py-2">
-                      {finalSelectedPOSResponse["Industries"] || "-"}
+                      {
+                        JSON.parse(sessionStorage.getItem("finalPOSResponse"))[
+                          "Payment Processing Cost"
+                        ]
+                      }
+                    </td>
+                    <td className="border border-gray-200 px-4 py-2">
+                      {
+                        JSON.parse(sessionStorage.getItem("finalPOSResponse"))[
+                          "Industries"
+                        ]
+                      }
                     </td>
                   </tr>
                 </tbody>
@@ -2220,8 +2257,8 @@ export default function Home() {
 
         {isPGQVisible && (
           <div>
-            <div className="fixed inset-0 z-60 flex items-center justify-center bg-black bg-opacity-40 p-4">
-              <div className="bg-white rounded-lg p-6 max-w-sm w-full relative">
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 p-4">
+              <div className="bg-white rounded-lg p-6 max-w-4xl w-auto min-h-3/4 relative">
                 <button
                   className={`text-gray-600 hover:text-gray-800 absolute top-2 right-4`}
                   onClick={handleClosePGQPopup}
@@ -2278,11 +2315,11 @@ export default function Home() {
                           .map((method, index) => (
                             <label
                               key={index}
-                              className="flex flex-row justify-start cursor-pointer text-cyan-900 font-normal text-sm gap-1"
+                              className="flex flex-row justify-start cursor-pointer text-sky-900 font-normal text-sm gap-1"
                             >
                               <input
                                 type="checkbox"
-                                className="pr-1 checked:bg-cyan-400"
+                                className="pr-1 checked:bg-sky-400"
                                 value={method}
                                 checked={selectedPMethods.includes(method)}
                                 onChange={() => handlePMethodSelect(method)}
@@ -2335,7 +2372,7 @@ export default function Home() {
                               .map((country, index) => (
                                 <label
                                   key={index}
-                                  className="flex flex-row justify-start cursor-pointer text-cyan-900 font-normal text-sm gap-1"
+                                  className="flex flex-row justify-start cursor-pointer text-sky-900 font-normal text-sm gap-1"
                                 >
                                   <input
                                     type="checkbox"
@@ -2396,7 +2433,7 @@ export default function Home() {
                               .map((currency, index) => (
                                 <label
                                   key={index}
-                                  className="flex flex-row justify-start cursor-pointer text-cyan-900 font-normal text-sm gap-1"
+                                  className="flex flex-row justify-start cursor-pointer text-sky-900 font-normal text-sm gap-1"
                                 >
                                   <input
                                     type="checkbox"
@@ -2417,7 +2454,7 @@ export default function Home() {
                   </div>
                 )}
                 <button
-                  className={`bg-cyan-500 text-white px-4 py-2 w-40 mt-4 rounded-lg focus:outline-none relative ${
+                  className={`bg-sky-500 text-white px-4 py-2 w-40 mt-4 rounded-lg focus:outline-none relative ${
                     isLoading ? "opacity-50 pointer-events-none" : ""
                   } ${
                     selectedPMethods == null
@@ -2676,7 +2713,7 @@ export default function Home() {
 
             <div className="flex justify-center ml-2 mb-2">
               <button
-                className={`bg-cyan-500 text-white px-4 py-2 w-40 mt-2 rounded-lg focus:outline-none relative ${
+                className={`bg-sky-500 text-white px-4 py-2 w-40 mt-2 rounded-lg focus:outline-none relative ${
                   isLoading ? "opacity-50 pointer-events-none" : ""
                 } ${checkedCount < 2 ? "opacity-50 pointer-events-none" : ""}`}
                 onClick={!isLoading ? handleCompareClick : undefined}
@@ -2709,7 +2746,7 @@ export default function Home() {
             <div className="ml-2">
               <button
                 type="button"
-                className="mt-2 px-4 py-2 mb-2 text-white rounded-md transition-colors w-full bg-cyan-500 min-w-60"
+                className="mt-2 px-4 py-2 mb-2 text-white rounded-md transition-colors w-full bg-sky-500 min-w-60"
                 onClick={handleScheduleSubmit}
               >
                 {/* I need consultation 🡢 */}
@@ -2720,7 +2757,7 @@ export default function Home() {
         </div>
         <div className="overflow-x-auto max-h-96 overflow-y-auto custom-scrollbar">
           <table className="border border-gray-200">
-            <thead className=" bg-cyan-500 text-white ">
+            <thead className=" bg-sky-500 text-white ">
               <tr>
                 <th className="border border-gray-200 px-4 py-2 font-semibold">
                   Select
@@ -2765,13 +2802,13 @@ export default function Home() {
                   <tr
                     key={pos.id}
                     className={`border-b border-gray-200 ${
-                      index % 2 === 0 ? "" : "bg-cyan-50"
+                      index % 2 === 0 ? "" : "bg-sky-50"
                     }`}
                   >
                     <td className="border border-gray-200 px-4 py-2">
                       <input
                         type="checkbox"
-                        className="form-checkbox h-4 w-4 text-primary-500 border-gray-300 rounded focus:ring-primary-500 checked:bg-cyan-500"
+                        className="form-checkbox h-4 w-4 text-primary-500 border-gray-300 rounded focus:ring-primary-500 checked:bg-sky-500"
                         checked={checkedBoxes[pos.id] || false}
                         onChange={() => handleCheckboxChange(pos.id, pos)}
                       />
@@ -2805,7 +2842,7 @@ export default function Home() {
                         ? pos.Industries.map((industry, index) => (
                             <span
                               key={index}
-                              className={`border bg-gray-100 shadow-md shadow-gray-200 text-cyan-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block`}
+                              className={`border bg-gray-100 shadow-md shadow-gray-200 text-sky-900 mr-2 mb-2 px-2 py-1 rounded-md inline-block`}
                             >
                               {industry}
                             </span>
@@ -2846,7 +2883,7 @@ export default function Home() {
             />
             <label
               htmlFor="consultationCheckbox"
-              className="text-cyan-900 font-semibold text-sm"
+              className="text-sky-900 font-semibold text-sm"
             >
               I need consultation
             </label>
@@ -2861,7 +2898,7 @@ export default function Home() {
                     onChange={handleToggle}
                     className="sr-only"
                   />
-                  <div className="h-10 w-56 rounded-full bg-cyan-500 shadow-md shadow-cyan-600 flex justify-between items-center px-4">
+                  <div className="h-10 w-56 rounded-full bg-sky-500 shadow-md shadow-sky-600 flex justify-between items-center px-4">
                     <span className="text-white font-semibold pl-12">
                       {isChecked ? "POS" : "Payment Gateway"}
                     </span>
@@ -2925,11 +2962,11 @@ export default function Home() {
             </div>
             <button
               type="button"
-              className={`mb-2 ml-2 h-20 text-white transition-colors min-w-20 rounded-3xl shadow-md shadow-cyan-600
+              className={`mb-2 ml-2 h-20 text-white transition-colors min-w-20 rounded-3xl shadow-md shadow-sky-600
                 ${
                   isButtonDisabled
-                    ? " bg-cyan-500 bg-opacity-55 cursor-not-allowed"
-                    : "hover:border-gray-300 bg-cyan-500 hover:bg-cyan-400 cursor-pointer"
+                    ? " bg-sky-500 bg-opacity-55 cursor-not-allowed"
+                    : "hover:border-gray-300 bg-sky-500 hover:bg-sky-400 cursor-pointer"
                 }`}
               onClick={handleButtonClick}
               disabled={isButtonDisabled}
