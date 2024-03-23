@@ -2871,7 +2871,7 @@ export default function Home() {
 
   return (
     <body>
-      <main className="flex flex-col items-center justify-center min-h-screen p-8 sm:p-16 md:p-24 lg:p-32 xl:p-40">
+      <main className="flex flex-col items-center justify-center min-h-screen p-4 sm:p-10 md:p-20 lg:p-32 xl:p-40">
         <div className="w-full max-w-full rounded-xl p-4 sm:w-3/4 sm:gap-2">
           <div className="flex items-center justify-end w-full mb-1 gap-2">
             <input
@@ -2890,7 +2890,7 @@ export default function Home() {
           </div>
           <div className="mt-2 mb-4 flex flex-col sm:flex-row sm:justify-between">
             <div className="flex w-full flex-col items-start sm:flex-row sm:justify-between">
-              <label className="flex cursor-pointer select-none items-center mr-2 mt-2">
+              <label className="flex cursor-pointer select-none items-center ml-1 mr-2 mt-2">
                 <div className="relative">
                   <input
                     type="checkbox"
@@ -2913,7 +2913,7 @@ export default function Home() {
                 </div>
               </label>
 
-              <div className="flex w-full mt-4 lg:mt-2 flex-col gap-2 sm:flex-row sm:w-3/4">
+              <div className="flex w-full mt-4 lg:mt-2 flex-col gap-4 lg:gap-2 sm:flex-row sm:w-3/4">
                 <select
                   className="h-10 w-full rounded-full border-none pl-2 text-sm text-gray-400 cursor-pointer shadow-md shadow-gray-400 focus:outline-none"
                   value={selectedValuesFilters.country}
