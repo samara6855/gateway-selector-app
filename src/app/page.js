@@ -33,11 +33,19 @@ export default function Home() {
   const [finalCompareResponse, setFinalCompareResponse] = useState("");
   const [finalCompareResponsePOS, setFinalCompareResponsePOS] = useState("");
   const [buttonText, setButtonText] = useState(null);
+  const [isPGQVisible, setIsPGQVisible] = useState(false);
+
+  const [showCountryQ, setShowCountryQ] = useState(false);
+  const [showCurrencyQ, setShowCurrencyQ] = useState(false);
 
   const [selectedValuesFilters, setSelectedValuesFilters] = useState({
     country: "option1",
     currency: "option1",
   });
+
+  const handleClosePGQPopup = () => {
+    setIsPGQVisible(false);
+  };
 
   const handleClosePGPopup = () => {
     setIsPGPopupVisible(false);
@@ -373,9 +381,7 @@ export default function Home() {
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 p-4">
         <div
           className={`bg-white rounded-lg shadow-md ${
-            isPGFullScreen
-              ? "w-screen h-screen"
-              : "max-w-4xl w-auto max-h-3/4"
+            isPGFullScreen ? "w-screen h-screen" : "max-w-4xl w-auto max-h-3/4"
           }  overflow-y-auto relative text-black custom-scrollbar`}
         >
           <div className="p-4">
@@ -407,7 +413,6 @@ export default function Home() {
             >
               {isPGFullScreen ? (
                 <svg
-                  class="feather feather-minimize-2"
                   fill="none"
                   height="24"
                   stroke="currentColor"
@@ -760,7 +765,6 @@ export default function Home() {
             >
               {isPOSFullScreen ? (
                 <svg
-                  class="feather feather-minimize-2"
                   fill="none"
                   height="24"
                   stroke="currentColor"
@@ -908,11 +912,9 @@ export default function Home() {
     const [showSecurityFilter, setShowSecurityFilter] = useState(false);
     const [showCountriesFilter, setShowCountriesFilter] = useState(false);
     const [showCurrenciesFilter, setShowCurrenciesFilter] = useState(false);
-    const [isPGQVisible, setIsPGQVisible] = useState(false);
+
     const [isSelectedPOSVisible, setSelectedPOSVisible] = useState(false);
 
-    const [showCountryQ, setShowCountryQ] = useState(false);
-    const [showCurrencyQ, setShowCurrencyQ] = useState(false);
     // const [finalSelectedPOSResponse, setFinalSelectedPOSResponse] = useState([]);
 
     // Add state variables
@@ -930,10 +932,6 @@ export default function Home() {
     // const [selectedGateways, setSelectedGateways] = useState([]);
 
     const [showPM, setShowPM] = useState(false);
-
-    const handleClosePGQPopup = () => {
-      setIsPGQVisible(false);
-    };
 
     const handleCloseSelectedPOSPopup = () => {
       setSelectedPOSVisible(false);
@@ -1346,7 +1344,7 @@ export default function Home() {
                       onMouseLeave={() => setShowPMinfo(false)}
                     >
                       <svg
-                        enable-background="new 0 0 48 48"
+                        enableBackground="new 0 0 48 48"
                         height={24}
                         id="Layer_3"
                         version="1.1"
@@ -1459,7 +1457,7 @@ export default function Home() {
                           viewBox="0 0 512 512"
                           xmlns="http://www.w3.org/2000/svg"
                           className="h-4 w-4"
-                        > 
+                        >
                           <path
                             d="M256 0C114.6 0 0 114.6 0 256c0 141.4 114.6 256 256 256s256-114.6 256-256C512 114.6 397.4 0 256 0zM390.6 246.6l-112 112C272.4 364.9 264.2 368 256 368s-16.38-3.125-22.62-9.375l-112-112c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L256 290.8l89.38-89.38c12.5-12.5 32.75-12.5 45.25 0S403.1 234.1 390.6 246.6z"
                             fill="#ffffff"
@@ -2257,8 +2255,8 @@ export default function Home() {
 
         {isPGQVisible && (
           <div>
-            <div className="absolute inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40" >
-              <div className="bg-white h-full w-full rounded-lg p-6 relative">
+            <div className="absolute inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+              <div className="bg-white min-h-full min-w-full rounded-lg p-6 relative">
                 <button
                   className={`text-gray-600 hover:text-gray-800 absolute top-2 right-4`}
                   onClick={handleClosePGQPopup}
@@ -2497,13 +2495,14 @@ export default function Home() {
           </div>
         )}
 
-      <div>{isPGPopupVisible && (
-        <PaymentGatewayPopup
-          finalCompareResponse={finalCompareResponse}
-          selectedGateways={selectedGateways}
-        />
-      )}
-      </div>
+        <div>
+          {isPGPopupVisible && (
+            <PaymentGatewayPopup
+              finalCompareResponse={finalCompareResponse}
+              selectedGateways={selectedGateways}
+            />
+          )}
+        </div>
       </div>
     );
   }
@@ -3036,13 +3035,12 @@ export default function Home() {
               >
                 {isFullScreen ? (
                   <svg
-                    class="feather feather-minimize-2"
                     fill="none"
                     height="24"
                     stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
                     viewBox="0 0 24 24"
                     width="24"
                     xmlns="http://www.w3.org/2000/svg"
