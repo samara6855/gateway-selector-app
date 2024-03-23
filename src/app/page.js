@@ -1310,10 +1310,10 @@ export default function Home() {
                 {`Compare(${checkedCount})`}
               </button>
             </div>
-            <div className="ml-2">
+            <div className="ml-2"> 
               <button
                 type="button"
-                className="mt-2 px-4 py-2 mb-2 text-white rounded-md transition-colors w-full bg-sky-500 min-w-60"
+                className="mt-2 px-4 py-2 mb-2 justify-center items-center text-white rounded-md transition-colors w-full bg-sky-500 min-w-60"
                 onClick={handleScheduleSubmit}
               >
                 {/* I need consultation 🡢 */}
@@ -2890,7 +2890,7 @@ export default function Home() {
           </div>
           <div className="mt-2 mb-4 flex flex-col sm:flex-row sm:justify-between">
             <div className="flex w-full flex-col items-start sm:flex-row sm:justify-between">
-              <label className="flex cursor-pointer select-none items-center ml-2 mr-2 mt-2">
+              <label className="flex cursor-pointer select-none items-center mr-2 mt-2">
                 <div className="relative">
                   <input
                     type="checkbox"
@@ -2913,7 +2913,7 @@ export default function Home() {
                 </div>
               </label>
 
-              <div className="flex w-full mt-2 flex-col gap-2 sm:flex-row sm:w-3/4">
+              <div className="flex w-full mt-4 lg:mt-2 flex-col gap-2 sm:flex-row sm:w-3/4">
                 <select
                   className="h-10 w-full rounded-full border-none pl-2 text-sm text-gray-400 cursor-pointer shadow-md shadow-gray-400 focus:outline-none"
                   value={selectedValuesFilters.country}
